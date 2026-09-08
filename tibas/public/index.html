@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://i.ytimg.com">
+<link rel="preload" as="image" href="img/logo-hd.webp">
 <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..600&display=swap" rel="stylesheet">
 <style>
 /* ══════════════════════════════ TOKENS ══════════════════════════════ */
@@ -103,6 +104,15 @@ body.open .aurora{opacity:.42}
 .onda{position:fixed;width:24px;height:24px;border-radius:50%;z-index:9995;
   pointer-events:none;transform:translate(-50%,-50%) scale(0);
   transition:transform .8s cubic-bezier(.16,1,.3,1),opacity .4s ease-out}
+
+/* ══════════════════════════════ INTRO ══════════════════════════════
+   Nace SIEMPRE en gris perla, sea cual sea el tema guardado. Si el tema
+   es oscuro, durante la dispersión el suelo vira a negro por debajo de
+   las partículas y sólo entonces se retira el velo: el empalme con la
+   web queda invisible en los dos casos. */
+#intro{position:fixed;inset:0;z-index:10000;background:#E8E5DF;pointer-events:none;
+  will-change:opacity,background-color}
+#intro canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
 
 .grain{position:fixed;inset:0;pointer-events:none;z-index:9990;opacity:.045;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
@@ -547,6 +557,7 @@ body.open .vscrim{pointer-events:auto;cursor:pointer}
 </style>
 </head>
 <body>
+<div id="intro"><canvas id="introLienzo"></canvas></div>
 <div class="aurora" id="aurora"><i></i><i></i><i></i></div>
 <div class="grain"></div>
 <div class="cur" id="cur"></div><div class="cur-r" id="curr"><span id="curTxt">Abrir</span></div>
@@ -785,6 +796,172 @@ function toast(msg){const t=$('#toast');t.textContent=msg;
 const root=document.documentElement;
 try{const t=localStorage.getItem('eb-theme'); if(t) root.dataset.theme=t;}catch(e){}
 const FONDO={light:'#E8E5DF', dark:'#08080A'};
+
+/* ═══════════════════════════════════════════════════════════════
+   INTRO EN PARTÍCULAS
+   El logo se arma con polvo dorado, se sostiene y se dispersa
+   destapando la web. Corre en cada carga, como se pidió.
+   ═══════════════════════════════════════════════════════════════ */
+let retrasoEntrada = 0.05;          // cuándo entra el header y el pie
+
+const INTRO = (function(){
+  const capa   = $('#intro');
+  const lienzo = $('#introLienzo');
+  if(!capa || !lienzo) return {duracion:0};
+
+  const PERLA = [232,229,223];
+  const OSCURO= [8,8,10];
+  const DUR   = 3000;                                   // 3 s
+  const PROP  = {ent:0.40, rep:0.275, sal:0.325};
+  const tEnt = DUR*PROP.ent, tRep = DUR*PROP.rep, tSal = DUR*PROP.sal;
+
+  // Quien pide menos movimiento entra directo, sin intro.
+  if(reduce){ capa.remove(); return {duracion:0}; }
+
+  const ctx = lienzo.getContext('2d', {alpha:true});
+  let DPR=1, W=0, H=0, particulas=[], comp=null, t0=0;
+
+  const suaveOut = t => 1 - Math.pow(1-t, 4);
+  const expoIn   = t => t<=0 ? 0 : Math.pow(2, 10*(t-1));
+  const suave    = t => t*t*(3-2*t);
+  const cl       = (v,a=0,b=1) => Math.max(a, Math.min(b, v));
+  const mezcla   = (a,b,t) => `rgb(${Math.round(a[0]+(b[0]-a[0])*t)},${Math.round(a[1]+(b[1]-a[1])*t)},${Math.round(a[2]+(b[2]-a[2])*t)})`;
+
+  function medir(){
+    DPR = Math.min(2, devicePixelRatio || 1);
+    W = innerWidth; H = innerHeight;
+    lienzo.width = Math.round(W*DPR); lienzo.height = Math.round(H*DPR);
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+  }
+
+  function componer(img){
+    medir();
+    const lado = Math.min(W*0.64, H*0.46, 470);
+    const esc  = lado/img.width;
+    const aL = Math.round(img.width*esc), hL = Math.round(img.height*esc);
+    const c = document.createElement('canvas');
+    c.width = Math.round(aL*DPR); c.height = Math.round(hL*DPR);
+    const g = c.getContext('2d', {willReadFrequently:true});
+    g.setTransform(DPR,0,0,DPR,0,0);
+    g.imageSmoothingQuality = 'high';
+    g.drawImage(img, 0, 0, aL, hL);
+    comp = {canvas:c, w:aL, h:hL, ox:(W-aL)/2, oy:(H-hL)/2};
+  }
+
+  function sembrar(){
+    const g = comp.canvas.getContext('2d', {willReadFrequently:true});
+    const ancho = comp.canvas.width;
+    const datos = g.getImageData(0, 0, ancho, comp.canvas.height).data;
+    const salto = Math.max(1, Math.round(2*DPR));       // densidad «densa»
+    const radio = Math.hypot(W,H)*0.62;
+    particulas = [];
+    for(let py=0; py<comp.canvas.height; py+=salto){
+      for(let px=0; px<ancho; px+=salto){
+        const i = (py*ancho + px)*4;
+        if(datos[i+3] < 40) continue;
+        const tx = comp.ox + px/DPR, ty = comp.oy + py/DPR;
+        const dx = tx-W/2, dy = ty-H/2;
+        const d = Math.hypot(dx,dy), ang = Math.atan2(dy,dx);
+        const aE = ang + (Math.random()-0.5)*1.5, rE = radio*(0.55+Math.random()*0.75);
+        const aS = ang + (Math.random()-0.5)*0.55, rS = radio*(0.7+Math.random()*0.6);
+        particulas.push({tx,ty,
+          ax:W/2+Math.cos(aE)*rE, ay:H/2+Math.sin(aE)*rE,
+          bx:W/2+Math.cos(aS)*rS, by:H/2+Math.sin(aS)*rS,
+          dEnt:Math.min(0.70,(d/(comp.w*0.72))*0.52+Math.random()*0.24),
+          dSal:Math.random()*0.34,
+          r:datos[i], g:datos[i+1], b:datos[i+2], a:datos[i+3]/255});
+      }
+    }
+  }
+
+  let acabado = false;
+  function terminar(){
+    if(acabado) return;
+    acabado = true;
+    clearTimeout(salvavidas);
+    capa.remove();
+    lienzo.width = lienzo.height = 0;
+    particulas = []; comp = null;
+  }
+  /* Salvavidas: si el navegador congela requestAnimationFrame — pestaña de
+     fondo, ahorro de energía, equipo cargado — el bucle no avanza y el velo
+     taparía la web para siempre. setTimeout sí corre en esas condiciones. */
+  let salvavidas = null;
+
+  function cuadro(ms){
+    const t = ms - t0;
+    ctx.clearRect(0,0,W,H);
+
+    let nitidez;
+    if(t < tEnt)            nitidez = suave(cl((t/tEnt - 0.74)/0.26));
+    else if(t < tEnt+tRep)  nitidez = 1;
+    else                    nitidez = 1 - suave(cl((t-tEnt-tRep)/(tSal*0.26)));
+
+    if(t >= tEnt+tRep){
+      const q = (t - tEnt - tRep)/tSal;
+      // el suelo vira al color de la web (en claro es el mismo perla)
+      const destino = root.dataset.theme === 'dark' ? OSCURO : PERLA;
+      capa.style.backgroundColor = mezcla(PERLA, destino, suave(cl(q/0.62)));
+      // y sólo al final el velo se retira, ya del color correcto
+      capa.style.opacity = String(1 - suave(cl((q-0.6)/0.4)));
+    }
+
+    if(nitidez < 0.999){
+      for(let n=0; n<particulas.length; n++){
+        const p = particulas[n];
+        let x, y, alfa;
+        if(t < tEnt){
+          const u = cl((t/tEnt - p.dEnt)/(1 - p.dEnt));
+          const e = suaveOut(u);
+          x = p.ax+(p.tx-p.ax)*e; y = p.ay+(p.ty-p.ay)*e;
+          alfa = p.a*Math.min(1, u*2.4);
+        }else if(t < tEnt+tRep){
+          x = p.tx; y = p.ty; alfa = p.a;
+        }else{
+          const u = cl(((t-tEnt-tRep)/tSal - p.dSal)/(1 - p.dSal));
+          const e = expoIn(u);
+          x = p.tx+(p.bx-p.tx)*e; y = p.ty+(p.by-p.ty)*e;
+          alfa = p.a*(1 - suave(u));
+        }
+        alfa *= (1 - nitidez);
+        if(alfa <= 0.01) continue;
+        ctx.globalAlpha = alfa;
+        ctx.fillStyle = `rgb(${p.r},${p.g},${p.b})`;
+        ctx.fillRect(x, y, 1.5, 1.5);
+      }
+    }
+    if(nitidez > 0.001){
+      ctx.globalAlpha = nitidez;
+      ctx.drawImage(comp.canvas, comp.ox, comp.oy, comp.w, comp.h);
+    }
+    ctx.globalAlpha = 1;
+
+    if(t < DUR) requestAnimationFrame(cuadro);
+    else terminar();
+  }
+
+  const img = new Image();
+  img.decoding = 'async';
+  let arrancado = false;
+  const arrancar = () => {
+    if(arrancado) return; arrancado = true;
+    try{
+      componer(img); sembrar();
+      t0 = performance.now();
+      salvavidas = setTimeout(terminar, DUR + 1200);
+      requestAnimationFrame(cuadro);
+    }catch(_){ terminar(); }          // si algo falla, la web aparece igual
+  };
+  img.onload  = arrancar;
+  img.onerror = terminar;             // sin logo no hay intro, pero sí web
+  img.src = 'img/logo-hd.webp';
+  // red de seguridad: si la imagen tarda, no dejamos la web tapada
+  setTimeout(() => { if(!arrancado) terminar(); }, 2500);
+
+  retrasoEntrada = 2.15;              // el header entra mientras se destapa
+  return {duracion: DUR};
+})();
+
 
 $('#theme').addEventListener('click',e=>{
   const n = root.dataset.theme==='light' ? 'dark' : 'light';
@@ -1701,7 +1878,7 @@ introK.forEach((o,i)=>{
   gsap.to(o,{v:1,duration:1.1,ease:'power2.out',delay:.25 + (i%3)*.12 + Math.floor(i/3)*.05});
 });
 setTimeout(()=>introK.forEach(o=>{if(o.v<1)o.v=1}),2400);
-gsap.timeline({delay:.05})
+gsap.timeline({delay:retrasoEntrada})
   // sólo opacidad: cualquier desplazamiento vertical aquí corre el riesgo de
   // dejar los elementos del header desalineados si el tween no termina
   .from('.marca, .social a, .nav-r > *',{opacity:0,duration:.85,ease:'power2.out',stagger:.06},0)
