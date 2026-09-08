@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Ministerios Ebenezer C.R</title>
 <meta name="description" content="Ministerios Ebenezer Costa Rica — casa de fe, familia y palabra. Servicios, transmisión en vivo y recursos.">
-<meta name="theme-color" content="#EFEFEF">
+<meta name="theme-color" content="#E8E5DF">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://i.ytimg.com">
@@ -13,12 +13,12 @@
 <style>
 /* ══════════════════════════════ TOKENS ══════════════════════════════ */
 :root{
-  /* claro = el gris del ejemplo pmndrs */
-  --bg:#EFEFEF; --bg-2:#E6E6E6; --panel:#FFFFFF; --panel-2:#F4F4F4;
-  --fg:#0A0A0A; --fg-2:#5C5C5C; --fg-3:#9A9A9A;
+  /* claro = gris perla: mismo espíritu que el ejemplo pmndrs, pero cálido */
+  --bg:#E8E5DF; --bg-2:#DFDBD3; --panel:#F3F1EC; --panel-2:#EAE7E0;
+  --fg:#100F0D; --fg-2:#5C594F; --fg-3:#96918A;
   --amber:#A8690A; --amber-2:#7E4F06; --violet:#4B3EE0; --rose:#D6365A; --mint:#1F9E76;
   --accent:var(--amber);
-  --line:rgba(10,10,10,.14); --line-2:rgba(10,10,10,.07);
+  --line:rgba(16,15,13,.15); --line-2:rgba(16,15,13,.075);
   --glow:rgba(168,105,10,.2);
 
   --e-expo:cubic-bezier(.16,1,.3,1);
@@ -92,6 +92,18 @@ body.open .aurora{opacity:.42}
 .aurora i:nth-child(2){width:48vw;height:48vw;right:-8vw;top:18vh}
 .aurora i:nth-child(3){width:44vw;height:44vw;left:26vw;bottom:-18vw}
 [data-theme="light"] .aurora i{mix-blend-mode:multiply}
+/* ── Onda del cambio de tema ────────────────────────────────────────
+   Donde el navegador soporta View Transitions, el círculo recorta el
+   render nuevo: se ve la web entera del otro tema apareciendo, no un
+   color plano. Donde no, cae al círculo de color de abajo.          */
+::view-transition-old(root),::view-transition-new(root){
+  animation:none;mix-blend-mode:normal}
+::view-transition-old(root){z-index:1}
+::view-transition-new(root){z-index:2}
+.onda{position:fixed;width:24px;height:24px;border-radius:50%;z-index:9995;
+  pointer-events:none;transform:translate(-50%,-50%) scale(0);
+  transition:transform .8s cubic-bezier(.16,1,.3,1),opacity .4s ease-out}
+
 .grain{position:fixed;inset:0;pointer-events:none;z-index:9990;opacity:.045;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 
@@ -221,6 +233,8 @@ body.open .aurora{opacity:.42}
 .hud > *{pointer-events:auto}
 .copy,.by{font-family:var(--serif);font-weight:var(--w-book);font-size:12.5px;letter-spacing:.15em;
   text-transform:uppercase;color:var(--fg-2);white-space:nowrap}
+.copy{line-height:1.45}
+.copy b{display:block;font-weight:var(--w-med);color:var(--fg)}
 .by{transition:color .35s}
 .by b{font-weight:var(--w-semi);color:var(--fg)}
 .by:hover{color:var(--accent)}.by:hover b{color:var(--accent)}
@@ -239,7 +253,7 @@ body.open .hud{opacity:0;pointer-events:none;transition:opacity .35s}
   .dots i{width:5px;height:5px}
   .dots button.on i{width:18px}
   .copy,.by{font-size:7.5px;letter-spacing:.09em;line-height:1.35}
-  .copy{flex:1 1 0;min-width:0;white-space:normal}
+  .copy{flex:1 1 0;min-width:0;white-space:nowrap;line-height:1.45;font-size:9px;letter-spacing:.07em}
   .by{flex:0 0 auto;text-align:right}
 }
 @media(max-width:400px){
@@ -264,7 +278,7 @@ body.open .vscrim{pointer-events:auto;cursor:pointer}
 .grip{position:absolute;top:11px;left:50%;translate:-50% 0;z-index:6;
   width:52px;height:4px;border-radius:4px;background:rgba(255,255,255,.55)}
 @media(max-width:760px){
-  .view{left:0;right:0;top:clamp(74px,11vh,112px);border-radius:22px 22px 0 0;
+  .view{left:0;right:0;top:clamp(104px,15vh,152px);border-radius:22px 22px 0 0;
     border-left:0;border-right:0}
   /* La portada ocupaba media pantalla y dejaba muy poco cuerpo visible.
      Van con `.view` delante porque estas reglas quedan antes que las base
@@ -506,7 +520,18 @@ body.open .vscrim{pointer-events:auto;cursor:pointer}
 .drawer li b{font-weight:var(--w-semi)}
 .drawer li span{color:var(--fg-2);font-family:var(--serif);font-size:.9em;letter-spacing:.08em;
   text-align:right;white-space:nowrap;font-variant-numeric:lining-nums}
-@media(max-width:640px){.drawer .sheet{width:100%;border-left:0}}
+@media(max-width:640px){
+  /* En móvil la ficha era un panel a pantalla completa: no quedaba nada
+     fuera que tocar para cerrarla. Pasa a hoja inferior, dejando una
+     franja de velo arriba, con asa y cierre por deslizamiento. */
+  .drawer .sheet{width:100%;left:0;right:0;top:auto;bottom:0;
+    height:min(84vh, calc(100% - 76px));
+    border-left:0;border-top:1px solid var(--line);
+    border-radius:22px 22px 0 0;padding-top:34px}
+  .drawer .sheet::before{content:"";position:absolute;top:12px;left:50%;
+    translate:-50% 0;width:46px;height:4px;border-radius:4px;background:var(--line)}
+  .drawer .x{top:14px;right:14px}
+}
 
 /* footer dentro de vistas */
 .vfoot{margin-top:clamp(40px,6vh,80px);padding-top:24px;border-top:1px solid var(--line);
@@ -557,7 +582,7 @@ body.open .vscrim{pointer-events:auto;cursor:pointer}
 </main>
 
 <footer class="hud" id="hud">
-  <span class="copy">© 2026 Ministerios Ebenezer Costa Rica · Todos los derechos reservados</span>
+  <span class="copy"><b>Ministerios Ebenezer CR</b>Todos los derechos reservados</span>
   <div class="dots" id="dots"></div>
   <a class="by" href="https://altriumcr.com" target="_blank" rel="noopener">Designed by <b>Altriumcr.com</b></a>
 </footer>
@@ -759,12 +784,45 @@ function toast(msg){const t=$('#toast');t.textContent=msg;
    ═══════════════════════════════════════════════════════════════ */
 const root=document.documentElement;
 try{const t=localStorage.getItem('eb-theme'); if(t) root.dataset.theme=t;}catch(e){}
-$('#theme').addEventListener('click',()=>{
+const FONDO={light:'#E8E5DF', dark:'#08080A'};
+
+$('#theme').addEventListener('click',e=>{
   const n = root.dataset.theme==='light' ? 'dark' : 'light';
-  root.dataset.theme=n;
-  try{localStorage.setItem('eb-theme',n)}catch(e){}
-  document.querySelector('meta[name=theme-color]').content = n==='light' ? '#F6F5F1' : '#08080A';
-  gsap.fromTo('#aurora',{opacity:0},{opacity:n==='light'?.3:.5,duration:1,ease:'power2.out'});
+
+  const aplicar=()=>{
+    root.dataset.theme=n;
+    try{localStorage.setItem('eb-theme',n)}catch(_){}
+    document.querySelector('meta[name=theme-color]').content = FONDO[n];
+  };
+
+  if(reduce){ aplicar(); return; }
+
+  // origen de la onda: el propio botón
+  const b=$('#theme').getBoundingClientRect();
+  const x=b.left+b.width/2, y=b.top+b.height/2;
+  // radio que alcanza la esquina más lejana
+  const R=Math.hypot(Math.max(x,innerWidth-x), Math.max(y,innerHeight-y));
+
+  if(document.startViewTransition){
+    const vt=document.startViewTransition(aplicar);
+    vt.ready.then(()=>{
+      root.animate(
+        {clipPath:[`circle(0px at ${x}px ${y}px)`, `circle(${R}px at ${x}px ${y}px)`]},
+        {duration:760, easing:'cubic-bezier(.16,1,.3,1)',
+         pseudoElement:'::view-transition-new(root)'});
+    }).catch(()=>{});
+  }else{
+    // sin View Transitions: un disco del color de destino que se expande
+    const o=document.createElement('div');
+    o.className='onda';
+    o.style.background=FONDO[n];
+    o.style.left=x+'px'; o.style.top=y+'px';
+    document.body.appendChild(o);
+    requestAnimationFrame(()=>{o.style.transform=`translate(-50%,-50%) scale(${R/12})`});
+    setTimeout(aplicar, 430);                 // el tema cambia bajo el disco
+    setTimeout(()=>{o.style.opacity='0'}, 780);
+    setTimeout(()=>o.remove(), 1250);
+  }
 });
 
 document.addEventListener('click',e=>{
@@ -1036,6 +1094,22 @@ cards.forEach(c=>{
     if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openSection(c.dataset.id,c); }
   });
 });
+
+/* Teclado global. Escape cierra de dentro hacia fuera: primero la ficha,
+   luego el panel. Las flechas mueven la banda sólo en el home. */
+addEventListener('keydown',e=>{
+  if(e.key==='Escape'){
+    if($('#drawer').classList.contains('on')) return closeDrawer();
+    if(document.body.classList.contains('open')) return closeView();
+    return;
+  }
+  if(document.body.classList.contains('open')) return;
+  if(e.key==='ArrowRight') step(1);
+  if(e.key==='ArrowLeft')  step(-1);
+});
+
+/* Los puntos del pie saltan a su sección por el camino más corto. */
+$$('#dots button').forEach(b=>b.addEventListener('click',()=>goToSection(+b.dataset.i)));
 
 /* ═══════════════════════════════════════════════════════════════
    CONTENIDO DE CADA SECCIÓN
@@ -1434,22 +1508,69 @@ function renderEdiciones(langIdx){
    DRAWER
    ═══════════════════════════════════════════════════════════════ */
 const drawer=$('#drawer'), sheet=$('#sheet'), sheetIn=$('#sheetIn');
+let fichaAbiertaEn=0, guardFicha=null;
+
+/* En escritorio la ficha entra por la derecha; en móvil sube desde abajo.
+   El eje se decide en el momento de abrir, no está fijado en el CSS. */
+const fichaMovil = ()=>matchMedia('(max-width:640px)').matches;
+const fichaFuera = ()=> fichaMovil() ? {x:'0%', y:'100%'} : {x:'100%', y:'0%'};
+const fichaDentro = ()=>({x:'0%', y:'0%'});
+
+function settleFicha(){
+  clearTimeout(guardFicha);
+  drawer.classList.remove('on');
+  sheetIn.innerHTML='';
+  gsap.set(sheet, fichaFuera());
+  gsap.set('#drawer .scrim',{opacity:0});
+}
+
 function openDrawer(html){
   sheetIn.innerHTML=html;
   drawer.classList.add('on');
   sheet.scrollTop=0;
+  fichaAbiertaEn=performance.now();
+  gsap.set(sheet, fichaFuera());
   gsap.timeline()
     .to('#drawer .scrim',{opacity:1,duration:.45,ease:'power2.out'},0)
-    .fromTo(sheet,{x:'100%'},{x:'0%',duration:.7,ease:'expo.out'},0)
+    .to(sheet,{...fichaDentro(),duration:.72,ease:'expo.out'},0)
     .fromTo(sheetIn.children,{opacity:0,y:22},{opacity:1,y:0,duration:.7,ease:'expo.out',stagger:.05},'-=.4');
+  clearTimeout(guardFicha);
+  guardFicha=setTimeout(()=>gsap.set(sheet, fichaDentro()), 1200);
 }
+
 function closeDrawer(){
-  gsap.timeline({onComplete:()=>{drawer.classList.remove('on');sheetIn.innerHTML=''}})
-    .to(sheet,{x:'100%',duration:.55,ease:'expo.in'},0)
+  if(!drawer.classList.contains('on')) return;
+  if(performance.now()-fichaAbiertaEn < 380) return;   // ignora el clic fantasma
+  clearTimeout(guardFicha);
+  gsap.timeline({onComplete:settleFicha})
+    .to(sheet,{...fichaFuera(),duration:.55,ease:'power3.in'},0)
     .to('#drawer .scrim',{opacity:0,duration:.4},0);
+  guardFicha=setTimeout(settleFicha, 900);
 }
-drawer.addEventListener('click',e=>{ if(e.target.closest('[data-close]')) closeDrawer() });
-gsap.set(sheet,{x:'100%'});
+
+/* Igual que el panel grande: el velo cierra con pointerdown, inmune al
+   clic fantasma del táctil. El botón ✕ va aparte. */
+$('#drawer .scrim').addEventListener('pointerdown',e=>{
+  if(performance.now()-fichaAbiertaEn < 380) return;
+  closeDrawer();
+});
+$('#drawer .scrim').addEventListener('click',e=>{e.preventDefault();e.stopPropagation()});
+$$('.x',drawer).forEach(b=>b.addEventListener('click',closeDrawer));
+
+/* Deslizar la ficha hacia abajo también la cierra (móvil) */
+(function(){
+  let y0=null;
+  sheet.addEventListener('touchstart',e=>{
+    y0 = (sheet.scrollTop<=0 && fichaMovil() && performance.now()-fichaAbiertaEn>500)
+       ? e.touches[0].clientY : null;
+  },{passive:true});
+  sheet.addEventListener('touchmove',e=>{
+    if(y0===null) return;
+    if(e.touches[0].clientY-y0 > 110){ y0=null; closeDrawer(); }
+  },{passive:true});
+})();
+
+gsap.set(sheet, fichaFuera());
 gsap.set(view,{y:'100%'});
 
 function openDrawerDep(i){
