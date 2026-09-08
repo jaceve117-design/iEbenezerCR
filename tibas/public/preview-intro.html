@@ -77,8 +77,8 @@ body{background:var(--bg);color:var(--fg);font-family:var(--serif);font-size:18p
   <button class="dens on" data-p="2">Densa</button>
   <span>·</span>
   <span>Duración</span>
-  <input type="range" id="dur" min="1" max="5" step="0.1" value="2" aria-label="Duración del intro">
-  <b id="durVal">2.0 s</b>
+  <input type="range" id="dur" min="1" max="5" step="0.1" value="3" aria-label="Duración del intro">
+  <b id="durVal">3.0 s</b>
   <span>·</span>
   <button id="tema">Tema</button>
 </div>
@@ -102,7 +102,7 @@ let pase = 0;                 // token: abandona los bucles de pases viejos
 /* Guion proporcional: la duración total la manda el deslizador.
    El reparto se mantiene igual sea cual sea el total. */
 const PROP = { entrada:0.40, reposo:0.275, salida:0.325 };
-let duracion = 2000;          // ms — 2 s por defecto
+let duracion = 3000;          // ms — 3 s por defecto
 let plan = null;              // tiempos fijados al arrancar cada pase
 
 const suaveOut = t => 1 - Math.pow(1-t, 4);
@@ -120,46 +120,21 @@ function medir(){
 /* ── La composición: el logo con «Costa Rica» abajo a la derecha ──
    Se dibuja a resolución de dispositivo (DPR) sobre el logo de 1080 px,
    para que el remate final salga nítido de verdad.                  */
-async function componer(img){
+function componer(img){
   medir();
   const lado = Math.min(W*0.64, H*0.46, 470);
   const esc  = lado/img.width;
   const aL   = Math.round(img.width*esc);
   const hL   = Math.round(img.height*esc);
 
-  const cuerpo  = Math.max(11, Math.round(lado*0.077));   // «Costa Rica»
-  const respiro = Math.round(lado*0.055);
-  const altoTxt = Math.round(cuerpo*1.25);
-  const total   = hL + respiro + altoTxt;
-
   const c = document.createElement('canvas');
   c.width  = Math.round(aL*DPR);
-  c.height = Math.round(total*DPR);
+  c.height = Math.round(hL*DPR);
   const g = c.getContext('2d', {willReadFrequently:true});
   g.setTransform(DPR,0,0,DPR,0,0);
   g.imageSmoothingQuality = 'high';
   g.drawImage(img, 0, 0, aL, hL);
-
-  try{
-    await document.fonts.load(`500 ${cuerpo}px "EB Garamond"`);
-    await document.fonts.ready;
-  }catch(_){}
-
-  const txt = 'COSTA RICA';
-  g.font = `500 ${cuerpo}px "EB Garamond", Garamond, Georgia, serif`;
-  g.textBaseline = 'alphabetic';
-  const track = cuerpo*0.30;                       // interletrado generoso
-  let ancho = -track;
-  for(const ch of txt) ancho += g.measureText(ch).width + track;
-
-  // alineado al borde derecho del logo, justo debajo
-  const grad = g.createLinearGradient(aL-ancho, 0, aL, 0);
-  grad.addColorStop(0, '#E3C07A');
-  grad.addColorStop(1, '#BC8620');
-  g.fillStyle = grad;
-  let x = aL - ancho;
-  const y = hL + respiro + cuerpo;
-  for(const ch of txt){ g.fillText(ch, x, y); x += g.measureText(ch).width + track; }
+  const total = hL;
 
   comp = { canvas:c, w:aL, h:total, ox:(W-aL)/2, oy:(H-total)/2 };
 }
@@ -280,7 +255,7 @@ async function reproducir(){
   plan = { ent: duracion*PROP.entrada,
            rep: duracion*PROP.reposo,
            sal: duracion*PROP.salida };
-  await componer(imagen);
+  componer(imagen);
   sembrar();
   if(mio !== pase) return;               // nos adelantaron mientras componíamos
   t0 = performance.now();
