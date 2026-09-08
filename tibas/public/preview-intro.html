@@ -41,6 +41,15 @@ body{background:var(--bg);color:var(--fg);font-family:var(--serif);font-size:18p
 .panel button:hover{border-color:#A8690A;background:color-mix(in oklab,#A8690A 12%,transparent)}
 .panel button.on{background:var(--fg);color:var(--bg);border-color:var(--fg)}
 .panel span{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--fg-2);padding-inline:6px}
+.panel b{font-family:var(--serif);font-weight:500;font-size:13px;letter-spacing:.06em;
+  min-width:46px;text-align:right;font-variant-numeric:tabular-nums}
+#dur{-webkit-appearance:none;appearance:none;width:132px;height:22px;background:transparent;cursor:pointer}
+#dur::-webkit-slider-runnable-track{height:2px;background:var(--line);border-radius:2px}
+#dur::-moz-range-track{height:2px;background:var(--line);border-radius:2px}
+#dur::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;border-radius:50%;
+  background:#A8690A;margin-top:-6.5px;border:0;transition:transform .25s}
+#dur::-moz-range-thumb{width:15px;height:15px;border-radius:50%;background:#A8690A;border:0}
+#dur:hover::-webkit-slider-thumb{transform:scale(1.25)}
 .nota{position:fixed;left:50%;translate:-50% 0;top:18px;z-index:40;font-size:12px;
   letter-spacing:.16em;text-transform:uppercase;color:var(--fg-2);text-align:center;padding-inline:20px}
 @media(max-width:520px){ .panel button{padding:8px 11px;font-size:11px} }
@@ -67,8 +76,11 @@ body{background:var(--bg);color:var(--fg);font-family:var(--serif);font-size:18p
   <button class="dens" data-p="3">Media</button>
   <button class="dens on" data-p="2">Densa</button>
   <span>·</span>
+  <span>Duración</span>
+  <input type="range" id="dur" min="1" max="5" step="0.1" value="2" aria-label="Duración del intro">
+  <b id="durVal">2.0 s</b>
+  <span>·</span>
   <button id="tema">Tema</button>
-  <button id="lento">Cámara lenta</button>
 </div>
 
 <script>
@@ -84,11 +96,14 @@ let W = 0, H = 0;
 let particulas = [];
 let comp = null;              // lienzo con el logo + «Costa Rica», a resolución completa
 let paso = 2;                 // muestreo: menor = más partículas
-let lento = false;
 let t0 = 0, corriendo = false;
+let pase = 0;                 // token: abandona los bucles de pases viejos
 
-/* Guion, en milisegundos */
-const T = { entrada:1600, reposo:1100, salida:1300 };
+/* Guion proporcional: la duración total la manda el deslizador.
+   El reparto se mantiene igual sea cual sea el total. */
+const PROP = { entrada:0.40, reposo:0.275, salida:0.325 };
+let duracion = 2000;          // ms — 2 s por defecto
+let plan = null;              // tiempos fijados al arrancar cada pase
 
 const suaveOut = t => 1 - Math.pow(1-t, 4);
 const expoIn   = t => t <= 0 ? 0 : Math.pow(2, 10*(t-1));
@@ -189,8 +204,8 @@ function sembrar(){
 }
 
 function dibujar(ms){
-  const k = lento ? 2.6 : 1;
-  const tEnt = T.entrada*k, tRep = T.reposo*k, tSal = T.salida*k;
+  if(dibujar.pase !== pase) return;      // llegó tarde: este pase ya no vale
+  const tEnt = plan.ent, tRep = plan.rep, tSal = plan.sal;
   const t = ms - t0;
 
   ctx.clearRect(0, 0, W, H);
@@ -256,13 +271,20 @@ function dibujar(ms){
 }
 
 async function reproducir(){
-  if(corriendo) return;
+  const mio = ++pase;                    // invalida cualquier pase anterior
   corriendo = true;
   velo.style.opacity = '1';
   velo.style.pointerEvents = '';
+  // los tiempos se fijan al arrancar: mover el deslizador a media
+  // reproducción no debe descolocar el pase en curso
+  plan = { ent: duracion*PROP.entrada,
+           rep: duracion*PROP.reposo,
+           sal: duracion*PROP.salida };
   await componer(imagen);
   sembrar();
+  if(mio !== pase) return;               // nos adelantaron mientras componíamos
   t0 = performance.now();
+  dibujar.pase = mio;
   requestAnimationFrame(dibujar);
 }
 
@@ -274,9 +296,13 @@ imagen.src = RUTA_LOGO;
 addEventListener('resize', () => { if(!corriendo){ medir(); ctx.clearRect(0,0,W,H); } });
 
 document.getElementById('repetir').addEventListener('click', reproducir);
-document.getElementById('lento').addEventListener('click', e => {
-  lento = !lento; e.currentTarget.classList.toggle('on', lento);
+const barra = document.getElementById('dur');
+const rotulo = document.getElementById('durVal');
+barra.addEventListener('input', () => {
+  duracion = Math.round(parseFloat(barra.value)*1000);
+  rotulo.textContent = (duracion/1000).toFixed(1)+' s';
 });
+barra.addEventListener('change', reproducir);   // reinicia con la duración nueva
 document.getElementById('tema').addEventListener('click', () => {
   raiz.dataset.theme = raiz.dataset.theme === 'dark' ? 'light' : 'dark';
   document.querySelector('meta[name=theme-color]').content =
@@ -286,7 +312,7 @@ document.querySelectorAll('.dens').forEach(b => b.addEventListener('click', () =
   document.querySelectorAll('.dens').forEach(x => x.classList.remove('on'));
   b.classList.add('on');
   paso = +b.dataset.p;
-  if(!corriendo) reproducir();
+  reproducir();
 }));
 </script>
 </body>
