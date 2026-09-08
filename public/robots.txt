@@ -1,0 +1,3 @@
+# Despliegue de prueba. Quitar este archivo antes del lanzamiento real.
+User-agent: *
+Disallow: /

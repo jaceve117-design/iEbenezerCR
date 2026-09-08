@@ -1,0 +1,14 @@
+/*
+  X-Frame-Options: SAMEORIGIN
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), microphone=(), camera=()
+  # QUITAR ANTES DE PUBLICAR DE VERDAD --------------------------------
+  # Mientras es un despliegue de prueba con datos por confirmar, pedimos
+  # a los buscadores que no lo indexen. Es una iglesia real: no conviene
+  # que Google recoja fechas e horarios que todavía no están validados.
+  X-Robots-Tag: noindex, nofollow
+  # -------------------------------------------------------------------
+
+/index.html
+  Cache-Control: public, max-age=0, must-revalidate

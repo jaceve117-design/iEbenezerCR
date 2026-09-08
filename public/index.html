@@ -1,0 +1,1588 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ministerios Ebenezer C.R</title>
+<meta name="description" content="Ministerios Ebenezer Costa Rica — casa de fe, familia y palabra. Servicios, transmisión en vivo y recursos.">
+<meta name="theme-color" content="#EFEFEF">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://i.ytimg.com">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..600&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════ TOKENS ══════════════════════════════ */
+:root{
+  /* claro = el gris del ejemplo pmndrs */
+  --bg:#EFEFEF; --bg-2:#E6E6E6; --panel:#FFFFFF; --panel-2:#F4F4F4;
+  --fg:#0A0A0A; --fg-2:#5C5C5C; --fg-3:#9A9A9A;
+  --amber:#A8690A; --amber-2:#7E4F06; --violet:#4B3EE0; --rose:#D6365A; --mint:#1F9E76;
+  --accent:var(--amber);
+  --line:rgba(10,10,10,.14); --line-2:rgba(10,10,10,.07);
+  --glow:rgba(168,105,10,.2);
+
+  --e-expo:cubic-bezier(.16,1,.3,1);
+  --e-snap:cubic-bezier(.7,0,.2,1);
+  --e-back:cubic-bezier(.34,1.5,.5,1);
+  --e-soft:cubic-bezier(.33,1,.68,1);
+
+  --pad:clamp(20px,4vw,44px);
+  --nav-h:80px;
+
+  /* ── TIPOGRAFÍA ────────────────────────────────────────────────
+     Una sola familia: EB Garamond, revival de los tipos de Claude
+     Garamont (s. XVI) — el linaje de la imprenta litúrgica. Toda la
+     jerarquía se construye con variantes internas: peso, tamaño,
+     interletrado, caja e itálica. Nada de mezclar familias.        */
+  --serif:'EB Garamond', Garamond, Georgia, 'Times New Roman', serif;
+
+  --w-book:400;    /* cuerpo de texto            */
+  --w-med:500;     /* títulos grandes, cifras    */
+  --w-semi:600;    /* subtítulos                 */
+  --w-bold:700;    /* énfasis puntual            */
+
+  --ls-display:-.022em;   /* los titulares grandes cierran  */
+  --ls-body:0;
+  --ls-label:.22em;       /* las versalitas respiran        */
+}
+[data-theme="dark"]{
+  --bg:#08080A; --bg-2:#0D0D11; --panel:#121218; --panel-2:#17171F;
+  --fg:#F0EEE9; --fg-2:#8E8B98; --fg-3:#5D5A67;
+  --amber:#F0A93B; --amber-2:#FFD79A; --violet:#6B5BFF; --rose:#FF6B8A; --mint:#4FD1A5;
+  --line:rgba(240,238,233,.10); --line-2:rgba(240,238,233,.055);
+  --glow:rgba(240,169,59,.32);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  background:var(--bg);color:var(--fg);
+  font-family:var(--serif);font-weight:var(--w-book);
+  /* Garamond tiene altura de x baja: pide un cuerpo mayor y más aire */
+  font-size:clamp(17px, 0.5vw + 15.2px, 19px);line-height:1.68;
+  font-feature-settings:"kern" 1,"liga" 1,"onum" 1;
+  -webkit-font-smoothing:antialiased;overflow:hidden;
+  transition:background-color .8s var(--e-soft),color .8s var(--e-soft);
+  overscroll-behavior:none;
+}
+body.open{overflow:hidden}
+::selection{background:var(--accent);color:#0A0A0C}
+h1,h2,h3,h4,.dis{font-family:var(--serif);font-weight:var(--w-med);
+  line-height:1.02;letter-spacing:var(--ls-display);text-transform:none}
+h3,h4{font-weight:var(--w-semi);line-height:1.18}
+em,.it{font-style:italic}
+/* versalitas: la misma familia en caja alta, ligera y muy espaciada */
+.mono,.label{font-family:var(--serif);font-weight:var(--w-med);font-size:12px;
+  letter-spacing:var(--ls-label);text-transform:uppercase;color:var(--fg-2);
+  font-feature-settings:"kern" 1;line-height:1.4}
+/* cifras tabulares para horarios y numeración */
+.num{font-variant-numeric:lining-nums tabular-nums}
+a{color:inherit;text-decoration:none;-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+img{display:block;max-width:100%}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+
+/* ── fondo: aurora reactiva ── */
+.aurora{position:fixed;inset:-25%;z-index:0;pointer-events:none;filter:blur(100px);opacity:0;
+  transition:opacity .9s var(--e-soft)}
+body.open .aurora{opacity:.42}
+[data-theme="light"] body.open .aurora{opacity:.26}
+.aurora i{position:absolute;border-radius:50%;display:block;mix-blend-mode:screen;
+  transition:background 1.2s var(--e-soft),transform 1.6s var(--e-expo)}
+.aurora i:nth-child(1){width:56vw;height:56vw;left:-10vw;top:-10vw}
+.aurora i:nth-child(2){width:48vw;height:48vw;right:-8vw;top:18vh}
+.aurora i:nth-child(3){width:44vw;height:44vw;left:26vw;bottom:-18vw}
+[data-theme="light"] .aurora i{mix-blend-mode:multiply}
+.grain{position:fixed;inset:0;pointer-events:none;z-index:9990;opacity:.045;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* ── cursor ── */
+.cur,.cur-r{position:fixed;top:0;left:0;z-index:9999;pointer-events:none;will-change:transform}
+.cur{width:8px;height:8px;border-radius:50%;background:var(--accent);mix-blend-mode:difference}
+.cur-r{width:40px;height:40px;border:1px solid var(--line);border-radius:50%;z-index:9998;
+  display:grid;place-items:center}
+.cur-r span{font-family:var(--serif);font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+  opacity:0;transform:scale(.6);transition:opacity .3s,transform .4s var(--e-back);color:var(--accent)}
+.cur-r.hot span{opacity:1;transform:none}
+@media(pointer:coarse),(max-width:820px){.cur,.cur-r{display:none}}
+
+/* ══════════════════════════════ HEADER ══════════════════════════════ */
+.nav{position:fixed;top:0;left:0;right:0;height:var(--nav-h);z-index:700;
+  display:flex;align-items:center;justify-content:space-between;padding-inline:var(--pad)}
+
+.wordmark{font-family:var(--serif);font-weight:var(--w-med);text-transform:uppercase;
+  font-size:clamp(12px,1.05vw,14.5px);letter-spacing:.15em;line-height:1.2;
+  transition:opacity .4s}
+.wordmark em{display:block;font-style:italic;text-transform:none;
+  font-weight:400;font-size:13px;letter-spacing:.01em;color:var(--fg-2);margin-top:1px}
+.wordmark:hover{opacity:.62}
+
+.social{position:absolute;left:50%;translate:-50% 0;display:flex;gap:6px}
+.social a{border-radius:11px;display:grid;place-items:center;color:var(--fg-2);
+  transition:color .35s,background-color .4s,transform .5s var(--e-back)}
+.social a:hover{color:var(--fg);background:var(--line-2);transform:translateY(-2px)}
+.social svg{width:17px;fill:currentColor}
+
+.nav-r{display:flex;align-items:center;gap:10px}
+.logo{display:block;flex:none;margin-left:4px}
+.logo img{width:auto;display:block;transition:transform .8s var(--e-back)}
+.logo:hover img{transform:scale(1.07) rotate(-2.5deg)}
+
+.icb{border-radius:11px;border:1px solid var(--line);display:grid;place-items:center;
+  position:relative;overflow:hidden;transition:border-color .35s,background-color .4s,transform .5s var(--e-back)}
+.icb:hover{border-color:var(--accent);background:color-mix(in oklab,var(--accent) 12%,transparent)}
+.icb:active{transform:scale(.9)}
+.icb svg{width:16px;position:absolute;transition:transform .65s var(--e-expo),opacity .3s}
+.i-sun{opacity:0;transform:translateY(-18px) rotate(80deg)}.i-moon{opacity:1;transform:none}
+[data-theme="dark"] .i-sun{opacity:1;transform:none}
+[data-theme="dark"] .i-moon{opacity:0;transform:translateY(18px) rotate(-80deg)}
+
+.pill{display:inline-flex;align-items:center;gap:8px;padding:0 18px;border-radius:11px;font-size:14px;
+  letter-spacing:.09em;text-transform:uppercase;font-weight:var(--w-med);background:var(--fg);color:var(--bg);
+  transition:transform .45s var(--e-back),box-shadow .5s,background-color .5s}
+.pill.live{background:#E8443F;color:#fff}
+.pill:hover{transform:translateY(-2px);box-shadow:0 12px 30px -12px rgba(0,0,0,.35)}
+.pill i{width:6px;height:6px;border-radius:50%;background:currentColor;animation:bl 1.5s infinite}
+@keyframes bl{0%,100%{opacity:1}50%{opacity:.25}}
+
+/* Todos los elementos del header comparten una misma altura (--ctl) y el
+   texto se dimensiona contra ella, para que nada quede fuera de escala. */
+:root{--ctl:38px}
+.icb,.social a{width:var(--ctl);height:var(--ctl)}
+.logo img{height:var(--ctl)}
+.pill{height:var(--ctl)}
+
+@media(max-width:760px){
+  :root{--nav-h:60px;--ctl:32px}
+  .wordmark{max-width:118px;font-size:9.5px;letter-spacing:.13em;line-height:1.3}
+  .wordmark em{display:none}
+  /* la píldora se vuelve un botón cuadrado, igual que el del tema */
+  .pill span{display:none}
+  .pill{width:var(--ctl);padding:0;justify-content:center;border-radius:10px}
+  .icb{border-radius:10px}
+  .icb svg{width:14px}
+  .social{position:static;translate:none;gap:2px}
+  .social svg{width:15px}
+  .nav-r{gap:7px}
+}
+@media(max-width:560px){ .social{display:none} }
+
+/* ══════════════════════════════ HOME — SCROLL INFINITO ══════════════════════════════ */
+.stage{position:fixed;inset:0;z-index:1;overflow:hidden;touch-action:none;cursor:grab;
+  will-change:transform,opacity;transform-origin:50% 46%}
+.stage:active{cursor:grabbing}
+
+.deck{position:absolute;top:50%;left:0;width:100%;height:0;
+  perspective:1200px;perspective-origin:50% 50%;transform-style:preserve-3d;z-index:10}
+
+.card{
+  position:absolute;top:0;left:0;
+  width:var(--cw,32vw);
+  transform-style:preserve-3d;will-change:transform,opacity;
+  cursor:pointer;background:none;border:0;
+}
+.card figure{position:relative;width:100%;height:var(--ch,72vh);overflow:hidden;background:var(--bg-2)}
+.card img{width:100%;height:100%;object-fit:cover;display:block;
+  /* --g lo calcula el loop: 0 = a color (la del centro), 1 = blanco y negro */
+  filter:grayscale(var(--g,1)) contrast(1.02);
+  transform:scale(1.02);
+  transition:transform 1.1s var(--e-expo)}
+.card:hover img{transform:scale(1.06);filter:grayscale(calc(var(--g,1) * .18)) contrast(1.04)}
+
+.card figcaption{position:relative;display:flex;align-items:baseline;gap:12px;padding-top:14px;
+  font-family:var(--serif);font-size:13px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--fg-2);font-variant-numeric:lining-nums}
+.card figcaption .nm{font-family:var(--serif);font-weight:var(--w-med);font-size:clamp(19px,1.9vw,27px);
+  letter-spacing:.055em;color:var(--fg);text-transform:uppercase;line-height:1;
+  transition:transform .55s var(--e-expo)}
+.card figcaption .go{margin-left:auto;opacity:0;transform:translateX(-8px);
+  transition:opacity .5s var(--e-expo),transform .5s var(--e-expo);color:var(--accent)}
+.card.act figcaption .go,.card:hover figcaption .go{opacity:1;transform:none}
+.card:hover figcaption .nm{transform:translateX(5px)}
+.card figcaption::before{content:"";position:absolute;left:0;bottom:-5px;height:1px;width:0;
+  background:var(--accent);transition:width .7s var(--e-expo)}
+.card.act figcaption::before,.card:hover figcaption::before{width:100%}
+
+/* ══════════════════════════════ FOOTER ══════════════════════════════ */
+.hud{position:fixed;left:0;right:0;bottom:0;z-index:120;
+  padding:0 var(--pad) clamp(18px,2.6vh,30px);
+  display:flex;align-items:center;justify-content:space-between;gap:20px;pointer-events:none}
+.hud > *{pointer-events:auto}
+.copy,.by{font-family:var(--serif);font-weight:var(--w-book);font-size:12.5px;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--fg-2);white-space:nowrap}
+.by{transition:color .35s}
+.by b{font-weight:var(--w-semi);color:var(--fg)}
+.by:hover{color:var(--accent)}.by:hover b{color:var(--accent)}
+.dots{position:absolute;left:50%;translate:-50% 0;display:flex;gap:6px;align-items:center}
+.dots button{width:20px;height:20px;display:grid;place-items:center}
+.dots i{display:block;width:6px;height:6px;border-radius:50%;background:var(--fg-3);
+  transition:width .5s var(--e-expo),background-color .4s,border-radius .4s}
+.dots button.on i{width:26px;border-radius:4px;background:var(--accent)}
+body.open .hud{opacity:0;pointer-events:none;transition:opacity .35s}
+@media(max-width:760px){
+  /* En móvil el pie se apila y baja de cuerpo: antes ocupaba tres líneas
+     y se comía la pantalla. Una línea por texto y letra pequeña. */
+  .hud{flex-wrap:wrap;align-items:center;row-gap:9px;padding-bottom:12px;gap:10px}
+  .dots{position:static;translate:none;order:-1;width:100%;justify-content:center}
+  .dots button{width:16px;height:16px}
+  .dots i{width:5px;height:5px}
+  .dots button.on i{width:18px}
+  .copy,.by{font-size:7.5px;letter-spacing:.09em;line-height:1.35}
+  .copy{flex:1 1 0;min-width:0;white-space:normal}
+  .by{flex:0 0 auto;text-align:right}
+}
+@media(max-width:400px){
+  .copy,.by{font-size:7px;letter-spacing:.06em}
+}
+
+/* ══════════════════════════════ VISTA DE SECCIÓN ══════════════════════════════ */
+/* Velo entre el home y el panel. Un clic aquí = fuera de la tarjeta = se cierra. */
+.vscrim{position:fixed;inset:0;z-index:590;opacity:0;pointer-events:none;
+  background:color-mix(in oklab,var(--bg) 55%,transparent);
+  -webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px)}
+body.open .vscrim{pointer-events:auto;cursor:pointer}
+
+/* El panel cubre sólo la parte que le toca: deja ver el home arriba y a los lados. */
+.view{position:fixed;left:var(--pad);right:var(--pad);top:clamp(88px,13vh,152px);bottom:0;
+  max-width:1240px;margin-inline:auto;z-index:600;background:var(--bg);
+  border:1px solid var(--line);border-bottom:0;border-radius:26px 26px 0 0;overflow:hidden;
+  box-shadow:0 -30px 80px -26px rgba(0,0,0,.4);
+  transform:translate3d(0,100%,0);visibility:hidden;pointer-events:none;
+  will-change:transform;display:flex;flex-direction:column}
+.view.on{pointer-events:auto;visibility:visible}
+.grip{position:absolute;top:11px;left:50%;translate:-50% 0;z-index:6;
+  width:52px;height:4px;border-radius:4px;background:rgba(255,255,255,.55)}
+@media(max-width:760px){
+  .view{left:0;right:0;top:clamp(74px,11vh,112px);border-radius:22px 22px 0 0;
+    border-left:0;border-right:0}
+  /* La portada ocupaba media pantalla y dejaba muy poco cuerpo visible.
+     Van con `.view` delante porque estas reglas quedan antes que las base
+     en la hoja y si no perderían la cascada. */
+  .view .view-hero{height:min(34vh,300px)}
+  .view .view-hero h1{font-size:clamp(38px,11vw,60px)}
+  .view .view-hero .lead{margin-top:10px;font-size:.95em}
+  .view .view-body{padding-top:24px}
+  .view .vclose{top:12px;right:12px;width:38px;height:38px;border-radius:12px}
+}
+.view-hero{position:relative;flex:none;height:min(38vh,360px);overflow:hidden}
+.view-hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  filter:grayscale(.55) brightness(.5);transform:scale(1.06);will-change:transform}
+.view-hero::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,color-mix(in oklab,var(--bg) 55%,transparent) 0%,transparent 30%,var(--bg) 97%)}
+.view-hero .cap{position:absolute;left:0;right:0;bottom:clamp(16px,3vh,36px);padding-inline:var(--pad);z-index:2}
+.view-hero h1{font-size:clamp(46px,9vw,130px);letter-spacing:-.025em;font-weight:var(--w-med)}
+.view-hero .lead{margin-top:16px;max-width:52ch;color:var(--fg-2);font-size:1.05em;font-style:italic}
+.view-body{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;touch-action:pan-y;
+  padding:clamp(30px,5vh,64px) var(--pad) clamp(70px,12vh,130px);
+  scrollbar-width:thin}
+.view-body::-webkit-scrollbar{width:4px}
+.view-body::-webkit-scrollbar-thumb{background:var(--line);border-radius:4px}
+.vclose{position:absolute;top:16px;right:16px;z-index:8;
+  width:42px;height:42px;border-radius:14px;display:grid;place-items:center;color:#F4F1EA;
+  border:1px solid rgba(244,241,234,.3);background:rgba(10,10,12,.4);
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+  transition:transform .5s var(--e-back),border-color .35s,background-color .4s}
+.vclose:hover{border-color:rgba(244,241,234,.75);background:rgba(10,10,12,.62);transform:rotate(90deg)}
+.vclose svg{width:16px}
+.vnav{display:flex;justify-content:space-between;gap:16px;margin-top:clamp(46px,7vh,90px);
+  padding-top:26px;border-top:1px solid var(--line)}
+.vnav a{display:flex;flex-direction:column;gap:5px;max-width:46%}
+.vnav a span{font-family:var(--serif);font-weight:var(--w-med);font-size:clamp(22px,3.2vw,36px);
+  letter-spacing:-.015em;transition:color .35s,transform .5s var(--e-expo)}
+.vnav a:hover span{color:var(--accent)}
+.vnav a.prev:hover span{transform:translateX(-6px)}
+.vnav a.next{text-align:right;align-items:flex-end}
+.vnav a.next:hover span{transform:translateX(6px)}
+/* Revelado por CSS, no por JS: si el navegador estrangula rAF (pestaña de
+   fondo, ahorro de energía, equipo cargado) el contenido igual aparece.
+   Antes esto era un tween de GSAP y el panel podía quedarse en blanco. */
+.rv{opacity:0;transform:translateY(26px);
+  transition:opacity .8s var(--e-expo),transform .8s var(--e-expo)}
+.rv.in{opacity:1;transform:none}
+
+/* ── bloques reutilizables ── */
+.grid{display:grid;gap:clamp(12px,1.4vw,18px)}
+.g2{grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(min(100%,270px),1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr))}
+.box{position:relative;border:1px solid var(--line);border-radius:16px;padding:clamp(20px,2.3vw,30px);
+  background:color-mix(in oklab,var(--panel) 55%,transparent);overflow:hidden;
+  transition:transform .6s var(--e-expo),border-color .45s}
+.box::before{content:"";position:absolute;left:var(--gx,50%);top:var(--gy,50%);width:300px;height:300px;
+  translate:-50% -50%;border-radius:50%;pointer-events:none;filter:blur(6px);opacity:0;
+  background:radial-gradient(circle,var(--glow),transparent 66%);transition:opacity .45s}
+.box:hover{transform:translateY(-6px);border-color:color-mix(in oklab,var(--accent) 48%,transparent)}
+.box:hover::before{opacity:1}
+.box>*{position:relative}
+.box h3{font-size:clamp(23px,2.2vw,31px);margin-bottom:8px;font-weight:var(--w-semi)}
+.box p{font-size:.93em;color:var(--fg-2)}
+.box .k{font-family:var(--serif);font-weight:var(--w-med);font-size:12px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--accent);display:block;margin-bottom:14px}
+.box .go{margin-top:18px;display:flex;align-items:center;gap:9px;font-size:11px;letter-spacing:.16em;
+  text-transform:uppercase;font-family:var(--serif);font-weight:var(--w-med)}
+.box .go svg{width:13px;transition:transform .5s var(--e-back)}
+.box:hover .go svg{transform:translateX(6px)}
+.hd{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;flex-wrap:wrap;
+  margin:clamp(40px,6vh,74px) 0 clamp(20px,3vh,34px)}
+.hd:first-child{margin-top:0}
+.hd h2{font-size:clamp(30px,4.4vw,58px);font-weight:var(--w-med)}
+.hd p{max-width:42ch;color:var(--fg-2);font-size:.92em}
+
+/* servicios */
+.svc{display:grid;grid-template-columns:auto 1fr auto;gap:clamp(16px,2.4vw,44px);align-items:center;
+  padding:clamp(20px,2.6vw,32px) 0;border-bottom:1px solid var(--line);position:relative}
+.svc:first-child{border-top:1px solid var(--line)}
+.svc .hr{font-family:var(--serif);font-weight:var(--w-med);font-size:clamp(30px,4.4vw,56px);line-height:1;
+  letter-spacing:-.02em;font-variant-numeric:lining-nums tabular-nums;white-space:nowrap;
+  background:linear-gradient(120deg,var(--fg),var(--accent));-webkit-background-clip:text;background-clip:text;color:transparent}
+.svc h3{font-size:clamp(22px,2.6vw,34px);font-weight:var(--w-semi);transition:transform .55s var(--e-expo),color .4s}
+.svc:hover h3{transform:translateX(10px);color:var(--accent)}
+.svc p{font-size:.93em;color:var(--fg-2);margin-top:4px}
+.svc .day{font-family:var(--serif);font-weight:var(--w-med);font-size:12.5px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--fg-2);white-space:nowrap;padding:7px 15px;
+  border:1px solid var(--line);border-radius:100px}
+.svc .hr i{font-style:normal;font-size:.34em;letter-spacing:.06em;margin-left:.28em;
+  vertical-align:.45em;font-weight:var(--w-book);-webkit-text-fill-color:var(--fg-2)}
+@media(max-width:700px){.svc{grid-template-columns:1fr;gap:8px}.svc .day{justify-self:start}}
+
+/* ── VISÍTANOS: la dirección como pieza tipográfica ── */
+.addr{position:relative;padding:clamp(28px,5vw,64px) clamp(24px,4vw,54px);
+  border:1px solid var(--line);border-radius:18px;overflow:hidden;
+  background:color-mix(in oklab,var(--panel) 55%,transparent)}
+.addr::before{content:"";position:absolute;inset:auto -10% -60% 40%;height:120%;
+  background:radial-gradient(circle at 50% 100%,var(--glow),transparent 62%);
+  filter:blur(30px);pointer-events:none}
+.addr > *{position:relative}
+.addr .place{font-family:var(--serif);font-weight:var(--w-med);
+  font-size:clamp(42px,7.5vw,104px);line-height:1.02;letter-spacing:-.028em;margin:6px 0 0}
+.addr .place em{font-style:italic;color:var(--accent)}
+.addr .note{margin-top:20px;color:var(--fg-2);font-style:italic;max-width:46ch}
+
+/* listado de congregaciones del resto del país */
+.sedes{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));
+  gap:1px;background:var(--line);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.sede{position:relative;background:var(--bg);padding:clamp(20px,2.4vw,30px);min-height:170px;
+  display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden;
+  transition:background-color .5s var(--e-expo)}
+.sede::before{content:"";position:absolute;inset:0;background:var(--accent);
+  transform:translateY(101%);transition:transform .65s var(--e-expo);z-index:0}
+.sede:hover::before{transform:translateY(0)}
+.sede > *{position:relative;z-index:1;transition:color .5s var(--e-expo)}
+.sede:hover,.sede:hover *{color:#12100C}
+.sede .n{position:absolute;top:18px;left:clamp(20px,2.4vw,30px);font-size:12px;
+  letter-spacing:.2em;color:var(--fg-3)}
+.sede h3{font-size:clamp(24px,2.4vw,34px);font-weight:var(--w-med);letter-spacing:-.015em}
+.sede p{font-size:.9em;color:var(--fg-2);margin-top:4px}
+.sede .hh{display:block;margin-top:12px;font-size:12.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--accent)}
+
+/* historia */
+.chap{display:grid;grid-template-columns:1fr 1fr;gap:clamp(20px,4vw,70px);align-items:center;
+  padding-block:clamp(34px,6vh,80px)}
+.chap:nth-child(even){direction:rtl}.chap:nth-child(even)>*{direction:ltr}
+.chap .yr{font-family:var(--serif);font-weight:var(--w-med);font-size:clamp(54px,9vw,138px);line-height:.86;
+  letter-spacing:-.03em;font-variant-numeric:lining-nums;
+  color:transparent;-webkit-text-stroke:1px var(--fg-3);transition:-webkit-text-stroke-color .5s}
+.chap:hover .yr{-webkit-text-stroke-color:var(--accent)}
+.chap h3{font-size:clamp(24px,2.8vw,40px);margin:18px 0 12px;font-weight:var(--w-semi)}
+.chap p{color:var(--fg-2);max-width:44ch}
+.chap figure{position:relative;aspect-ratio:4/3;border-radius:16px;overflow:hidden;background:var(--bg-2)}
+.chap figure img{width:100%;height:100%;object-fit:cover;filter:grayscale(.4);will-change:transform}
+@media(max-width:820px){.chap{grid-template-columns:1fr}.chap:nth-child(even){direction:ltr}}
+
+/* departamentos */
+.dep{position:relative;aspect-ratio:1/1.15;border-radius:16px;overflow:hidden;border:1px solid var(--line);
+  display:flex;flex-direction:column;justify-content:flex-end;padding:22px;isolation:isolate;cursor:pointer;
+  transition:transform .7s var(--e-expo)}
+.dep img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;
+  filter:grayscale(1) brightness(.45);transform:scale(1.07);
+  transition:filter .8s var(--e-expo),transform 1.2s var(--e-expo)}
+.dep::after{content:"";position:absolute;inset:0;z-index:-1;
+  background:linear-gradient(180deg,transparent 28%,rgba(6,6,8,.88))}
+.dep:hover{transform:translateY(-8px)}
+.dep:hover img{filter:grayscale(0) brightness(.68);transform:scale(1.15)}
+.dep h3{font-size:clamp(21px,2.1vw,30px);color:#F4F1EA;font-weight:var(--w-semi);letter-spacing:-.01em}
+.dep p{font-size:.9em;color:rgba(244,241,234,.7);margin-top:7px;max-height:0;overflow:hidden;opacity:0;
+  transition:max-height .6s var(--e-expo),opacity .45s}
+.dep:hover p{max-height:74px;opacity:1}
+.dep .n{position:absolute;top:18px;left:22px;font-family:var(--serif);font-size:12.5px;
+  letter-spacing:.2em;color:rgba(244,241,234,.6);font-variant-numeric:lining-nums}
+
+/* en vivo */
+.lgrid{display:grid;grid-template-columns:1.55fr .95fr;gap:clamp(18px,2.6vw,36px);align-items:start}
+@media(max-width:980px){.lgrid{grid-template-columns:1fr}}
+.stagebox{position:relative;border-radius:18px;overflow:hidden;border:1px solid var(--line);background:#000;aspect-ratio:16/9}
+.stagebox iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.stagebox .halo{position:absolute;inset:-6% -3% -12%;z-index:-1;filter:blur(65px);opacity:.5;border-radius:40px;
+  background:linear-gradient(120deg,var(--accent),var(--violet))}
+.lstat{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.lstat .d{width:8px;height:8px;border-radius:50%;background:var(--fg-3);flex:none}
+.lstat.on .d{background:#FF4D4F;animation:pls 2s infinite}
+@keyframes pls{0%,100%{box-shadow:0 0 0 0 rgba(255,77,79,.55)}55%{box-shadow:0 0 0 9px rgba(255,77,79,0)}}
+.tabs{display:flex;gap:24px;border-bottom:1px solid var(--line);margin-bottom:14px}
+.tabs button{color:var(--fg-2);font-size:13px;padding:10px 0;position:relative;transition:color .3s}
+.tabs button::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--accent);
+  transform:scaleX(0);transform-origin:left;transition:transform .5s var(--e-expo)}
+.tabs button.on{color:var(--fg)}.tabs button.on::after{transform:scaleX(1)}
+.feed{max-height:min(56vh,520px);overflow-y:auto;overscroll-behavior:contain;padding-right:8px}
+.feed::-webkit-scrollbar{width:3px}.feed::-webkit-scrollbar-thumb{background:var(--line);border-radius:3px}
+.vi{display:grid;grid-template-columns:110px 1fr;gap:13px;padding:10px 0;border-bottom:1px solid var(--line-2);
+  transition:transform .5s var(--e-expo)}
+.vi:hover{transform:translateX(5px)}
+.vi img{aspect-ratio:16/9;object-fit:cover;border-radius:8px;filter:grayscale(.5);
+  transition:filter .5s,transform .7s var(--e-expo)}
+.vi:hover img{filter:none;transform:scale(1.05)}
+.vi h4{font-family:var(--serif);font-weight:var(--w-semi);font-size:15px;line-height:1.32;letter-spacing:0;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.vi span{font-family:var(--serif);font-size:12.5px;letter-spacing:.1em;color:var(--fg-2);display:block;margin-top:5px;font-variant-numeric:lining-nums}
+.fbpane{height:min(56vh,520px);border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--panel)}
+.fbpane iframe{width:100%;height:100%;border:0}
+
+/* recursos: rejilla de ediciones */
+.ed{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,124px),1fr));gap:10px}
+.ed a{aspect-ratio:3/4;border-radius:10px;border:1px solid var(--line);display:flex;flex-direction:column;
+  justify-content:flex-end;padding:12px;position:relative;overflow:hidden;
+  background:linear-gradient(160deg,var(--panel),var(--bg-2));
+  transition:transform .55s var(--e-expo),border-color .4s}
+.ed a::before{content:"";position:absolute;inset:0;opacity:0;transition:opacity .5s;
+  background:linear-gradient(160deg,color-mix(in oklab,var(--accent) 22%,transparent),transparent 60%)}
+.ed a:hover{transform:translateY(-5px) rotate(-1.2deg);border-color:color-mix(in oklab,var(--accent) 50%,transparent)}
+.ed a:hover::before{opacity:1}
+.ed a b{position:relative;font-family:var(--serif);font-weight:var(--w-semi);font-size:20px;letter-spacing:-.01em;line-height:1.1}
+.ed a span{position:relative;font-family:var(--serif);font-size:12px;color:var(--fg-2);letter-spacing:.12em;font-variant-numeric:lining-nums}
+.langs{display:flex;gap:7px;flex-wrap:wrap;margin-top:16px}
+.langs button{padding:7px 15px;border:1px solid var(--line);border-radius:100px;font-size:13px;
+  font-family:var(--serif);letter-spacing:.14em;text-transform:uppercase;color:var(--fg-2);
+  transition:border-color .35s,color .35s,background-color .4s}
+.langs button.on{border-color:var(--accent);color:var(--accent);background:color-mix(in oklab,var(--accent) 10%,transparent)}
+
+/* videoteca */
+.vt{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,250px),1fr));gap:14px}
+.vt a{border-radius:14px;overflow:hidden;border:1px solid var(--line);background:var(--panel);
+  transition:transform .55s var(--e-expo),border-color .4s}
+.vt a:hover{transform:translateY(-6px);border-color:color-mix(in oklab,var(--accent) 45%,transparent)}
+.vt figure{position:relative;aspect-ratio:16/9;overflow:hidden;background:var(--bg-2)}
+.vt img{width:100%;height:100%;object-fit:cover;filter:grayscale(.45);
+  transition:transform .8s var(--e-expo),filter .6s}
+.vt a:hover img{transform:scale(1.07);filter:none}
+.vt figure .play{position:absolute;inset:0;display:grid;place-items:center;opacity:0;transition:opacity .4s}
+.vt a:hover .play{opacity:1}
+.vt .play b{width:46px;height:46px;border-radius:50%;background:var(--accent);display:grid;place-items:center;
+  color:#0A0A0C;transform:scale(.8);transition:transform .5s var(--e-back)}
+.vt a:hover .play b{transform:scale(1)}
+.vt .meta{padding:14px 16px 17px}
+.vt h4{font-family:var(--serif);font-weight:var(--w-semi);font-size:15.5px;line-height:1.32;letter-spacing:0;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.vt span{font-family:var(--serif);font-size:12.5px;letter-spacing:.1em;color:var(--fg-2);display:block;margin-top:6px}
+
+/* drawer (fichas internas) */
+.drawer{position:fixed;inset:0;z-index:800;pointer-events:none}
+.drawer .scrim{position:absolute;inset:0;background:color-mix(in oklab,var(--bg) 72%,transparent);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);opacity:0}
+.drawer .sheet{position:absolute;right:0;top:0;bottom:0;width:min(560px,100%);background:var(--panel);
+  border-left:1px solid var(--line);overflow-y:auto;transform:translateX(100%);
+  padding:clamp(26px,4vw,46px) clamp(22px,3.4vw,44px) 60px}
+.drawer.on{pointer-events:auto}
+.drawer h3{font-size:clamp(32px,4.8vw,54px);margin:12px 0 14px;font-weight:var(--w-med)}
+.drawer .x{position:absolute;top:18px;right:18px;width:36px;height:36px;border-radius:11px;border:1px solid var(--line);
+  display:grid;place-items:center;transition:transform .5s var(--e-back),border-color .35s}
+.drawer .x:hover{transform:rotate(90deg);border-color:var(--accent)}
+.drawer figure{aspect-ratio:16/10;border-radius:14px;overflow:hidden;margin-bottom:20px;background:var(--bg-2)}
+.drawer figure img{width:100%;height:100%;object-fit:cover;filter:grayscale(.35)}
+.drawer ul{list-style:none;margin-top:22px;border-top:1px solid var(--line)}
+.drawer li{padding:13px 0;border-bottom:1px solid var(--line-2);display:flex;justify-content:space-between;gap:16px;font-size:.97em}
+.drawer li b{font-weight:var(--w-semi)}
+.drawer li span{color:var(--fg-2);font-family:var(--serif);font-size:.9em;letter-spacing:.08em;
+  text-align:right;white-space:nowrap;font-variant-numeric:lining-nums}
+@media(max-width:640px){.drawer .sheet{width:100%;border-left:0}}
+
+/* footer dentro de vistas */
+.vfoot{margin-top:clamp(40px,6vh,80px);padding-top:24px;border-top:1px solid var(--line);
+  display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:14px;color:var(--fg-2)}
+.vfoot a{transition:color .3s}.vfoot a:hover{color:var(--accent)}
+
+/* toast */
+.toast{position:fixed;left:50%;bottom:26px;translate:-50% 0;z-index:9500;padding:12px 20px;border-radius:12px;
+  background:var(--panel-2);border:1px solid var(--line);font-size:13px;opacity:0;pointer-events:none;
+  box-shadow:0 20px 50px -20px rgba(0,0,0,.6)}
+
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="aurora" id="aurora"><i></i><i></i><i></i></div>
+<div class="grain"></div>
+<div class="cur" id="cur"></div><div class="cur-r" id="curr"><span id="curTxt">Abrir</span></div>
+
+<!-- ══ NAV ══ -->
+<header class="nav" id="nav">
+  <a class="wordmark" href="#" data-go="home">Ministerios Ebenezer<em>Costa Rica</em></a>
+
+  <div class="social">
+    <a href="https://www.facebook.com/MinisteriosEbenezerCR" target="_blank" rel="noopener" aria-label="Facebook">
+      <svg viewBox="0 0 24 24"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.68.24 2.68.24v2.97h-1.51c-1.49 0-1.96.93-1.96 1.89v2.25h3.33l-.53 3.49h-2.8V24C19.61 23.1 24 18.1 24 12.07z"/></svg>
+    </a>
+    <a href="https://www.youtube.com/@ministeriosebenezerc.r1904" target="_blank" rel="noopener" aria-label="YouTube">
+      <svg viewBox="0 0 24 24"><path d="M23.5 6.19a3.02 3.02 0 0 0-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.5A3.02 3.02 0 0 0 .5 6.19C0 8.08 0 12 0 12s0 3.92.5 5.81a3.02 3.02 0 0 0 2.12 2.14c1.88.5 9.38.5 9.38.5s7.5 0 9.38-.5a3.02 3.02 0 0 0 2.12-2.14C24 15.92 24 12 24 12s0-3.92-.5-5.81zM9.55 15.57V8.43L15.82 12l-6.27 3.57z"/></svg>
+    </a>
+  </div>
+
+  <div class="nav-r">
+    <button class="icb" id="theme" aria-label="Cambiar tema">
+      <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+    </button>
+    <a class="pill" id="livePill" href="#" data-go="envivo"><i></i><span>En vivo</span></a>
+    <a class="logo" href="#" data-go="home" aria-label="Ministerios Ebenezer Costa Rica">
+      <img src="data:image/png;base64,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" alt="Ministerios Ebenezer">
+    </a>
+  </div>
+</header>
+<!-- ══ HOME ══ -->
+<main class="stage" id="stage">
+  <div class="deck" id="deck"></div>
+</main>
+
+<footer class="hud" id="hud">
+  <span class="copy">© 2026 Ministerios Ebenezer Costa Rica · Todos los derechos reservados</span>
+  <div class="dots" id="dots"></div>
+  <a class="by" href="https://altriumcr.com" target="_blank" rel="noopener">Designed by <b>Altriumcr.com</b></a>
+</footer>
+
+<!-- ══ VISTA ══ -->
+<div class="vscrim" id="vscrim"></div>
+<section class="view" id="view" aria-hidden="true">
+  <span class="grip"></span>
+  <button class="vclose" id="vclose" aria-label="Cerrar">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+  </button>
+  <div class="view-hero"><img id="vimg" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" alt=""><div class="cap">
+    <p class="mono" id="vkicker"></p><h1 id="vtitle"></h1><p class="lead" id="vlead"></p>
+  </div></div>
+  <div class="view-body" id="vbody"></div>
+</section>
+
+<!-- ══ DRAWER ══ -->
+<div class="drawer" id="drawer"><div class="scrim" data-close></div>
+  <div class="sheet" id="sheet"><button class="x" data-close aria-label="Cerrar">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    <div id="sheetIn"></div></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+<script>
+/* ── Salvavidas: si el CDN de GSAP no carga, la web degrada a CSS puro ── */
+if(!window.gsap){
+  const noop=()=>({kill(){},to(){return this},from(){return this},fromTo(){return this},add(){return this},set(){return this}});
+  const applyVars=(t,v)=>{
+    if(t && typeof t==='object' && !t.nodeType && t.length===undefined){
+      for(const k in v){if(!['duration','ease','delay','stagger','overwrite','onUpdate','onComplete'].includes(k))t[k]=v[k];}
+      if(typeof v.onComplete==='function')v.onComplete(); return;
+    }
+    const els=typeof t==='string'?document.querySelectorAll(t):(t&&t.nodeType?[t]:(t&&t.length?t:[]));
+    [...els].forEach(el=>{for(const k in v){if(typeof v[k]!=='function'&&k!=='duration'&&k!=='ease'&&k!=='delay'&&k!=='stagger'&&k!=='overwrite'&&k!=='onUpdate'&&k!=='onComplete'){
+      if(k==='opacity'||k==='scale'||k==='x'||k==='y')el.style[k==='x'||k==='y'?'transform':'opacity']=k==='opacity'?v[k]:el.style.transform;
+      else if(el.style&&k in el.style)el.style[k]=v[k];}}});
+    if(v&&typeof v.onComplete==='function')v.onComplete();};
+  window.gsap={
+    set:applyVars,
+    to(t,v){applyVars(t,v);return noop()},
+    from(t,v){return noop()},
+    fromTo(t,a,b){applyVars(t,b);return noop()},
+    timeline(o){const tl={to(t,v){applyVars(t,v);return tl},from(){return tl},fromTo(t,a,b){applyVars(t,b);return tl},
+      add(f){if(typeof f==='function')f();return tl},kill(){}};if(o&&o.onComplete)setTimeout(o.onComplete,10);return tl},
+    killTweensOf(){}, quickSetter(el,prop,unit){return v=>{el.style[prop==='x'?'left':prop]= (prop==='x'||prop==='y')?'':v+unit}},
+    ticker:{add(fn){(function loop(t){fn(t);requestAnimationFrame(loop)})(0)},lagSmoothing(){}},
+    utils:{clamp:(a,b,c)=>Math.min(c===undefined?b:b,Math.max(a,c===undefined?b:c))}
+  };
+  console.warn('GSAP no disponible: la web funciona sin animaciones.');
+}
+/* ═══════════════════════════════════════════════════════════════
+   CONFIG
+   ═══════════════════════════════════════════════════════════════ */
+const CFG = {
+  channelId : 'UCK6O7BIAhJAaTTSPqnF-o8g',
+  channelUrl: 'https://www.youtube.com/@ministeriosebenezerc.r1904',
+  fbPage    : 'MinisteriosEbenezerCR',
+  /* Endpoint del Cloudflare Worker (ver worker/live.js).
+     Vacío = modo fallback sin API: embed live_stream + playlist de subidas. */
+  liveEndpoint: ''
+};
+const UPLOADS = 'UU' + CFG.channelId.slice(2);
+const th = (id,q='hqdefault') => `https://i.ytimg.com/vi/${id}/${q}.jpg`;
+
+/* ═══════════════════════════════════════════════════════════════
+   DATA
+   ═══════════════════════════════════════════════════════════════ */
+const VIDEOS=[
+{id:"xu2if1HSlmc",t:"Santa Cena · Apóstol Juan Castillo",d:"06.09.26"},
+{id:"3SEeaq_ir28",t:"Doctrinal · Protección en la tormenta",d:"02.09.26"},
+{id:"RTwKk5JW-Vg",t:"Devocional · Un corazón transformado",d:"30.08.26"},
+{id:"xyj64gquiVA",t:"Doctrinal · Evitando la escasez (II)",d:"26.08.26"},
+{id:"bM2RGP_xZ88",t:"Servicio Devocional",d:"23.08.26"},
+{id:"Nm4vpQPJjsQ",t:"Servicio Doctrinal",d:"19.08.26"},
+{id:"bDmeDFb5mg4",t:"Devocional · Muchos son los llamados",d:"16.08.26"},
+{id:"X1V8F6BD6G0",t:"Santa Cena",d:"09.08.26"},
+{id:"-kgbVerGT2M",t:"Servicio de Mujeres",d:"08.08.26"},
+{id:"w0CyI1KNedQ",t:"Servicio Doctrinal",d:"05.08.26"},
+{id:"CsF-fYU1FO4",t:"Doctrinal · El perfeccionamiento",d:"22.07.26"},
+{id:"VI-SI-OQT4I",t:"Servicio Devocional",d:"19.07.26"},
+{id:"CFwQIohc75g",t:"Mujeres · Mujer virtuosa",d:"17.07.26"},
+{id:"WJFb_EdcWeM",t:"Doctrinal · Caminando en fe",d:"08.07.26"},
+{id:"jZf2FIdxzD0",t:"Devocional · Ap. Gerardo Santiago",d:"26.07.26"},
+{id:"nxwGJhthAGU",t:"Servicio de Santa Cena",d:"05.07.26"},
+{id:"7t8BnY3VmBk",t:"Devocional · ¿Tiempo de diversión?",d:"28.06.26"},
+{id:"d5lHgN6ul5E",t:"Doctrinal · El secreto",d:"10.06.26"},
+{id:"ajTyHk9lyhA",t:"Servicio Doctrinal",d:"03.06.26"},
+{id:"4rP0GW7LmY0",t:"Santa Cena",d:"10.05.26"},
+{id:"9LyNcyJcbc0",t:"Servicio de Varones",d:"—"},
+{id:"lrszezae3IY",t:"Meditando en la Palabra · Las añadiduras",d:"—"},
+{id:"L3_JyI8wxV0",t:"Meditando · No estéis afanosos",d:"—"},
+{id:"ZDTcHbmxjuo",t:"Meditando en la Palabra",d:"—"}];
+
+const SERVICIOS=[
+ {day:'Domingo', h:'10:00', ap:'a.m.', t:'Servicio General',
+  x:'El servicio central de la semana. Adoración, palabra y toda la congregación reunida.'},
+ {day:'Lunes',   h:'7:00',  ap:'p.m.', t:'Servicio de Oración',
+  x:'Una hora para interceder juntos: por la iglesia, por el país y por cada familia.'},
+ {day:'Viernes', h:'7:00',  ap:'p.m.', t:'Servicio Familiar',
+  x:'Toda la casa junta. Pensado para venir con los tuyos, de la edad que sean.'},
+ {day:'Sábado',  h:'2:30',  ap:'p.m.', t:'Servicio de Jóvenes',
+  x:'La siguiente generación, con su propio lenguaje y su propio espacio.'}];
+
+/* La obra en Costa Rica cumple 21 años en 2026 (inicio en 2005).
+   Los hitos intermedios son una reconstrucción aproximada — falta
+   confirmarlos con el archivo de la iglesia. */
+const HISTORIA=[
+ {y:'2005', t:'La obra abre en Costa Rica', i:1,
+  x:'Ministerios Ebenezer echa raíces en suelo tico. Un grupo pequeño, un local prestado y la convicción de que la ayuda ya había venido de arriba.'},
+ {y:'2011', t:'La primera congregación hija', i:6,
+  x:'Lo que empezó como una sola casa se multiplica. Nace la primera obra fuera de la sede, y con ella la idea de que esto podía ser nacional.'},
+ {y:'2016', t:'La voz que viaja', i:11,
+  x:'Comienzan las transmisiones en vivo. La congregación se vuelve global sin dejar de ser barrio: quien no puede llegar, igual se reúne.'},
+ {y:'2021', t:'Una red, no una sede', i:16,
+  x:'La expansión deja de ser excepción y se vuelve método. Formación de liderazgo, acompañamiento y plantación de obras en todo el territorio.'},
+ {y:'2026', t:'Veintiún años', i:0,
+  x:'Más de 20 iglesias a lo largo del territorio nacional, y una casa central en Tibás que sigue abriendo la puerta cada semana.'}];
+
+const DEPTOS=[
+ {n:'Ministerio de Alabanza', i:0,
+  x:'Música y adoración en cada servicio.',
+  lead:'El equipo que sostiene el tiempo de adoración: vocalistas, instrumentistas y dirección musical.',
+  items:[['Ensayo general','Viernes'],['Vocal','Entre semana'],['Domingo','Antes del servicio'],['Audiciones','Abiertas']]},
+ {n:'Ministerio de Niños', i:17,
+  x:'Enseñanza por edades para los más pequeños.',
+  lead:'Espacio propio durante el servicio, con material adaptado a cada edad y equipo capacitado.',
+  items:[['Durante el servicio','Domingo 10:00 a.m.'],['Material propio','Por edades'],['Equipo','Capacitado'],['Actividades','Todo el año']]},
+ {n:'Ministerio Doulos', i:20,
+  x:'Diaconado: servicio, orden y cuidado de la casa.',
+  lead:'«Doulos» es siervo. Reciben, acomodan, ordenan y cuidan de que todo funcione — casi siempre sin que se note.',
+  items:[['Recepción','Cada servicio'],['Orden y logística','Cada servicio'],['Cuidado del templo','Permanente'],['Apoyo a eventos','Según agenda']]},
+ {n:'Ministerio Pastoral', i:9,
+  x:'Acompañamiento, consejería y cuidado.',
+  lead:'La atención uno a uno: consejería, visitas, acompañamiento en duelo y enfermedad, preparación matrimonial.',
+  items:[['Consejería','Con cita'],['Visitas','Semanal'],['Acompañamiento','Permanente'],['Preparación matrimonial','Por temporada']]},
+ {n:'Ministerio de Jóvenes', i:5,
+  x:'La siguiente generación, con voz propia.',
+  lead:'Adolescentes y jóvenes adultos. Enseñanza, comunión, servicio y mucha conversación honesta.',
+  items:[['Servicio de jóvenes','Sábado 2:30 p.m.'],['Grupos pequeños','Entre semana'],['Actividades','Mensual'],['Servicio a la comunidad','Por temporada']]},
+ {n:'Ministerio Audiovisual', i:12,
+  x:'Sonido, cámaras y transmisión en vivo.',
+  lead:'El equipo detrás de lo que se ve y se escucha: sonido, proyección, cámaras y la transmisión en vivo de cada servicio.',
+  items:[['Sonido','Cada servicio'],['Cámaras y transmisión','Cada servicio'],['Proyección','Cada servicio'],['Edición y archivo','Semanal']]}];
+
+const DIRECCION={
+  ciudad:'Tibás', provincia:'San José', pais:'Costa Rica',
+  nota:'La sede central de Ministerios Ebenezer en Costa Rica.'
+};
+
+/* Congregaciones en el resto del país. Provincias confirmadas por la
+   iglesia; los cantones y horarios están por verificar. */
+const SEDES=[
+ {p:'Alajuela', c:'Alajuela centro',  h:'Domingo · 10:00 a.m.'},
+ {p:'Cartago',  c:'Cartago centro',   h:'Domingo · 10:00 a.m.'},
+ {p:'Limón',    c:'Limón centro',     h:'Domingo · 9:00 a.m.'},
+ {p:'Heredia',  c:'Heredia centro',   h:'Domingo · 10:00 a.m.'},
+ {p:'Puntarenas', c:'Puntarenas centro', h:'Domingo · 9:00 a.m.'},
+ {p:'Guanacaste', c:'Liberia',        h:'Domingo · 10:00 a.m.'}];
+const MESES=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+const IDIOMAS=['Español','Inglés','Francés','Portugués','Italiano','K’iche’'];
+
+/* ── Las 6 secciones del carrusel ── */
+const SECCIONES=[
+ {id:'servicios', n:'Servicios', kicker:'01 / La semana', img:1, accent:'#A8690A',
+  lead:'Cuatro encuentros por semana, cada uno con su propio carácter. Vení como estés — aquí hay lugar para vos, tu familia y tus preguntas.',
+  sub:'Los horarios de la semana'},
+ {id:'historia', n:'Historia', kicker:'02 / Veintiún años', img:11, accent:'#4B3EE0',
+  lead:'«Ebenezer» es el nombre que Samuel le puso a una piedra, para que ninguna generación olvidara de dónde vino el auxilio.',
+  sub:'De 2005 a hoy, en cinco capítulos'},
+ {id:'departamentos', n:'Departamentos', kicker:'03 / Los ministerios', img:5, accent:'#1F9E76',
+  lead:'Seis ministerios, un mismo cuerpo. Todos tienen la puerta abierta y todos necesitan manos.',
+  sub:'Seis ministerios de la casa'},
+ {id:'envivo', n:'En Vivo', kicker:'04 / Transmisión', img:0, accent:'#D6365A',
+  lead:'Si estamos transmitiendo, el servicio arranca solo. Si no, te dejamos el más reciente y todo el archivo del canal.',
+  sub:'El servicio, en directo por YouTube'},
+ {id:'recursos', n:'Recursos', kicker:'05 / Para llevarte', img:21, accent:'#8A5A08',
+  lead:'La Revista Rhema mes a mes, las aplicaciones del ministerio y el archivo de enseñanzas.',
+  sub:'Revista Rhema y aplicaciones'},
+ {id:'visitanos', n:'Visítanos', kicker:'06 / Dónde estamos', img:8, accent:'#A8690A',
+  lead:'No hace falta traer nada. Solo vos, como estás. Esta es la dirección y cómo encontrarnos.',
+  sub:'Tibás, San José'}];
+/* ═══════════════════════════════════════════════════════════════
+   UTILS
+   ═══════════════════════════════════════════════════════════════ */
+const $=(s,c=document)=>c.querySelector(s), $$=(s,c=document)=>[...c.querySelectorAll(s)];
+const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function toast(msg){const t=$('#toast');t.textContent=msg;
+  gsap.killTweensOf(t);gsap.fromTo(t,{opacity:0,y:14},{opacity:1,y:0,duration:.45,ease:'power3.out'});
+  gsap.to(t,{opacity:0,y:10,duration:.4,delay:2.6,ease:'power2.in'})}
+
+/* ═══════════════════════════════════════════════════════════════
+   TEMA
+   ═══════════════════════════════════════════════════════════════ */
+const root=document.documentElement;
+try{const t=localStorage.getItem('eb-theme'); if(t) root.dataset.theme=t;}catch(e){}
+$('#theme').addEventListener('click',()=>{
+  const n = root.dataset.theme==='light' ? 'dark' : 'light';
+  root.dataset.theme=n;
+  try{localStorage.setItem('eb-theme',n)}catch(e){}
+  document.querySelector('meta[name=theme-color]').content = n==='light' ? '#F6F5F1' : '#08080A';
+  gsap.fromTo('#aurora',{opacity:0},{opacity:n==='light'?.3:.5,duration:1,ease:'power2.out'});
+});
+
+document.addEventListener('click',e=>{
+  const a=e.target.closest('[data-go]'); if(!a) return;
+  e.preventDefault();
+  const id=a.dataset.go;
+  if(id==='home') closeView(); else openSection(id);
+});
+
+/* ═══════════════════════════════════════════════════════════════
+   CARRUSEL INFINITO 3D  (mouse · touch · rueda · teclado)
+   ═══════════════════════════════════════════════════════════════ */
+const deck=$('#deck'), stage=$('#stage');
+
+/* Réplica del ejemplo pmndrs:
+   - 3 tarjetas por pantalla, centros separados exactamente viewport/3
+   - tres profundidades Z fijas que se repiten: lejos · media · cerca
+   - el ciclo completo son 4 pantallas (4 palabras gigantes), las 6 secciones
+     aparecen dos veces, así el bucle es imperceptible
+   - al scrollear las fotos ganan color y se empujan hacia el espectador;
+     al detenerse vuelven a gris. Ese es el gesto del original.            */
+const Z=[-560,-90,170];           // lejos · media · cerca
+// Con perspective:1200 estas Z dan escalas 0.68 / 0.93 / 1.17 — las mismas
+// proporciones del ejemplo original, donde la tarjeta cercana se agranda por
+// encima del paso y llega a solaparse con su vecina.
+const REP=2;                      // 6 secciones × 2 = 12 tarjetas (múltiplo de 3)
+const NC=SECCIONES.length*REP;
+
+deck.innerHTML = Array.from({length:NC},(_,i)=>{
+  const s=SECCIONES[i%SECCIONES.length];
+  return `<figure class="card" data-i="${i}" data-id="${s.id}" tabindex="0" role="button" aria-label="Abrir ${esc(s.n)}">
+    <figure><img src="${th(VIDEOS[s.img].id,'maxresdefault')}" alt=""
+      onerror="this.onerror=null;this.src='${th(VIDEOS[s.img].id)}'" loading="${i<4?'eager':'lazy'}"></figure>
+    <figcaption>
+      <span>${String((i%SECCIONES.length)+1).padStart(2,'0')}</span>
+      <span class="nm">${esc(s.n)}</span>
+      <span class="go"><svg width="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+    </figcaption>
+  </figure>`;
+}).join('');
+const cards=$$('.card',deck);
+
+$('#dots').innerHTML = SECCIONES.map((s,i)=>
+  `<button data-i="${i}" aria-label="${esc(s.n)}" class="${i?'':'on'}"><i></i></button>`).join('');
+
+const NS=SECCIONES.length;
+let VW=0, CW=0, STEP=0, TOTAL=0, half=0;
+let ZK=1;
+function measure(){
+  VW = innerWidth || 1280;
+  // El original ensancha el paso en pantallas angostas (1.5/3 en vez de 1/3):
+  // en móvil caben ~2 tarjetas, en escritorio 3.
+  const perScreen = VW < 900 ? 1.9 : 3;
+  STEP = VW/perScreen;                          // separación entre centros
+  CW = STEP - Math.max(14, VW*0.014);           // ancho de tarjeta = paso − margen
+  TOTAL = NC*STEP;                              // ciclo completo
+  ZK = VW < 900 ? 0.6 : 1;                      // en móvil se comprime la profundidad
+  half = VW/2 - CW/2;
+  const ch = Math.min(innerHeight*0.66, innerHeight-290);
+  deck.style.setProperty('--cw', CW+'px');
+  deck.style.setProperty('--ch', ch+'px');
+}
+measure();
+addEventListener('resize',()=>{measure();});
+requestAnimationFrame(measure);
+addEventListener('load',measure);
+
+let pos=0, target=0, vel=0, dragging=false, active=-1;
+let zPush=0, momentum=0, ultimoToque=0, tPrevFrame=0;
+
+/* ── Física del recorrido ──────────────────────────────────────────
+   No hay imán: la banda nunca se ancla a una tarjeta. La sensación
+   sale de tres cosas combinadas:
+
+   AMORT   qué tanto se retrasa la banda respecto al dedo. Bajo = pesado.
+           Ese retraso es lo que se siente gomoso: agarrás y la masa
+           tarda en obedecerte.
+   ARRASTRE cuánto camina el contenido por cada píxel de dedo. Cerca de 1
+           se siente conectado, como empujar un objeto real.
+   FRENO   cuánto conserva la inercia al soltar. Alto = deslizamiento
+           largo, mecánico, que se apaga solo.
+
+   Todo va corregido por delta de tiempo, así se siente igual a 60 y
+   a 120 Hz en vez de ir al doble de rápido en pantallas rápidas.      */
+const AMORT=0.075, ARRASTRE=1.12, FRENO=0.945, FRAME=16.667;
+const introK = cards.map(()=>({v:0}));
+const px=new Float64Array(NC), pz=new Float64Array(NC), poff=new Float64Array(NC);
+
+function setActive(i){
+  if(i===active) return;
+  active=i;
+  const si=i%NS, s=SECCIONES[si];
+  cards.forEach((c,k)=>c.classList.toggle('act',k===i));
+  $$('#dots button').forEach((b,k)=>b.classList.toggle('on',k===si));
+  root.style.setProperty('--accent',s.accent);
+  root.style.setProperty('--glow',s.accent+'55');
+  const au=$$('#aurora i');
+  if(au.length===3){
+    au[0].style.background=`radial-gradient(circle,${s.accent}88,transparent 68%)`;
+    au[1].style.background=`radial-gradient(circle,${SECCIONES[(si+2)%NS].accent}70,transparent 68%)`;
+    au[2].style.background=`radial-gradient(circle,${SECCIONES[(si+4)%NS].accent}55,transparent 68%)`;
+  }
+}
+
+function render(){
+  const ahora=performance.now();
+  const dt=tPrevFrame ? Math.min(64, ahora-tPrevFrame) : FRAME;
+  tPrevFrame=ahora;
+  const paso=dt/FRAME;                        // 1 = un frame de 60 Hz
+
+  // Inercia al soltar: sigue empujando el objetivo y se apaga sola.
+  if(!dragging && Math.abs(momentum)>0.03){
+    target += momentum*paso;
+    momentum *= Math.pow(FRENO, paso);
+  } else if(!dragging){ momentum=0; }
+
+  // La banda persigue al objetivo con retraso. Aquí vive lo gomoso.
+  const prev=pos;
+  pos += (target-pos) * (1-Math.pow(1-AMORT, paso));
+  vel = (pos-prev)/paso;                      // velocidad normalizada a 60 Hz
+
+  const speed=Math.abs(vel);
+  // empuje en Z con la velocidad (gesto del ejemplo original)
+  zPush += (Math.min(speed*1.5, 240) - zPush) * (1-Math.pow(0.93, paso));
+
+  setActive(((Math.round(pos/STEP)%NC)+NC)%NC);
+
+  // Primera pasada: posición de cada tarjeta y su distancia al centro.
+  let minOff=Infinity;
+  for(let i=0;i<cards.length;i++){
+    let d = i*STEP - pos;
+    d = ((d % TOTAL) + TOTAL) % TOTAL;
+    if(d > TOTAL - STEP*2.5) d -= TOTAL;    // reengancha por la izquierda
+    const x = half + d;
+    const z = Z[i%3]*ZK + zPush;
+    const sc = 1200/(1200 - z);             // escala real bajo perspectiva
+    const off = Math.abs((x + CW/2) - VW/2) * sc;
+    px[i]=x; pz[i]=z; poff[i]=off;
+    if(off<minOff) minOff=off;
+  }
+
+  // Segunda pasada: el color se mide CONTRA la más cercana, no contra el
+  // centro absoluto. Sin imán la banda puede quedar entre dos tarjetas, y
+  // así siempre hay una a color en vez de quedar todo gris.
+  for(let i=0;i<cards.length;i++){
+    const c=cards[i], x=px[i], z=pz[i];
+    c.style.setProperty('--g', clamp((poff[i]-minOff)/(STEP*0.55), 0, 1).toFixed(3));
+    c.style.transform = `translate3d(${x.toFixed(2)}px,-50%,${z.toFixed(1)}px)`;
+    c.style.opacity = introK[i].v;
+    c.style.zIndex = String(100 + Math.round(z/8));
+    c.style.pointerEvents = (x > -CW*1.2 && x < VW + CW*0.2) ? 'auto' : 'none';
+  }
+
+  requestAnimationFrame(render);
+}
+render();
+
+// desde los puntos: elige la copia de esa sección que quede más cerca
+function goToSection(si){
+  const cur=Math.round(target/STEP);
+  const curMod=((cur%NC)+NC)%NC;
+  let bestD=Infinity;
+  for(let r=0;r<REP;r++){
+    const cand=si+r*NS;
+    let d=cand-curMod;
+    if(d>NC/2) d-=NC; if(d<-NC/2) d+=NC;
+    if(Math.abs(d)<Math.abs(bestD)) bestD=d;
+  }
+  target=(cur+bestD)*STEP; momentum=0;
+}
+function step(dir){ target += dir*STEP; momentum=0; }
+
+/* rueda: los dos ejes empujan el mismo recorrido */
+addEventListener('wheel',e=>{
+  if(document.body.classList.contains('open')) return;
+  e.preventDefault();
+  const d = Math.abs(e.deltaX)>Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+  target += d * 0.95;
+  // La rueda también deja algo de inercia, pero mucho menos que el dedo:
+  // el factor 0.55 impide que un trackpad la acumule sin freno.
+  momentum = clamp(momentum*0.55 + d*0.03, -28, 28);
+},{passive:false});
+
+/* Arrastre y toque, unificados (ratón, dedo y lápiz).
+
+   Dos fallos que hubo aquí y por qué:
+
+   1) `setPointerCapture()` en el pointerdown hacía que el navegador
+      reasignara el `click` al elemento que capturaba — el listener de la
+      tarjeta no se disparaba nunca. Ahora la captura se toma sólo cuando
+      el gesto ya es un arrastre de verdad.
+
+   2) En móvil no abría nada porque el umbral era de 8 px. Un dedo rueda
+      entre 5 y 15 px en un toque normal, así que casi todos los toques se
+      contaban como arrastre. El ratón se mueve 0-2 px; el dedo, mucho más.
+      De ahí que haya dos tolerancias distintas.
+
+   Mientras el gesto no supera la tolerancia no movemos nada: así un toque
+   no empuja la banda ni un píxel. Al cruzarla se re-ancla el origen para
+   que el arrastre no dé un salto. */
+(function(){
+  const TOL_RATON=6, TOL_DEDO=15;
+  let id=null, x0=0, y0=0, t0=0, moved=0, tol=TOL_RATON;
+  let arrastrando=false, capturado=false, lastX=0, lastT=0, pv=0;
+
+  stage.addEventListener('pointerdown',e=>{
+    if(document.body.classList.contains('open')) return;
+    id=e.pointerId; x0=lastX=e.clientX; y0=e.clientY; t0=target;
+    moved=0; arrastrando=false; capturado=false; pv=0;
+    tol = e.pointerType==='mouse' ? TOL_RATON : TOL_DEDO;
+    lastT=performance.now();
+    momentum=0;                       // agarrar detiene el deslizamiento
+    dragging=true;
+  });
+
+  stage.addEventListener('pointermove',e=>{
+    if(id===null || e.pointerId!==id) return;
+    moved=Math.max(moved, Math.hypot(e.clientX-x0, e.clientY-y0));
+
+    if(!arrastrando){
+      if(moved<=tol) return;          // todavía puede ser un toque
+      arrastrando=true;
+      x0=e.clientX; t0=target;        // re-anclar: nada de saltos
+      lastX=e.clientX; lastT=performance.now();
+      try{ stage.setPointerCapture(id); capturado=true; }catch(_){}
+      return;
+    }
+
+    const ahora=performance.now(), dt=Math.max(8, ahora-lastT);
+    pv=(lastX-e.clientX)/dt;          // px/ms en el sentido del contenido
+    lastX=e.clientX; lastT=ahora;
+    target = t0 - (e.clientX-x0)*ARRASTRE;
+  });
+
+  const soltar=e=>{
+    if(id===null) return;
+    const eraArrastre=arrastrando, cx=e.clientX, cy=e.clientY;
+    if(capturado){ try{ stage.releasePointerCapture(id) }catch(_){} }
+    id=null; arrastrando=false; capturado=false; dragging=false;
+
+    if(!eraArrastre){
+      // fue un toque: abrimos la tarjeta que esté debajo del dedo
+      const el=document.elementFromPoint(cx,cy);
+      const card=el && el.closest ? el.closest('.card') : null;
+      if(card){ ultimoToque=performance.now(); openSection(card.dataset.id, card); }
+      return;
+    }
+    // soltó en movimiento: la velocidad del dedo se convierte en deslizamiento
+    if(performance.now()-lastT < 110){
+      momentum = clamp(pv*ARRASTRE*FRAME, -120, 120);
+    }
+  };
+  stage.addEventListener('pointerup',soltar);
+  stage.addEventListener('pointercancel',()=>{
+    id=null; arrastrando=false; capturado=false; dragging=false;
+  });
+})();
+
+/* Red de seguridad: si por lo que sea la ruta de punteros falla en algún
+   navegador, un clic normal también abre. El guardia evita abrir dos veces. */
+deck.addEventListener('click',e=>{
+  if(performance.now()-ultimoToque < 700) return;
+  const card=e.target.closest && e.target.closest('.card');
+  if(card && !document.body.classList.contains('open')) openSection(card.dataset.id, card);
+});
+
+/* Teclado: cada tarjeta es enfocable y se abre con Enter. */
+cards.forEach(c=>{
+  c.addEventListener('keydown',e=>{
+    if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openSection(c.dataset.id,c); }
+  });
+});
+
+/* ═══════════════════════════════════════════════════════════════
+   CONTENIDO DE CADA SECCIÓN
+   ═══════════════════════════════════════════════════════════════ */
+const ICON_ARROW='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+
+const BUILD={
+ servicios(){
+  return `
+  <div class="hd rv"><div><h2>Horarios</h2></div>
+    <p>Si es tu primera vez, llegá diez minutos antes: alguien te va a estar esperando en la entrada.</p></div>
+  ${SERVICIOS.map(s=>`<article class="svc rv">
+     <div class="hr num">${s.h}<i>${s.ap}</i></div>
+     <div><h3>${esc(s.t)}</h3><p>${esc(s.x)}</p></div>
+     <span class="day">${esc(s.day)}</span>
+   </article>`).join('')}
+  <div class="hd rv"><div><h2>Qué esperar</h2></div>
+    <p>Lo que suele preguntar quien viene por primera vez.</p></div>
+  <div class="grid g3">
+    ${[['Duración','Alrededor de dos horas, con música en vivo y predicación.'],
+       ['Vestimenta','Como te sientas cómodo. Nadie te va a mirar raro.'],
+       ['Niños','Tienen su propio espacio durante el servicio del domingo.'],
+       ['Ofrenda','Es voluntaria. Si venís de visita, no tenés que dar nada.'],
+       ['Después','Siempre hay café y gente con ganas de conocerte.'],
+       ['Volver','Sin compromiso. La puerta queda abierta.']]
+      .map(([t,x])=>`<div class="box rv"><h3>${t}</h3><p>${x}</p></div>`).join('')}
+  </div>`;
+ },
+
+ historia(){
+  return `
+  <div class="hd rv"><div><h2>Veintiún años<br>de obra</h2></div>
+    <p>De un grupo pequeño en 2005 a más de veinte iglesias en el territorio nacional.</p></div>
+  ${HISTORIA.map(h=>`<article class="chap rv">
+      <div><div class="yr num">${h.y}</div><h3>${esc(h.t)}</h3><p>${esc(h.x)}</p></div>
+      <figure><img loading="lazy" src="${th(VIDEOS[h.i].id)}" alt=""></figure>
+    </article>`).join('')}
+  <div class="grid g3" style="margin-top:clamp(24px,4vh,50px)">
+    ${[['21','Años de obra en Costa Rica'],['20+','Iglesias en el territorio nacional'],['1','Casa central, en Tibás']]
+      .map(([n,t])=>`<div class="box rv" style="text-align:center">
+        <h3 class="num" style="font-size:clamp(46px,6vw,84px);margin-bottom:6px">${n}</h3>
+        <p>${t}</p></div>`).join('')}
+  </div>
+  <div class="hd rv"><div><h2>El nombre</h2></div>
+    <p><em>1 Samuel 7:12</em> — «Y tomó Samuel una piedra… y le puso por nombre Ebenezer, diciendo: Hasta aquí nos ayudó Jehová.»</p></div>`;
+ },
+
+ departamentos(){
+  return `<div class="grid g3">${DEPTOS.map((d,i)=>`
+    <article class="dep rv" data-dep="${i}" tabindex="0" role="button" aria-label="Ver ${esc(d.n)}">
+      <img loading="lazy" src="${th(VIDEOS[d.i].id)}" alt="">
+      <span class="n num">${String(i+1).padStart(2,'0')}</span>
+      <h3>${esc(d.n)}</h3><p>${esc(d.x)}</p>
+    </article>`).join('')}</div>
+   <div class="hd rv"><div><h2>¿Querés servir?</h2></div>
+     <p>Contanos qué te gusta hacer y en qué horario podés. Te conectamos con el equipo que mejor calce.</p></div>
+   <div class="grid g2">
+     <a class="box rv" href="https://www.facebook.com/${CFG.fbPage}" target="_blank" rel="noopener">
+       <span class="k">Contacto</span><h3>Hablar con un líder</h3>
+       <p>El canal más rápido es la página de Facebook de la iglesia.</p>
+       <span class="go">Escribir ${ICON_ARROW}</span></a>
+     <div class="box rv"><span class="k">Requisito</span><h3>Ninguno especial</h3>
+       <p>Solo ganas y compromiso con los horarios del equipo. El resto se aprende adentro.</p></div>
+   </div>`;
+ },
+
+ envivo(){
+  return `
+  <div class="lgrid">
+    <div class="rv">
+      <div class="lstat" id="lstat"><span class="d"></span><span class="mono" id="lstatTxt">Verificando señal…</span></div>
+      <div class="stagebox"><span class="halo"></span>
+        <iframe id="player" title="Transmisión Ministerios Ebenezer C.R" src="about:blank" loading="lazy"
+          allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture;web-share" allowfullscreen></iframe>
+      </div>
+      <div class="grid g3" style="margin-top:18px">
+        <a class="box rv" href="${CFG.channelUrl}" target="_blank" rel="noopener">
+          <span class="k">YouTube</span><h3>El canal</h3>
+          <p>Suscribite para recibir aviso apenas entramos en vivo.</p>
+          <span class="go">Abrir ${ICON_ARROW}</span></a>
+        <a class="box rv" href="https://www.facebook.com/${CFG.fbPage}/live" target="_blank" rel="noopener">
+          <span class="k">Facebook</span><h3>También en vivo</h3>
+          <p>Transmitimos en paralelo en la página de la iglesia.</p>
+          <span class="go">Abrir ${ICON_ARROW}</span></a>
+        <div class="box rv"><span class="k">En directo</span><h3 class="num">Domingo 10:00</h3>
+          <p>Hora de Costa Rica (GMT−6). También lunes, viernes y sábado.</p></div>
+      </div>
+    </div>
+    <div class="rv">
+      <div class="tabs"><button class="on" data-tab="yt">Últimos servicios</button><button data-tab="fb">Facebook</button></div>
+      <div class="feed" id="feed"></div>
+      <div class="fbpane" id="fbpane" hidden>
+        <iframe title="Facebook Ministerios Ebenezer CR" loading="lazy"
+          src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2F${CFG.fbPage}&tabs=timeline&width=520&height=520&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=false"
+          scrolling="no" allow="encrypted-media"></iframe>
+      </div>
+    </div>
+  </div>`;
+ },
+
+ recursos(){
+  return `<div class="grid g3">
+    ${[['Mensual','Revista Rhema','La publicación del ministerio, mes a mes, en seis idiomas.','rhema'],
+       ['Móvil','Aplicaciones','Ministerios Ebenezer en tu teléfono: prédicas, Rhema y avisos.','apps'],
+       ['Video','Videoteca','El archivo completo de servicios y conferencias.','videoteca']]
+      .map(([k,t,x,d])=>`<article class="box rv" data-res="${d}" tabindex="0" role="button" style="cursor:pointer">
+        <span class="k">${k}</span><h3>${t}</h3><p>${x}</p>
+        <span class="go">Ver dentro ${ICON_ARROW}</span></article>`).join('')}
+  </div>
+  <div class="hd rv"><div><h2>Revista Rhema</h2></div>
+    <p>Últimas ediciones. Elegí idioma y descargá.</p></div>
+  <div class="langs rv" id="langs">${IDIOMAS.map((l,i)=>`<button class="${i?'':'on'}">${l}</button>`).join('')}</div>
+  <div class="ed rv" id="eds" style="margin-top:18px"></div>`;
+ },
+
+ visitanos(){
+  return `
+  <div class="addr rv">
+    <span class="k">La dirección</span>
+    <p class="place">${DIRECCION.ciudad},<br><em>${DIRECCION.provincia}</em><br>${DIRECCION.pais}</p>
+    <p class="note">${DIRECCION.nota}</p>
+    <a class="pill" href="https://www.google.com/maps/search/?api=1&query=Ministerios+Ebenezer+Tib%C3%A1s+San+Jos%C3%A9+Costa+Rica"
+       target="_blank" rel="noopener" style="margin-top:26px">Abrir en Google Maps</a>
+  </div>
+  <div class="grid g2" style="margin-top:clamp(26px,4vh,50px)">
+    <a class="box rv" href="https://www.facebook.com/${CFG.fbPage}" target="_blank" rel="noopener">
+      <span class="k">Escribinos</span><h3>Facebook</h3>
+      <p>Es el canal más rápido para pedir la ubicación exacta y las referencias del barrio.</p>
+      <span class="go">Abrir ${ICON_ARROW}</span></a>
+    <a class="box rv" href="#servicios" data-go="servicios">
+      <span class="k">Antes de venir</span><h3>Mirá los horarios</h3>
+      <p>Domingo 10:00 a.m. es el servicio general. Hay tres más durante la semana.</p>
+      <span class="go">Ver horarios ${ICON_ARROW}</span></a>
+  </div>
+
+  <div class="hd rv"><div><h2>En el resto<br>del país</h2></div>
+    <p>Más de veinte congregaciones a lo largo del territorio nacional. Estas son algunas.</p></div>
+  <div class="sedes">
+    ${SEDES.map((v,i)=>`<article class="sede rv">
+      <span class="n num">${String(i+1).padStart(2,'0')}</span>
+      <h3>${esc(v.p)}</h3>
+      <p>${esc(v.c)}</p>
+      <span class="hh num">${esc(v.h)}</span>
+    </article>`).join('')}
+  </div>
+  <p class="rv" style="margin-top:22px;color:var(--fg-3);font-style:italic;font-size:.9em">
+    Direcciones exactas y horarios de cada sede, pendientes de confirmar con la iglesia.</p>`;
+ }
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   ABRIR / CERRAR VISTA  (expansión tipo FLIP desde la tarjeta)
+   ═══════════════════════════════════════════════════════════════ */
+const view=$('#view'), vbody=$('#vbody');
+let currentId=null, viewTl=null, guard=null, revealT=null, abiertoEn=0;
+
+/* Estado final de cada transición, aislado e idempotente.
+   Se llama desde el onComplete y también desde un temporizador de respaldo:
+   si el navegador congela rAF (pestaña en segundo plano, ahorro de energía)
+   el panel igual termina donde debe, en vez de quedarse encima del home. */
+function settleOpen(){
+  gsap.set(view,{y:'0%'});
+  gsap.set(stage,{scale:.955,opacity:.5});
+  gsap.set('#vscrim',{opacity:1});
+  // el titular también se anima con GSAP: si el tween no corrió, lo dejamos visible
+  gsap.set('.view-hero .cap > *',{opacity:1,yPercent:0});
+  gsap.set('#vimg',{scale:1.06});
+  revealBody();
+}
+function settleClose(){
+  clearTimeout(revealT);
+  gsap.set('#vscrim',{opacity:0});
+  view.classList.remove('on');
+  view.setAttribute('aria-hidden','true');
+  gsap.set(view,{y:'100%'});
+  gsap.set(stage,{scale:1,opacity:1,clearProps:'transform,opacity'});
+  document.body.classList.remove('open');
+  vbody.innerHTML='';
+  $('#nav').classList.remove('solid');
+  if(active>=0) root.style.setProperty('--accent',SECCIONES[active%NS].accent);
+}
+
+function sectionFooter(id){
+  const i=SECCIONES.findIndex(s=>s.id===id);
+  const p=SECCIONES[(i-1+NS)%NS], nx=SECCIONES[(i+1)%NS];
+  return `<nav class="vnav rv">
+      <a class="prev" href="#${p.id}" data-go="${p.id}"><em class="mono" style="font-style:normal">← Anterior</em><span>${esc(p.n)}</span></a>
+      <a class="next" href="#${nx.id}" data-go="${nx.id}"><em class="mono" style="font-style:normal">Siguiente →</em><span>${esc(nx.n)}</span></a>
+    </nav>
+    <div class="vfoot">
+      <span>© ${new Date().getFullYear()} Ministerios Ebenezer Costa Rica</span>
+      <span style="display:flex;gap:18px">
+        <a href="${CFG.channelUrl}" target="_blank" rel="noopener">YouTube</a>
+        <a href="https://www.facebook.com/${CFG.fbPage}" target="_blank" rel="noopener">Facebook</a>
+        <a href="#home" data-go="home">Volver al inicio</a></span>
+    </div>`;
+}
+
+function openSection(id, fromCard){
+  const s=SECCIONES.find(x=>x.id===id); if(!s) return;
+  const first = !document.body.classList.contains('open');
+  if(first) abiertoEn=performance.now();
+  currentId=id;
+  history.replaceState(null,'','#'+id);
+
+  // contenido
+  $('#vkicker').textContent=s.kicker;
+  $('#vtitle').textContent=s.n;
+  $('#vlead').textContent=s.lead;
+  $('#vimg').src=th(VIDEOS[s.img].id,'maxresdefault');
+  $('#vimg').onerror=function(){this.onerror=null;this.src=th(VIDEOS[s.img].id)};
+  vbody.innerHTML = BUILD[id]() + sectionFooter(id);
+  vbody.scrollTop=0;
+  view.setAttribute('aria-hidden','false');
+  view.classList.add('on');
+  document.body.classList.add('open');
+  $('#nav').classList.add('solid');
+  // acento de la sección
+  root.style.setProperty('--accent',s.accent);
+  root.style.setProperty('--glow',s.accent+'55');
+
+  wireSection(id);
+
+  if(viewTl) viewTl.kill();
+  const tl=gsap.timeline();
+  if(first){
+    // el panel empuja hacia arriba desde el borde inferior…
+    tl.fromTo(view,{y:'100%'},{y:'0%',duration:1.0,ease:'expo.out'},0)
+      // …y el home retrocede un paso para dar profundidad
+      .to(stage,{scale:.955,opacity:.5,duration:1.0,ease:'expo.out'},0)
+      .fromTo('#vscrim',{opacity:0},{opacity:1,duration:.7,ease:'power2.out'},0)
+      .fromTo('.grip',{opacity:0,scaleX:.4},{opacity:1,scaleX:1,duration:.7,ease:'expo.out'},.25);
+  }else{
+    // ya estaba arriba: sólo se releva el contenido
+    tl.fromTo([$('.view-hero'),vbody],{y:34,opacity:0},{y:0,opacity:1,duration:.75,ease:'expo.out',stagger:.06},0);
+  }
+  tl.fromTo('#vimg',{scale:1.24},{scale:1.06,duration:1.7,ease:'expo.out'},0)
+    .fromTo('.view-hero .cap > *',{yPercent:70,opacity:0},{yPercent:0,opacity:1,duration:.95,ease:'expo.out',stagger:.07},first?'-=.62':'-=.5');
+  viewTl=tl;
+  // El revelado del cuerpo va por temporizador y transiciones CSS, no por el
+  // timeline: así aparece aunque las animaciones estén congeladas.
+  clearTimeout(revealT); revealT=setTimeout(revealBody, first?420:180);
+  clearTimeout(guard);   guard=setTimeout(settleOpen,1500);
+}
+
+function mostrar(el,i){
+  el.style.transitionDelay=(Math.min(i,8)*0.055)+'s';
+  el.classList.add('in');
+  setTimeout(()=>{el.style.transitionDelay=''},900);
+}
+function revealBody(){
+  // Los primeros bloques entran por orden, no por posición medida: durante la
+  // subida del panel las medidas todavía no son fiables y quedaban invisibles.
+  // Del resto se encarga el IntersectionObserver al hacer scroll.
+  $$('.rv',vbody).forEach((el,i)=>{ if(i<10) mostrar(el,i) });
+  observeRest();
+}
+let io=null;
+function observeRest(){
+  if(io) io.disconnect();
+  // IntersectionObserver no depende de rAF: el revelado al hacer scroll
+  // dentro del panel funciona aunque las animaciones estén congeladas.
+  io=new IntersectionObserver(entries=>{
+    entries.forEach(en=>{
+      if(en.isIntersecting){ mostrar(en.target,0); io.unobserve(en.target); }
+    });
+  },{root:vbody,threshold:.1,rootMargin:'0px 0px -5% 0px'});
+  $$('.rv',vbody).forEach(el=>{ if(!el.classList.contains('in')) io.observe(el) });
+}
+
+function closeView(){
+  if(!document.body.classList.contains('open')) return;
+  // Nada puede cerrar el panel en los primeros 380 ms: es la ventana en la
+  // que llegan los eventos rezagados del mismo gesto que lo abrió.
+  if(performance.now()-abiertoEn < 380) return;
+  history.replaceState(null,'','#');
+  if(viewTl) viewTl.kill();
+  const tl=gsap.timeline({onComplete:settleClose});
+  clearTimeout(guard); guard=setTimeout(settleClose,1100);
+  tl.to(view,{y:'100%',duration:.72,ease:'power3.in'},0)
+    .to('#vscrim',{opacity:0,duration:.6,ease:'power2.in'},0)
+    .to(stage,{scale:1,opacity:1,duration:.95,ease:'expo.out'},.06)
+    .to('.view-hero .cap > *',{yPercent:-26,opacity:0,duration:.36,ease:'power2.in'},0);
+  gsap.fromTo(cards.map(c=>c.querySelector('img')),{scale:1.1},{scale:1.02,duration:1.2,ease:'expo.out',stagger:{each:.035,from:Math.max(active,0)}});
+}
+$('#vclose').addEventListener('click',closeView);
+
+/* ── El "ghost click" del táctil ────────────────────────────────────
+   Tras un toque el navegador dispara, además del pointerup, un `click`
+   de compatibilidad. Ese click NO conserva el objetivo original: se
+   re-impacta contra lo que haya en esas coordenadas EN ESE MOMENTO.
+
+   Como el toque abría el panel y con él aparecía el velo, el click
+   fantasma caía sobre el velo y lo cerraba en el mismo gesto. De ahí
+   que la tarjeta «intentara abrirse y se retrajera», o se quedara a
+   medio camino cuando las dos animaciones se pisaban.
+
+   Se resuelve por partida triple:
+   1. el velo cierra con `pointerdown`, y un click fantasma no genera
+      pointerdown — es inmune por construcción;
+   2. una ventana de gracia tras el toque que abrió;
+   3. el click sobre el velo se traga para que no haga nada más.      */
+const scrim=$('#vscrim');
+scrim.addEventListener('pointerdown',e=>{
+  if(performance.now()-ultimoToque < 700) return;
+  closeView();
+});
+scrim.addEventListener('click',e=>{ e.preventDefault(); e.stopPropagation(); });
+gsap.set('#vscrim',{opacity:0});
+// swipe hacia abajo cierra (móvil), cuando el body está arriba del todo
+(function(){
+  let y0=null;
+  vbody.addEventListener('touchstart',e=>{
+    y0 = (vbody.scrollTop<=0 && performance.now()-abiertoEn>500) ? e.touches[0].clientY : null;
+  },{passive:true});
+  vbody.addEventListener('touchmove',e=>{
+    if(y0===null) return;
+    const dy=e.touches[0].clientY-y0;
+    if(dy>140){ y0=null; closeView(); }   // umbral alto: no estorba al scroll normal
+  },{passive:true});
+})();
+
+/* ═══════════════════════════════════════════════════════════════
+   CABLEADO POR SECCIÓN
+   ═══════════════════════════════════════════════════════════════ */
+function wireSection(id){
+  // glow que sigue el cursor en las cajas
+  $$('.box',vbody).forEach(b=>b.addEventListener('mousemove',e=>{
+    const r=b.getBoundingClientRect();
+    b.style.setProperty('--gx',(e.clientX-r.left)+'px');
+    b.style.setProperty('--gy',(e.clientY-r.top)+'px');
+  }));
+
+  if(id==='historia'){
+    // parallax suave en las fotos al hacer scroll del cuerpo
+    const figs=$$('.chap figure img',vbody);
+    const onScroll=()=>figs.forEach(im=>{
+      const r=im.getBoundingClientRect();
+      const p=(r.top+r.height/2-innerHeight/2)/innerHeight;
+      im.style.transform=`translate3d(0,${clamp(p*-26,-30,30)}px,0) scale(1.12)`;
+    });
+    vbody.addEventListener('scroll',onScroll,{passive:true}); onScroll();
+  }
+
+  if(id==='departamentos'){
+    $$('.dep',vbody).forEach(d=>{
+      const open=()=>openDrawerDep(+d.dataset.dep);
+      d.addEventListener('click',open);
+      d.addEventListener('keydown',e=>{if(e.key==='Enter')open()});
+    });
+  }
+
+  if(id==='envivo'){
+    $('#feed').innerHTML = VIDEOS.map(v=>`<a class="vi" href="https://youtu.be/${v.id}" target="_blank" rel="noopener">
+      <img loading="lazy" src="${th(v.id)}" alt=""><div><h4>${esc(v.t)}</h4><span>${v.d}</span></div></a>`).join('');
+    $$('.tabs button',vbody).forEach(b=>b.addEventListener('click',()=>{
+      $$('.tabs button',vbody).forEach(x=>x.classList.toggle('on',x===b));
+      const yt=b.dataset.tab==='yt';
+      $('#feed').hidden=!yt; $('#fbpane').hidden=yt;
+      gsap.fromTo(yt?$('#feed'):$('#fbpane'),{opacity:0,y:12},{opacity:1,y:0,duration:.55,ease:'power3.out'});
+    }));
+    initLive();
+  }
+
+  if(id==='recursos'){
+    renderEdiciones(0);
+    $$('#langs button',vbody).forEach((b,i)=>b.addEventListener('click',()=>{
+      $$('#langs button',vbody).forEach(x=>x.classList.toggle('on',x===b));
+      renderEdiciones(i);
+    }));
+    $$('[data-res]',vbody).forEach(el=>{
+      const open=()=>openDrawerRes(el.dataset.res);
+      el.addEventListener('click',open);
+      el.addEventListener('keydown',e=>{if(e.key==='Enter')open()});
+    });
+  }
+}
+
+function renderEdiciones(langIdx){
+  const now=new Date(), out=[];
+  for(let k=0;k<12;k++){
+    const d=new Date(now.getFullYear(), now.getMonth()-k, 1);
+    out.push({m:MESES[d.getMonth()], y:d.getFullYear()});
+  }
+  const box=$('#eds');
+  box.innerHTML=out.map(e=>`<a class="rv" href="#" data-ed>
+     <b>${e.m}</b><span>${e.y} · ${IDIOMAS[langIdx]}</span></a>`).join('');
+  // reflow forzado para que la transición arranque desde el estado inicial
+  void box.offsetWidth;
+  $$('a',box).forEach((a,i)=>mostrar(a,i));
+  $$('a',box).forEach(a=>a.addEventListener('click',e=>{
+    e.preventDefault(); toast('Enlace de descarga pendiente de conectar con el repositorio Rhema.');
+  }));
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   DRAWER
+   ═══════════════════════════════════════════════════════════════ */
+const drawer=$('#drawer'), sheet=$('#sheet'), sheetIn=$('#sheetIn');
+function openDrawer(html){
+  sheetIn.innerHTML=html;
+  drawer.classList.add('on');
+  sheet.scrollTop=0;
+  gsap.timeline()
+    .to('#drawer .scrim',{opacity:1,duration:.45,ease:'power2.out'},0)
+    .fromTo(sheet,{x:'100%'},{x:'0%',duration:.7,ease:'expo.out'},0)
+    .fromTo(sheetIn.children,{opacity:0,y:22},{opacity:1,y:0,duration:.7,ease:'expo.out',stagger:.05},'-=.4');
+}
+function closeDrawer(){
+  gsap.timeline({onComplete:()=>{drawer.classList.remove('on');sheetIn.innerHTML=''}})
+    .to(sheet,{x:'100%',duration:.55,ease:'expo.in'},0)
+    .to('#drawer .scrim',{opacity:0,duration:.4},0);
+}
+drawer.addEventListener('click',e=>{ if(e.target.closest('[data-close]')) closeDrawer() });
+gsap.set(sheet,{x:'100%'});
+gsap.set(view,{y:'100%'});
+
+function openDrawerDep(i){
+  const d=DEPTOS[i];
+  openDrawer(`<figure><img src="${th(VIDEOS[d.i].id)}" alt=""></figure>
+    <p class="mono">Departamento ${String(i+1).padStart(2,'0')}</p>
+    <h3>${esc(d.n)}</h3><p style="color:var(--fg-2)">${esc(d.lead)}</p>
+    <ul>${d.items.map(([a,b])=>`<li><b>${esc(a)}</b><span>${esc(b)}</span></li>`).join('')}</ul>
+    <a class="pill" style="margin-top:26px" href="https://www.facebook.com/${CFG.fbPage}" target="_blank" rel="noopener">Quiero servir aquí</a>`);
+}
+function openDrawerRes(kind){
+  if(kind==='videoteca'){
+    openDrawer(`<p class="mono">Recursos</p><h3>Videoteca</h3>
+      <p style="color:var(--fg-2)">Los servicios más recientes del canal. El archivo completo está en YouTube.</p>
+      <div class="vt" style="margin-top:22px;grid-template-columns:1fr 1fr">
+        ${VIDEOS.slice(0,10).map(v=>`<a href="https://youtu.be/${v.id}" target="_blank" rel="noopener">
+          <figure><img loading="lazy" src="${th(v.id)}" alt="">
+            <span class="play"><b><svg width="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></b></span></figure>
+          <div class="meta"><h4>${esc(v.t)}</h4><span>${v.d}</span></div></a>`).join('')}
+      </div>
+      <a class="pill" style="margin-top:24px" href="${CFG.channelUrl}/videos" target="_blank" rel="noopener">Ver archivo completo</a>`);
+  }else if(kind==='rhema'){
+    openDrawer(`<p class="mono">Recursos</p><h3>Revista Rhema</h3>
+      <p style="color:var(--fg-2)">Publicación mensual del ministerio. Disponible en seis idiomas desde 2019.</p>
+      <ul>${IDIOMAS.map(l=>`<li><b>${l}</b><span>Edición mensual</span></li>`).join('')}</ul>
+      <p style="margin-top:22px;color:var(--fg-2);font-size:.9em">Las descargas se conectarán al repositorio oficial de Rhema.</p>`);
+  }else{
+    openDrawer(`<p class="mono">Recursos</p><h3>Aplicaciones</h3>
+      <p style="color:var(--fg-2)">Ministerios Ebenezer en el teléfono: prédicas, la Revista Rhema, avisos y la transmisión en vivo.</p>
+      <ul>
+        <li><b>App Ministerios Ebenezer</b><span>Android · iOS</span></li>
+        <li><b>Revista Rhema digital</b><span>Dentro de la app</span></li>
+        <li><b>Transmisión en vivo</b><span>Aviso al iniciar</span></li>
+        <li><b>Archivo de prédicas</b><span>Audio y video</span></li>
+      </ul>
+      <p style="margin-top:22px;color:var(--fg-2);font-size:.9em">
+        Los enlaces a App Store y Google Play quedan pendientes de confirmar.</p>`);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   EN VIVO — estado real vía Worker, con fallback sin API
+   ═══════════════════════════════════════════════════════════════ */
+let liveState={live:false,videoId:null,title:'',checked:false};
+
+async function fetchLive(){
+  if(!CFG.liveEndpoint) return null;
+  try{
+    const r=await fetch(CFG.liveEndpoint,{cache:'no-store'});
+    if(!r.ok) throw new Error(r.status);
+    return await r.json();     // { live:boolean, videoId, title, latest:{id,title,date} }
+  }catch(e){ return null; }
+}
+
+function paintPill(){
+  const p=$('#livePill');
+  p.classList.toggle('live',liveState.live);
+  p.querySelector('span').textContent = liveState.live ? 'En vivo ahora' : 'En vivo';
+}
+
+async function initLive(){
+  const player=$('#player'), stat=$('#lstat'), txt=$('#lstatTxt');
+  if(!player) return;
+  const data = liveState.checked ? liveState.raw : await fetchLive();
+
+  if(data){
+    liveState={...liveState,checked:true,raw:data,live:!!data.live,videoId:data.videoId};
+    if(data.live && data.videoId){
+      player.src=`https://www.youtube.com/embed/${data.videoId}?autoplay=1&mute=1&rel=0`;
+      stat.classList.add('on');
+      txt.textContent = 'En vivo ahora' + (data.title? ' · '+data.title : '');
+    }else{
+      const v=data.latest||{};
+      player.src = v.id ? `https://www.youtube.com/embed/${v.id}?rel=0`
+                        : `https://www.youtube.com/embed/videoseries?list=${UPLOADS}&rel=0`;
+      stat.classList.remove('on');
+      txt.textContent = 'Sin transmisión · último servicio' + (v.title? ' · '+v.title : '');
+    }
+  }else{
+    // Fallback sin API: el embed live_stream entra solo si hay señal.
+    player.src=`https://www.youtube.com/embed/live_stream?channel=${CFG.channelId}&rel=0`;
+    txt.textContent='Buscando transmisión…';
+    clearTimeout(initLive._t);
+    initLive._t=setTimeout(()=>{
+      if(!player.isConnected) return;
+      player.src=`https://www.youtube.com/embed/videoseries?list=${UPLOADS}&rel=0`;
+      stat.classList.remove('on');
+      txt.textContent='Sin transmisión · reproduciendo el servicio más reciente';
+    },4000);
+  }
+  paintPill();
+}
+// chequeo temprano y periódico del badge del nav
+(async function pollLive(){
+  const d=await fetchLive();
+  if(d){ liveState={...liveState,checked:true,raw:d,live:!!d.live,videoId:d.videoId}; paintPill(); }
+  setTimeout(pollLive, 90000);
+})();
+
+/* ═══════════════════════════════════════════════════════════════
+   CURSOR
+   ═══════════════════════════════════════════════════════════════ */
+(function(){
+  if(matchMedia('(pointer:coarse)').matches) return;
+  const c=$('#cur'), r=$('#curr'), tx=$('#curTxt');
+  let cx=0,cy=0,rx=0,ry=0,mx=innerWidth/2,my=innerHeight/2;
+  addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
+  const sx=gsap.quickSetter(c,'x','px'),sy=gsap.quickSetter(c,'y','px'),
+        rxs=gsap.quickSetter(r,'x','px'),rys=gsap.quickSetter(r,'y','px');
+  gsap.ticker.add(()=>{
+    cx+=(mx-cx)*.4;cy+=(my-cy)*.4;rx+=(mx-rx)*.13;ry+=(my-ry)*.13;
+    sx(cx-4);sy(cy-4);rxs(rx-20);rys(ry-20);
+  });
+  const hot=(on,label)=>{ r.classList.toggle('hot',on); if(label)tx.textContent=label;
+    gsap.to(r,{scale:on?1.75:1,borderColor:on?'var(--accent)':'var(--line)',duration:.45,ease:'power3.out'}) };
+  document.addEventListener('mouseover',e=>{
+    const card=e.target.closest('.card');
+    if(card){ hot(card.classList.contains('act'),'Abrir'); return; }
+    if(e.target.closest('a,button,.dep,.box,.vi,.ed a')){ hot(true,'Ver'); return; }
+    hot(false);
+  });
+})();
+
+/* ═══════════════════════════════════════════════════════════════
+   INTRO
+   ═══════════════════════════════════════════════════════════════ */
+introK.forEach((o,i)=>{
+  gsap.to(o,{v:1,duration:1.1,ease:'power2.out',delay:.25 + (i%3)*.12 + Math.floor(i/3)*.05});
+});
+setTimeout(()=>introK.forEach(o=>{if(o.v<1)o.v=1}),2400);
+gsap.timeline({delay:.05})
+  .from('.wordmark, .social a, .nav-r > *',{opacity:0,y:-16,duration:.9,ease:'expo.out',stagger:.06},0)
+  .from('.hud > *',{opacity:0,y:16,duration:.85,ease:'expo.out',stagger:.09},.4);
+
+// deep-link al cargar (#servicios, etc.)
+addEventListener('load',()=>{
+  const h=location.hash.replace('#','');
+  if(h && SECCIONES.some(s=>s.id===h)){
+    const i=SECCIONES.findIndex(s=>s.id===h);
+    goToSection(i);
+    setTimeout(()=>openSection(h),700);
+  }
+});
+addEventListener('scroll',()=>{ if(scrollY>0 && !document.body.classList.contains('open')) scrollTo(0,0) },{passive:true});
+</script>
+</body>
+</html>
