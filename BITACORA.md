@@ -4,6 +4,36 @@ Registro de trabajo sobre el monorepo. Cada entrada: fecha, alcance y qué cambi
 
 ---
 
+## 2026-09-12 · Laboratorio de temas: tarjetas flotantes, 5+5 paletas y controles abajo (tibas)
+
+**Pedido:** combinar velocidad y colores en el preview, con las tarjetas flotantes de la web
+original para ver cada tema en contexto, y los controles abajo.
+
+**preview-pulso.html rehecho como laboratorio:**
+- Carrusel flotante con la misma física de la web (arrastre, inercia, profundidad Z, gris por
+  distancia al centro, sleep/wake del loop) y las 6 portadas reales.
+- 5 paletas candidatas para claro (Gris elegante, Marfil, Gris frío, Crema, Piedra) y 5 para
+  oscuro (Azabache, Azul noche, Carbón cálido, Vino, Bosque): cada una cambia fondo, panel,
+  texto, líneas y dorado. Muescas seleccionables abajo, con nombre.
+- Controles en un dock fijo abajo: velocidad (300/400/500/650), paleta clara y paleta oscura.
+  El pulso sale del ícono del header, como en la web real.
+
+**Bugs cazados con el headless durante el armado:**
+1. `window.pulsoIcono` se llamaba a sí mismo (recursión infinita) — renombrado a `dispararPulso`.
+2. El carrusel nacía dormido: `vivo` se inicializaba en `true`, así que `despertar()` retornaba
+   sin desplegar nada. Ahora arranca en `false` y el primer cuadro corre síncrono.
+3. Geometría del carrusel calculada desde el alto real del dock, con tope por ancho de tarjeta
+   para que quepa entera con su rótulo en móvil.
+
+**Renders de comparación** (fuera del repo, regenerables con `node recpaletas.mjs`):
+`pulso-oscuras.gif` y `pulso-claras.gif` — cinco paneles en tiempo real (screencast CDP + PIL),
+un pulso de 400 ms por paleta sobre las tarjetas flotantes.
+
+**Validación:** 6 tarjetas, 10 muestras, pulso verificado (claro↔oscuro), sin residuos,
+consola limpia; imágenes de portada todas cargadas.
+
+---
+
 ## 2026-09-12 · Logo más grande en PC, pulso de 400 ms y preview para elegir velocidad (tibas)
 
 **Reporte:** el logo quedó chico en escritorio y el pulso del tema quedó demasiado lento
