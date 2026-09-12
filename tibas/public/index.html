@@ -97,6 +97,19 @@ body.open .aurora{opacity:.42}
 .aurora i:nth-child(2){width:48vw;height:48vw;right:-8vw;top:18vh}
 .aurora i:nth-child(3){width:44vw;height:44vw;left:26vw;bottom:-18vw}
 [data-theme="light"] .aurora i{mix-blend-mode:multiply}
+/* ── fondo de mármol con paralaje inverso ───────────────────────────
+   Textura según el tema (mármol blanco en claro, negro vetado en
+   oscuro) a opacidad fija baja. La cinta mide 400vw con la imagen
+   espejada en pares: los empalmes quedan continuos y el reinicio del
+   módulo (200vw) es invisible. El carrusel la desplaza en dirección
+   contraria, muy sutil, para dar profundidad. */
+.fondo-web{position:fixed;top:0;bottom:0;left:-200vw;width:400vw;z-index:0;pointer-events:none;
+  display:flex;opacity:.12;will-change:transform;transform:translate3d(0,0,0)}
+.fondo-web i{flex:none;width:100vw;background-size:cover;background-position:center;
+  background-image:url(img/fondo-claro.webp)}
+.fondo-web i:nth-child(even){transform:scaleX(-1)}
+[data-theme="dark"] .fondo-web{opacity:.07}
+[data-theme="dark"] .fondo-web i{background-image:url(img/fondo-oscuro.webp)}
 /* ── Pulso del cambio de tema ───────────────────────────────────────
    Dos ondas (~500 ms) que nacen del propio botón: un disco del color
    de destino (bajo él el tema cambia, a mitad del pulso) y un anillo
@@ -579,6 +592,7 @@ body.open .vscrim{pointer-events:auto;cursor:pointer}
 </head>
 <body>
 <div id="intro"><canvas id="introLienzo"></canvas></div>
+<div class="fondo-web" id="fondoWeb" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
 <div class="aurora" id="aurora"><i></i><i></i><i></i></div>
 <div class="grain"></div>
 <div class="cur" id="cur"></div><div class="cur-r" id="curr"><span id="curTxt">Abrir</span></div>
@@ -1072,6 +1086,7 @@ document.addEventListener('click',e=>{
    CARRUSEL INFINITO 3D  (mouse · touch · rueda · teclado)
    ═══════════════════════════════════════════════════════════════ */
 const deck=$('#deck'), stage=$('#stage');
+const fondoWeb=$('#fondoWeb'); let cacheF='';   // paralaje del mármol
 
 /* Réplica del ejemplo pmndrs:
    - 3 tarjetas por pantalla, centros separados exactamente viewport/3
@@ -1228,6 +1243,16 @@ function render(){
     if(cacheZ[i]!==zi){ cacheZ[i]=zi; c.style.zIndex=zi; }
     const pe=(x > -CW*1.2 && x < VW + CW*0.2) ? 'auto' : 'none';
     if(cacheP[i]!==pe){ cacheP[i]=pe; c.style.pointerEvents=pe; }
+  }
+
+  // Paralaje del mármol: la cinta viaja en dirección contraria a las
+  // tarjetas y muy frenada (6% del recorrido). El módulo de 200vw cae
+  // siempre sobre un empalme espejado, así que el reinicio no se ve.
+  if(!reduce){
+    const perFondo=VW*2;
+    const u=((pos*.06)%perFondo+perFondo)%perFondo;
+    const tf=`translate3d(${u.toFixed(1)}px,0,0)`;
+    if(cacheF!==tf){ cacheF=tf; fondoWeb.style.transform=tf; }
   }
 
   // ¿Sigue habiendo algo por animar? Si no, el loop se apaga y suelta el

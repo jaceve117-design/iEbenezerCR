@@ -4,6 +4,23 @@ Registro de trabajo sobre el monorepo. Cada entrada: fecha, alcance y qué cambi
 
 ---
 
+## 2026-09-12 · Fondos de mármol oficiales con paralaje inverso (tibas)
+
+**Decisión:** los fondos de pantalla pasan a la web oficial. Opacidades fijas: **12% claro,
+7% oscuro**. Mármoles convertidos a WebP (2,7-3 MB → 230-260 KB).
+
+**Efecto de profundidad:** capa `.fondo-web` de 400 vw con la imagen repetida y **espejada en
+pares** — los empalmes entre mosaicos son continuos (espejo) y el reinicio del módulo (200 vw)
+cae siempre en contenido idéntico, así que ni seam ni salto se perciben. El carrusel la arrastra
+en **dirección contraria, frenada al 6%** del recorrido: tarjetas a la izquierda, mármol a la
+derecha, y viceversa. La escritura va con caché dentro del loop del carrusel (mismo sueño del
+loop: fondo quieto cuando las tarjetas quietas) y se desactiva con reduced-motion.
+
+**Validación:** arrastre sintético de 260 px → tarjetas -506 px, fondo +30,4 px (inverso ✓);
+opacidades 0.12/0.07 según tema; imagen conmuta con el tema; capturas claro/oscuro; consola limpia.
+
+---
+
 ## 2026-09-12 · Elección cerrada: 500 ms + Piedra/Azabache, y copia local para probar fondos (tibas)
 
 **Elección del laboratorio:** velocidad **500 ms**; claro **Piedra** (`#E2E0DB`, dorado `#8C6D14`),
