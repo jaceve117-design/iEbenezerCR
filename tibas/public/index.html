@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Ministerios Ebenezer C.R</title>
 <meta name="description" content="Ministerios Ebenezer Costa Rica — casa de fe, familia y palabra. Servicios, transmisión en vivo y recursos.">
-<meta name="theme-color" content="#E8E5DF">
+<meta name="theme-color" content="#EAE9E6">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://i.ytimg.com">
@@ -14,13 +14,14 @@
 <style>
 /* ══════════════════════════════ TOKENS ══════════════════════════════ */
 :root{
-  /* claro = gris perla: mismo espíritu que el ejemplo pmndrs, pero cálido */
-  --bg:#E8E5DF; --bg-2:#DFDBD3; --panel:#F3F1EC; --panel-2:#EAE7E0;
-  --fg:#100F0D; --fg-2:#5C594F; --fg-3:#96918A;
-  --amber:#A8690A; --amber-2:#7E4F06; --violet:#4B3EE0; --rose:#D6365A; --mint:#1F9E76;
+  /* claro = gris elegante con hilo dorado */
+  --bg:#EAE9E6; --bg-2:#E1E0DC; --panel:#F6F5F2; --panel-2:#EAE9E5;
+  --fg:#131210; --fg-2:#5E5B53; --fg-3:#999590;
+  --gold:#9C7318;   /* el hilo dorado: bordes, kickers y remates, en ambos temas */
+  --amber:#9C7318; --amber-2:#7A5A12; --violet:#4B3EE0; --rose:#D6365A; --mint:#1F9E76;
   --accent:var(--amber);
   --line:rgba(16,15,13,.15); --line-2:rgba(16,15,13,.075);
-  --glow:rgba(168,105,10,.2);
+  --glow:rgba(156,115,24,.22);
 
   --e-expo:cubic-bezier(.16,1,.3,1);
   --e-snap:cubic-bezier(.7,0,.2,1);
@@ -49,6 +50,7 @@
 [data-theme="dark"]{
   --bg:#08080A; --bg-2:#0D0D11; --panel:#121218; --panel-2:#17171F;
   --fg:#F0EEE9; --fg-2:#8E8B98; --fg-3:#5D5A67;
+  --gold:#D5B269;
   --amber:#F0A93B; --amber-2:#FFD79A; --violet:#6B5BFF; --rose:#FF6B8A; --mint:#4FD1A5;
   --line:rgba(240,238,233,.10); --line-2:rgba(240,238,233,.055);
   --glow:rgba(240,169,59,.32);
@@ -95,30 +97,25 @@ body.open .aurora{opacity:.42}
 .aurora i:nth-child(2){width:48vw;height:48vw;right:-8vw;top:18vh}
 .aurora i:nth-child(3){width:44vw;height:44vw;left:26vw;bottom:-18vw}
 [data-theme="light"] .aurora i{mix-blend-mode:multiply}
-/* ── Onda del cambio de tema ────────────────────────────────────────
-   Donde el navegador soporta View Transitions, el círculo recorta el
-   render nuevo: se ve la web entera del otro tema apareciendo, no un
-   color plano. Donde no, cae al círculo de color de abajo.          */
-::view-transition-old(root),::view-transition-new(root){
-  animation:none;mix-blend-mode:normal}
-::view-transition-old(root){z-index:1}
-::view-transition-new(root){z-index:2}
+/* ── Ondas del cambio de tema ───────────────────────────────────────
+   Dos ondas lentas que nacen del propio botón: un disco del color de
+   destino (bajo él el tema cambia, a mitad de viaje) y un anillo dorado
+   que lo persigue. Sin View Transitions: mismo resultado en todos los
+   navegadores, sin depender del estado del móvil. */
 .onda{position:fixed;width:24px;height:24px;border-radius:50%;z-index:9995;
   pointer-events:none;transform:translate(-50%,-50%) scale(0);
-  transition:transform .8s cubic-bezier(.16,1,.3,1),opacity .4s ease-out}
-/* Onda 2 del cambio de tema: un anillo que persigue a la primera onda con
-   90 ms de retardo y se desvanece a mitad del recorrido. */
+  transition:transform 1.45s cubic-bezier(.6,.2,.35,1),opacity .6s ease-out 1.15s}
 .anillo{position:fixed;width:24px;height:24px;border-radius:50%;z-index:9994;
-  pointer-events:none;border:1.5px solid var(--accent);opacity:.8;
+  pointer-events:none;border:1px solid var(--gold);opacity:.8;
   transform:translate(-50%,-50%) scale(0);
-  transition:transform 1.05s cubic-bezier(.16,1,.3,1) .09s,opacity .55s ease-out .38s}
+  transition:transform 1.7s cubic-bezier(.6,.2,.35,1) .15s,opacity .65s ease-out .6s}
 
 /* ══════════════════════════════ INTRO ══════════════════════════════
    Nace SIEMPRE en gris perla, sea cual sea el tema guardado. Si el tema
    es oscuro, durante la dispersión el suelo vira a negro por debajo de
    las partículas y sólo entonces se retira el velo: el empalme con la
    web queda invisible en los dos casos. */
-#intro{position:fixed;inset:0;z-index:10000;background:#E8E5DF;pointer-events:none;
+#intro{position:fixed;inset:0;z-index:10000;background:#EAE9E6;pointer-events:none;
   will-change:opacity,background-color}
 #intro canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
 
@@ -226,10 +223,10 @@ body.open .aurora{opacity:.42}
   letter-spacing:.055em;color:var(--fg);text-transform:uppercase;line-height:1;
   transition:transform .55s var(--e-expo)}
 .card figcaption .go{margin-left:auto;opacity:0;transform:translateX(-8px);
-  transition:opacity .5s var(--e-expo),transform .5s var(--e-expo);color:var(--accent)}
+  transition:opacity .5s var(--e-expo),transform .5s var(--e-expo);color:var(--gold)}
 .card.act figcaption .go{opacity:1;transform:none}
 .card figcaption::before{content:"";position:absolute;left:0;bottom:-5px;height:1px;width:0;
-  background:var(--accent);transition:width .7s var(--e-expo)}
+  background:var(--gold);transition:width .7s var(--e-expo)}
 .card.act figcaption::before{width:100%}
 
 /* ══════════════════════════════ FOOTER ══════════════════════════════ */
@@ -338,7 +335,8 @@ body.open .vscrim{pointer-events:auto;cursor:pointer}
 .g2{grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr))}
 .g3{grid-template-columns:repeat(auto-fit,minmax(min(100%,270px),1fr))}
 .g4{grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr))}
-.box{position:relative;border:1px solid var(--line);border-radius:16px;padding:clamp(20px,2.3vw,30px);
+.box{position:relative;border:1px solid color-mix(in oklab,var(--gold) 16%,var(--line));
+  border-radius:16px;padding:clamp(20px,2.3vw,30px);
   background:color-mix(in oklab,var(--panel) 55%,transparent);overflow:hidden;
   transition:transform .6s var(--e-expo),border-color .45s}
 .box::before{content:"";position:absolute;left:var(--gx,50%);top:var(--gy,50%);width:300px;height:300px;
@@ -347,8 +345,9 @@ body.open .vscrim{pointer-events:auto;cursor:pointer}
 .box>*{position:relative}
 .box h3{font-size:clamp(23px,2.2vw,31px);margin-bottom:8px;font-weight:var(--w-semi)}
 .box p{font-size:.93em;color:var(--fg-2)}
-.box .k{font-family:var(--serif);font-weight:var(--w-med);font-size:12px;letter-spacing:.2em;
-  text-transform:uppercase;color:var(--accent);display:block;margin-bottom:14px}
+/* kickers dorados: el hilo que ata fichas, cajas y la dirección */
+.k{font-family:var(--serif);font-weight:var(--w-med);font-size:12px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--gold);display:block;margin-bottom:14px}
 .box .go{margin-top:18px;display:flex;align-items:center;gap:9px;font-size:11px;letter-spacing:.16em;
   text-transform:uppercase;font-family:var(--serif);font-weight:var(--w-med)}
 .box .go svg{width:13px;transition:transform .5s var(--e-back)}
@@ -376,7 +375,7 @@ body.open .vscrim{pointer-events:auto;cursor:pointer}
 
 /* ── VISÍTANOS: la dirección como pieza tipográfica ── */
 .addr{position:relative;padding:clamp(24px,4.2vw,50px) clamp(20px,3.6vw,46px);
-  border:1px solid var(--line);border-radius:18px;overflow:hidden;
+  border:1px solid color-mix(in oklab,var(--gold) 16%,var(--line));border-radius:18px;overflow:hidden;
   background:color-mix(in oklab,var(--panel) 55%,transparent)}
 .addr::before{content:"";position:absolute;inset:auto -10% -60% 40%;height:120%;
   background:radial-gradient(circle at 50% 100%,var(--glow),transparent 62%);
@@ -401,7 +400,7 @@ body.open .vscrim{pointer-events:auto;cursor:pointer}
 .sede h3{font-size:clamp(24px,2.4vw,34px);font-weight:var(--w-med);letter-spacing:-.015em}
 .sede p{font-size:.9em;color:var(--fg-2);margin-top:4px}
 .sede .hh{display:block;margin-top:12px;font-size:12.5px;letter-spacing:.14em;
-  text-transform:uppercase;color:var(--accent)}
+  text-transform:uppercase;color:var(--gold)}
 
 /* historia */
 .chap{display:grid;grid-template-columns:1fr 1fr;gap:clamp(20px,4vw,70px);align-items:center;
@@ -461,7 +460,8 @@ body.open .vscrim{pointer-events:auto;cursor:pointer}
 
 /* recursos: rejilla de ediciones */
 .ed{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,124px),1fr));gap:10px}
-.ed a{aspect-ratio:3/4;border-radius:10px;border:1px solid var(--line);display:flex;flex-direction:column;
+.ed a{aspect-ratio:3/4;border-radius:10px;border:1px solid color-mix(in oklab,var(--gold) 14%,var(--line));
+  display:flex;flex-direction:column;
   justify-content:flex-end;padding:12px;position:relative;overflow:hidden;
   background:linear-gradient(160deg,var(--panel),var(--bg-2));
   transition:transform .55s var(--e-expo),border-color .4s}
@@ -477,7 +477,8 @@ body.open .vscrim{pointer-events:auto;cursor:pointer}
 
 /* videoteca */
 .vt{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,250px),1fr));gap:14px}
-.vt a{border-radius:14px;overflow:hidden;border:1px solid var(--line);background:var(--panel);
+.vt a{border-radius:14px;overflow:hidden;border:1px solid color-mix(in oklab,var(--gold) 14%,var(--line));
+  background:var(--panel);
   transition:transform .55s var(--e-expo),border-color .4s}
 .vt figure{position:relative;aspect-ratio:16/9;overflow:hidden;background:var(--bg-2)}
 .vt img{width:100%;height:100%;object-fit:cover;filter:grayscale(.45);
@@ -783,7 +784,7 @@ const IDIOMAS=['Español','Inglés','Francés','Portugués','Italiano','K’iche
 
 /* ── Las 6 secciones del carrusel ── */
 const SECCIONES=[
- {id:'servicios', n:'Servicios', kicker:'01 / La semana', img:'img/servicios.webp', accent:'#A8690A',
+ {id:'servicios', n:'Servicios', kicker:'01 / La semana', img:'img/servicios.webp', accent:'#9C7318',
   lead:'Cuatro encuentros por semana, cada uno con su propio carácter. Vení como estés — aquí hay lugar para vos, tu familia y tus preguntas.',
   sub:'Los horarios de la semana'},
  {id:'historia', n:'Historia', kicker:'02 / Veintiún años', img:'img/historia.webp', accent:'#4B3EE0',
@@ -795,10 +796,10 @@ const SECCIONES=[
  {id:'envivo', n:'En Vivo', kicker:'04 / Transmisión', img:'img/envivo.webp', accent:'#D6365A',
   lead:'Si estamos transmitiendo, el servicio arranca solo. Si no, te dejamos el más reciente y todo el archivo del canal.',
   sub:'El servicio, en directo por YouTube'},
- {id:'recursos', n:'Recursos', kicker:'05 / Para llevarte', img:'img/recursos.webp', accent:'#8A5A08',
+ {id:'recursos', n:'Recursos', kicker:'05 / Para llevarte', img:'img/recursos.webp', accent:'#8F6B18',
   lead:'La Revista Rhema mes a mes, las aplicaciones del ministerio y el archivo de enseñanzas.',
   sub:'Revista Rhema y aplicaciones'},
- {id:'visitanos', n:'Visítanos', kicker:'06 / Dónde estamos', img:'img/visitanos.webp', accent:'#A8690A',
+ {id:'visitanos', n:'Visítanos', kicker:'06 / Dónde estamos', img:'img/visitanos.webp', accent:'#9C7318',
   lead:'No hace falta traer nada. Solo vos, como estás. Esta es la dirección y cómo encontrarnos.',
   sub:'Tibás, San José'}];
 /* ═══════════════════════════════════════════════════════════════
@@ -821,7 +822,7 @@ function toast(msg){const t=$('#toast');t.textContent=msg;
    ═══════════════════════════════════════════════════════════════ */
 const root=document.documentElement;
 try{const t=localStorage.getItem('eb-theme'); if(t) root.dataset.theme=t;}catch(e){}
-const FONDO={light:'#E8E5DF', dark:'#08080A'};
+const FONDO={light:'#EAE9E6', dark:'#08080A'};
 
 /* ── Entrada del marco (header + pie) ────────────────────────────────
    Va ligada al intro: entra mientras el velo se retira. Pero si el logo
@@ -852,7 +853,7 @@ const INTRO = (function(){
   const lienzo = $('#introLienzo');
   if(!capa || !lienzo) return {duracion:0};
 
-  const PERLA = [232,229,223];
+  const PERLA = [234,233,230];
   const OSCURO= [8,8,10];
   const DUR   = 3000;                                   // 3 s
   const PROP  = {ent:0.40, rep:0.275, sal:0.325};
@@ -1005,6 +1006,16 @@ const INTRO = (function(){
 })();
 
 
+/* ── Cambio de tema: dos ondas lentas desde el propio botón ─────────
+   El origen se mide en el pointerdown (el toque de verdad, no el click
+   sintético) y no se usa View Transitions: el disco del color destino +
+   el anillo dorado se comportan igual en cualquier navegador, siempre
+   exactamente desde el icono. */
+let posIcono=null;
+$('#theme').addEventListener('pointerdown',()=>{
+  const b=$('#theme').getBoundingClientRect();
+  if(b.width>0) posIcono={x:b.left+b.width/2, y:b.top+b.height/2};
+});
 $('#theme').addEventListener('click',()=>{
   const n = root.dataset.theme==='light' ? 'dark' : 'light';
 
@@ -1014,48 +1025,39 @@ $('#theme').addEventListener('click',()=>{
     document.querySelector('meta[name=theme-color]').content = FONDO[n];
   };
 
+  // red de seguridad: sin medidas del toque (teclado, click sintético),
+  // se mide el botón en este instante; si ni eso, el sitio conocido
+  if(!posIcono){
+    const b=$('#theme').getBoundingClientRect();
+    if(b.width>0) posIcono={x:b.left+b.width/2, y:b.top+b.height/2};
+  }
+  const {x=innerWidth-56, y=44} = posIcono ?? {};
+  posIcono=null;
+
   if(reduce){ aplicar(); return; }
 
-  // origen de las dos ondas: el propio botón, en el frame del toque
-  const b=$('#theme').getBoundingClientRect();
-  const x=b.left+b.width/2, y=b.top+b.height/2;
   // radio que alcanza la esquina más lejana
   const R=Math.hypot(Math.max(x,innerWidth-x), Math.max(y,innerHeight-y));
 
-  // Onda 2: un anillo que arranca 90 ms detrás de la primera y se desvanece
-  // a mitad de camino. El CSS lleva los tiempos; aquí sólo nace y crece.
+  const disco=document.createElement('div');
+  disco.className='onda';
+  disco.style.background=FONDO[n];
+  disco.style.left=x+'px'; disco.style.top=y+'px';
+  document.body.appendChild(disco);
+
   const anillo=document.createElement('div');
   anillo.className='anillo';
   anillo.style.left=x+'px'; anillo.style.top=y+'px';
   document.body.appendChild(anillo);
-  // crece Y se desvanece a la vez: sin este opacity:0 la transición de
-  // opacidad nunca corre (el valor no cambia) y el anillo queda pegado
-  requestAnimationFrame(()=>{
-    anillo.style.transform=`translate(-50%,-50%) scale(${R/12})`;
-    anillo.style.opacity='0';
-  });
-  setTimeout(()=>anillo.remove(), 1500);
 
-  if(document.startViewTransition){
-    const vt=document.startViewTransition(aplicar);
-    vt.ready.then(()=>{
-      root.animate(
-        {clipPath:[`circle(0px at ${x}px ${y}px)`, `circle(${R}px at ${x}px ${y}px)`]},
-        {duration:720, easing:'cubic-bezier(.16,1,.3,1)',
-         pseudoElement:'::view-transition-new(root)'});
-    }).catch(()=>{});
-  }else{
-    // sin View Transitions: un disco del color de destino que se expande
-    const o=document.createElement('div');
-    o.className='onda';
-    o.style.background=FONDO[n];
-    o.style.left=x+'px'; o.style.top=y+'px';
-    document.body.appendChild(o);
-    requestAnimationFrame(()=>{o.style.transform=`translate(-50%,-50%) scale(${R/12})`});
-    setTimeout(aplicar, 430);                 // el tema cambia bajo el disco
-    setTimeout(()=>{o.style.opacity='0'}, 780);
-    setTimeout(()=>o.remove(), 1250);
-  }
+  requestAnimationFrame(()=>{
+    disco.style.transform=`translate(-50%,-50%) scale(${R/12})`;
+    anillo.style.transform=`translate(-50%,-50%) scale(${R/12})`;
+    anillo.style.opacity='0';   // sin esto su desvanecido nunca arranca
+  });
+  setTimeout(aplicar, 640);                      // el tema cambia a mitad del viaje
+  setTimeout(()=>{disco.style.opacity='0'}, 1250);
+  setTimeout(()=>{disco.remove(); anillo.remove()}, 2400);
 });
 
 document.addEventListener('click',e=>{

@@ -4,6 +4,36 @@ Registro de trabajo sobre el monorepo. Cada entrada: fecha, alcance y qué cambi
 
 ---
 
+## 2026-09-12 · Onda del tema anclada al ícono y tema claro gris dorado (tibas)
+
+**Reporte:** la onda del cambio de tema seguía saliendo mal ubicada (arriba a la izquierda) y
+pedía ser más lenta y suave; el claro debía pasar de perla a un gris elegante con detalles dorados.
+
+**Onda del tema, reescrita sin View Transitions.** El efecto de revelado del navegador era la
+pieza menos controlable en móviles. Ahora el efecto es 100% determinista: el origen se mide en
+el `pointerdown` (el toque real), con dos redes de seguridad (rect en el click para teclado y
+clicks sintéticos; posición conocida del botón como último recurso). Dos ondas lentas desde el
+ícono: disco del color destino (el tema cambia a mitad del viaje, a los 640 ms) y un anillo
+dorado que lo persigue. Duraciones 1,45 s / 1,7 s con curva pareja `cubic-bezier(.6,.2,.35,1)`.
+**Verificado matemáticamente**: el centro del disco en pleno vuelo coincide con el centro del
+ícono al píxel (289.4, 31), y el radio crece en vuelo (33→184 px entre muestras) — la transición
+viaja, no salta. El anillo ahora usa `--gold`, y su desvanecido quedó blindado (el `opacity:0`
+se asigna en el mismo frame del arranque; sin eso la transición de opacidad no corre nunca).
+
+**Tema claro: gris elegante con hilo dorado.** Fondo perla → gris neutro `#EAE9E6` (con panel,
+líneas y acentos reacomodados; intro y `theme-color` emparejados para que el empalme siga
+invisible). Nuevo token `--gold` (`#9C7318` en claro, `#D5B269` en oscuro) que ata en ambos
+temas: bordes de cajas, fichas de Rhema y videoteca, y la dirección con una hebra dorada al 14-16%;
+kickers (`.k`) en dorado; subrayado, flecha y numeral de las tarjetas del carrusel en dorado;
+horarios de las sedes en dorado. Acentos de Servicios/Recursos/Visítanos movidos a la familia
+dorado (`#9C7318`/`#8F6B18`); Historia, Departamentos y En Vivo conservan su color propio.
+
+**Validación:** sintaxis verificada; anclaje al píxel y viaje de onda medidos en vivo (Chrome
+headless + CDP, móvil 390×844); asentados claro y oscuro sin residuos (`residuos:0`) y consola
+limpia; intro↔home sin costura con el nuevo fondo.
+
+---
+
 ## 2026-09-12 · La web en vivo estaba serviendo otro repo — despliegue directo (tibas)
 
 **Reporte:** los push a GitHub no se reflejaban en `iebenezer-tibas.pages.dev`.
