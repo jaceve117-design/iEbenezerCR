@@ -4,6 +4,28 @@ Registro de trabajo sobre el monorepo. Cada entrada: fecha, alcance y qué cambi
 
 ---
 
+## 2026-09-12 · Elección cerrada: 500 ms + Piedra/Azabache, y copia local para probar fondos (tibas)
+
+**Elección del laboratorio:** velocidad **500 ms**; claro **Piedra** (`#E2E0DB`, dorado `#8C6D14`),
+oscuro **Azabache** (el negro actual, dorado `#D5B269`).
+
+**Aplicado a la web real:** paleta Piedra completa (fondo, panel, líneas, acentos y dorado
+reajustados; intro y theme-color emparejados), acentos de Servicios/Visítanos a `#8C6D14` y
+Recursos a `#7E6212`, y el pulso del tema re-temporizado a 500 ms (disco .5 s, anillo .62 s,
+tema cambia a los 250 ms).
+
+**Copia de prueba para fondos de pantalla (solo localhost, fuera del repo):**
+`tibas/prueba/test-fondos.html` servida en `http://127.0.0.1:8093/test-fondos.html` — copia de la
+web real con dos mármoles (negro con vetas rojas/doradas para oscuro, blanco con vetas doradas
+para claro) como capa fija al 12% de opacidad, intercambiados según el tema. Controles: slider
+de opacidad (0-35%, persiste en localStorage) y botón en la nav para quitar/poner el fondo,
+mismo estilo .icb que el de tema. No se publica hasta decidir si merecen la pena.
+
+**Validación:** capturas headless de ambos temas con fondo, sin fondo y al 30%; consola limpia;
+sanidad del laboratorio intacta.
+
+---
+
 ## 2026-09-12 · Laboratorio de temas: tarjetas flotantes, 5+5 paletas y controles abajo (tibas)
 
 **Pedido:** combinar velocidad y colores en el preview, con las tarjetas flotantes de la web

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Ministerios Ebenezer C.R</title>
 <meta name="description" content="Ministerios Ebenezer Costa Rica — casa de fe, familia y palabra. Servicios, transmisión en vivo y recursos.">
-<meta name="theme-color" content="#EAE9E6">
+<meta name="theme-color" content="#E2E0DB">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://i.ytimg.com">
@@ -14,14 +14,14 @@
 <style>
 /* ══════════════════════════════ TOKENS ══════════════════════════════ */
 :root{
-  /* claro = gris elegante con hilo dorado */
-  --bg:#EAE9E6; --bg-2:#E1E0DC; --panel:#F6F5F2; --panel-2:#EAE9E5;
-  --fg:#131210; --fg-2:#5E5B53; --fg-3:#999590;
-  --gold:#9C7318;   /* el hilo dorado: bordes, kickers y remates, en ambos temas */
-  --amber:#9C7318; --amber-2:#7A5A12; --violet:#4B3EE0; --rose:#D6365A; --mint:#1F9E76;
+  /* claro = piedra: gris cálido con hilo dorado */
+  --bg:#E2E0DB; --bg-2:#D7D5CF; --panel:#ECEAE5; --panel-2:#E4E2DD;
+  --fg:#141311; --fg-2:#5A574F; --fg-3:#948F86;
+  --gold:#8C6D14;   /* el hilo dorado: bordes, kickers y remates, en ambos temas */
+  --amber:#8C6D14; --amber-2:#6E5410; --violet:#4B3EE0; --rose:#D6365A; --mint:#1F9E76;
   --accent:var(--amber);
-  --line:rgba(16,15,13,.15); --line-2:rgba(16,15,13,.075);
-  --glow:rgba(156,115,24,.22);
+  --line:rgba(20,19,17,.17); --line-2:rgba(20,19,17,.08);
+  --glow:rgba(140,109,20,.22);
 
   --e-expo:cubic-bezier(.16,1,.3,1);
   --e-snap:cubic-bezier(.7,0,.2,1);
@@ -98,25 +98,25 @@ body.open .aurora{opacity:.42}
 .aurora i:nth-child(3){width:44vw;height:44vw;left:26vw;bottom:-18vw}
 [data-theme="light"] .aurora i{mix-blend-mode:multiply}
 /* ── Pulso del cambio de tema ───────────────────────────────────────
-   Dos ondas rápidas (~400 ms) que nacen del propio botón: un disco del
-   color de destino (bajo él el tema cambia, a mitad del pulso) y un
-   anillo dorado que lo persigue. Sin View Transitions: mismo resultado
-   en todos los navegadores, sin depender del estado del móvil.
+   Dos ondas (~500 ms) que nacen del propio botón: un disco del color
+   de destino (bajo él el tema cambia, a mitad del pulso) y un anillo
+   dorado que lo persigue. Sin View Transitions: mismo resultado en
+   todos los navegadores, sin depender del estado del móvil.
    Para comparar velocidades: preview-pulso.html */
 .onda{position:fixed;width:24px;height:24px;border-radius:50%;z-index:9995;
   pointer-events:none;transform:translate(-50%,-50%) scale(0);
-  transition:transform .4s cubic-bezier(.6,.2,.35,1),opacity .18s ease-out .3s}
+  transition:transform .5s cubic-bezier(.6,.2,.35,1),opacity .22s ease-out .35s}
 .anillo{position:fixed;width:24px;height:24px;border-radius:50%;z-index:9994;
   pointer-events:none;border:1px solid var(--gold);opacity:.8;
   transform:translate(-50%,-50%) scale(0);
-  transition:transform .5s cubic-bezier(.6,.2,.35,1) .05s,opacity .22s ease-out .26s}
+  transition:transform .62s cubic-bezier(.6,.2,.35,1) .06s,opacity .28s ease-out .33s}
 
 /* ══════════════════════════════ INTRO ══════════════════════════════
    Nace SIEMPRE en gris perla, sea cual sea el tema guardado. Si el tema
    es oscuro, durante la dispersión el suelo vira a negro por debajo de
    las partículas y sólo entonces se retira el velo: el empalme con la
    web queda invisible en los dos casos. */
-#intro{position:fixed;inset:0;z-index:10000;background:#EAE9E6;pointer-events:none;
+#intro{position:fixed;inset:0;z-index:10000;background:#E2E0DB;pointer-events:none;
   will-change:opacity,background-color}
 #intro canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
 
@@ -785,7 +785,7 @@ const IDIOMAS=['Español','Inglés','Francés','Portugués','Italiano','K’iche
 
 /* ── Las 6 secciones del carrusel ── */
 const SECCIONES=[
- {id:'servicios', n:'Servicios', kicker:'01 / La semana', img:'img/servicios.webp', accent:'#9C7318',
+ {id:'servicios', n:'Servicios', kicker:'01 / La semana', img:'img/servicios.webp', accent:'#8C6D14',
   lead:'Cuatro encuentros por semana, cada uno con su propio carácter. Vení como estés — aquí hay lugar para vos, tu familia y tus preguntas.',
   sub:'Los horarios de la semana'},
  {id:'historia', n:'Historia', kicker:'02 / Veintiún años', img:'img/historia.webp', accent:'#4B3EE0',
@@ -797,10 +797,10 @@ const SECCIONES=[
  {id:'envivo', n:'En Vivo', kicker:'04 / Transmisión', img:'img/envivo.webp', accent:'#D6365A',
   lead:'Si estamos transmitiendo, el servicio arranca solo. Si no, te dejamos el más reciente y todo el archivo del canal.',
   sub:'El servicio, en directo por YouTube'},
- {id:'recursos', n:'Recursos', kicker:'05 / Para llevarte', img:'img/recursos.webp', accent:'#8F6B18',
+ {id:'recursos', n:'Recursos', kicker:'05 / Para llevarte', img:'img/recursos.webp', accent:'#7E6212',
   lead:'La Revista Rhema mes a mes, las aplicaciones del ministerio y el archivo de enseñanzas.',
   sub:'Revista Rhema y aplicaciones'},
- {id:'visitanos', n:'Visítanos', kicker:'06 / Dónde estamos', img:'img/visitanos.webp', accent:'#9C7318',
+ {id:'visitanos', n:'Visítanos', kicker:'06 / Dónde estamos', img:'img/visitanos.webp', accent:'#8C6D14',
   lead:'No hace falta traer nada. Solo vos, como estás. Esta es la dirección y cómo encontrarnos.',
   sub:'Tibás, San José'}];
 /* ═══════════════════════════════════════════════════════════════
@@ -823,7 +823,7 @@ function toast(msg){const t=$('#toast');t.textContent=msg;
    ═══════════════════════════════════════════════════════════════ */
 const root=document.documentElement;
 try{const t=localStorage.getItem('eb-theme'); if(t) root.dataset.theme=t;}catch(e){}
-const FONDO={light:'#EAE9E6', dark:'#08080A'};
+const FONDO={light:'#E2E0DB', dark:'#08080A'};
 
 /* ── Entrada del marco (header + pie) ────────────────────────────────
    Va ligada al intro: entra mientras el velo se retira. Pero si el logo
@@ -854,7 +854,7 @@ const INTRO = (function(){
   const lienzo = $('#introLienzo');
   if(!capa || !lienzo) return {duracion:0};
 
-  const PERLA = [234,233,230];
+  const PERLA = [226,224,219];
   const OSCURO= [8,8,10];
   const DUR   = 3000;                                   // 3 s
   const PROP  = {ent:0.40, rep:0.275, sal:0.325};
@@ -1057,8 +1057,8 @@ $('#theme').addEventListener('click',()=>{
     anillo.style.opacity='0';   // sin esto su desvanecido nunca arranca
     disco.style.opacity='0';    // el disco revela el nuevo tema al apagarse
   });
-  setTimeout(aplicar, 200);                      // el tema cambia a mitad del pulso
-  setTimeout(()=>{disco.remove(); anillo.remove()}, 900);
+  setTimeout(aplicar, 250);                      // el tema cambia a mitad del pulso
+  setTimeout(()=>{disco.remove(); anillo.remove()}, 1100);
 });
 
 document.addEventListener('click',e=>{
