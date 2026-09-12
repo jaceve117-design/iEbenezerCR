@@ -4,6 +4,30 @@ Registro de trabajo sobre el monorepo. Cada entrada: fecha, alcance y qué cambi
 
 ---
 
+## 2026-09-12 · Ajustes de detalle tras prueba en teléfono (tibas)
+
+**Reporte:** línea que titila al abrir secciones, espacios muertos, onda del tema, texto de la marca, footer lejos del borde, iconos sociales descentrados y desproporcionados, destello de toque en Android.
+
+**1 · La línea que titila — diagnosticada y eliminada.** Reproducida frame a frame con Chrome headless: es una costura de composición. La foto del hero tenía `will-change:transform` permanente, GSAP la escala mientras el panel sube con su propio transform, y capas y recorte se rasterizan por separado → filete oscuro de 1 px en el borde inferior del hero, sólo durante la animación. Fix: `translateZ(0)` en `.view-hero` (capa atómica: recorte y contenido se pintan juntos) y fuera el `will-change` permanente de `#vimg` y de las fotos de Historia. Verificado: frames a 300/600/1000 ms limpios.
+
+**2 · Secciones compactadas.** Hero de 38vh→32vh en escritorio y de 300px→225px en móvil; panel más cerca del header (móvil top 104→78px); márgenes de `.hd`, `.chap`, `.svc`, `.vnav`, `.vfoot`, `.addr` y `.view-body` recortados. En 1440×900 ahora se ven tres servicios al abrir; antes, uno y medio.
+
+**3 · Cambio de tema con dos ondas desde el ícono.** Onda 1: disco/revelado (View Transitions o fallback). Onda 2 nueva: `.anillo`, un aro del color de acento que arranca 90 ms detrás y se desvanece a mitad de camino. Detalle: la primera versión no asignaba `opacity:0` desde JS, la transición de opacidad nunca corría y el anillo quedaba como una banda dorada hasta eliminarse — capturas lo mostraron; corregido y re-verificado (sin residuo a los 8 s).
+
+**4 · Frase de la marca eliminada.** Se quitó «Ministerios Ebenezer / Costa Rica» del header; el nombre vive en el logo y en el `aria-label` del enlace.
+
+**5 · Header reorganizado en tres zonas flex.** Marca / redes / controles: los iconos de Facebook y YouTube quedan centrados de verdad (verificado: centro social 720 = centro pantalla 720), y a la escala de los iconos de tema (SVG 16 px = 16 px; 14 = 14 en móvil).
+
+**6 · Logo más grande.** 38→48 px escritorio, 32→40 px móvil.
+
+**7 · Footer pegado a los bordes.** Padding horizontal del `.hud` de --pad (20-44 px) a 12-24 px.
+
+**8 · Sin tap-highlight.** `-webkit-tap-highlight-color:transparent` en el reset universal (antes sólo cubría `a` y `button`; las tarjetas y fichas destellaban en Android).
+
+Validación: Chrome headless + CDP, escritorio y móvil, consola limpia; deep-link `#servicios` abre panel; botón atrás cierra; tema oscuro/claro ida y vuelta sin residuos.
+
+---
+
 ## 2026-09-12 · Refino del sistema de transiciones y animaciones (tibas)
 
 **Meta:** que todo se vea fluido y elegante, sin tirones ni lags al abrir ninguna parte de la web.
