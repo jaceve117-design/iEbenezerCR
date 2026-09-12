@@ -4,6 +4,34 @@ Registro de trabajo sobre el monorepo. Cada entrada: fecha, alcance y qué cambi
 
 ---
 
+## 2026-09-12 · La web en vivo estaba serviendo otro repo — despliegue directo (tibas)
+
+**Reporte:** los push a GitHub no se reflejaban en `iebenezer-tibas.pages.dev`.
+
+**Causa raíz (verificada byte a byte):** el proyecto de Cloudflare Pages `iebenezer-tibas` es de
+**subida directa** (sin integración Git — confirmado con `wrangler pages project list`), y el
+contenido que servía era idéntico al `site/index.html` del monorepo viejo de Altrium
+(`Proyectos-Web-ALTRIUM`). Es decir: nadie subió nunca la versión del repo `iEbenezerCR`;
+todo lo publicado por git desde el inicio (intro incluido) nunca salió a producción.
+
+**Solución aplicada:** despliegue directo con Wrangler, autenticado en esta máquina:
+
+```
+npx wrangler pages deploy tibas/public --project-name=iebenezer-tibas --branch=main
+```
+
+**Validación en producción:** el dominio sirve ya el commit `6acfbcd` (marcadores verificados:
+anillo del tema, `translateZ(0)` del hero, logo 48 px, GSAP 3.12.5 con SRI, footer compacto,
+reset de tap-highlight, sin texto de marca). Prueba de humo headless contra el live: tema claro,
+12 tarjetas, GSAP activo, intro retirado, cero errores de consola.
+
+**Pendiente para el dueño del proyecto Cloudflare:** si se quiere publicar por git (que cada
+`push` despliegue solo), conectar el proyecto al repo `jaceve117-design/iEbenezerCR` con
+**Root directory = `tibas`** y **Build output = `public`** (como documenta el README). Mientras
+siga siendo subida directa, el comando de Wrangler de arriba es la vía de publicación.
+
+---
+
 ## 2026-09-12 · Ajustes de detalle tras prueba en teléfono (tibas)
 
 **Reporte:** línea que titila al abrir secciones, espacios muertos, onda del tema, texto de la marca, footer lejos del borde, iconos sociales descentrados y desproporcionados, destello de toque en Android.
