@@ -4,6 +4,28 @@ Registro de trabajo sobre el monorepo. Cada entrada: fecha, alcance y qué cambi
 
 ---
 
+## 2026-09-12 · Logo más grande en PC, pulso de 400 ms y preview para elegir velocidad (tibas)
+
+**Reporte:** el logo quedó chico en escritorio y el pulso del tema quedó demasiado lento
+(«te pasaste», dijo literal). Pidió ver el pulso en tiempo real para elegir velocidad.
+
+**Logo:** 48 → 62 px en escritorio (el móvil se queda en 40 px).
+
+**Pulso a 400 ms:** disco 0,4 s y anillo 0,5 s con curva pareja; el tema cambia a mitad del
+pulso (200 ms); el disco se apaga revelando el nuevo tema y todo se retira a los 900 ms.
+
+**preview-pulso.html** (nueva, se despliega con el sitio): tocás 300/400/500/650 ms y el pulso
+sale del botón tocado alternando claro/oscuro como la web real; el botón fijo arriba a la
+derecha dispara la velocidad elegida. Con `?auto=400` entra en modo grabación.
+
+**Render de comparación:** GIF 2×2 grabado con screencast (Chrome headless + CDP) y armado con
+PIL — los cuatro pulsos en tiempo real, un panel por velocidad. Quedó fuera del repo
+(es artefacto de decisión, se regenera con `node recpulso.mjs`).
+
+**Validación:** anclaje al píxel re-verificado a 400 ms, sin residuos, consola limpia.
+
+---
+
 ## 2026-09-12 · Onda del tema anclada al ícono y tema claro gris dorado (tibas)
 
 **Reporte:** la onda del cambio de tema seguía saliendo mal ubicada (arriba a la izquierda) y

@@ -97,18 +97,19 @@ body.open .aurora{opacity:.42}
 .aurora i:nth-child(2){width:48vw;height:48vw;right:-8vw;top:18vh}
 .aurora i:nth-child(3){width:44vw;height:44vw;left:26vw;bottom:-18vw}
 [data-theme="light"] .aurora i{mix-blend-mode:multiply}
-/* ── Ondas del cambio de tema ───────────────────────────────────────
-   Dos ondas lentas que nacen del propio botón: un disco del color de
-   destino (bajo él el tema cambia, a mitad de viaje) y un anillo dorado
-   que lo persigue. Sin View Transitions: mismo resultado en todos los
-   navegadores, sin depender del estado del móvil. */
+/* ── Pulso del cambio de tema ───────────────────────────────────────
+   Dos ondas rápidas (~400 ms) que nacen del propio botón: un disco del
+   color de destino (bajo él el tema cambia, a mitad del pulso) y un
+   anillo dorado que lo persigue. Sin View Transitions: mismo resultado
+   en todos los navegadores, sin depender del estado del móvil.
+   Para comparar velocidades: preview-pulso.html */
 .onda{position:fixed;width:24px;height:24px;border-radius:50%;z-index:9995;
   pointer-events:none;transform:translate(-50%,-50%) scale(0);
-  transition:transform 1.45s cubic-bezier(.6,.2,.35,1),opacity .6s ease-out 1.15s}
+  transition:transform .4s cubic-bezier(.6,.2,.35,1),opacity .18s ease-out .3s}
 .anillo{position:fixed;width:24px;height:24px;border-radius:50%;z-index:9994;
   pointer-events:none;border:1px solid var(--gold);opacity:.8;
   transform:translate(-50%,-50%) scale(0);
-  transition:transform 1.7s cubic-bezier(.6,.2,.35,1) .15s,opacity .65s ease-out .6s}
+  transition:transform .5s cubic-bezier(.6,.2,.35,1) .05s,opacity .22s ease-out .26s}
 
 /* ══════════════════════════════ INTRO ══════════════════════════════
    Nace SIEMPRE en gris perla, sea cual sea el tema guardado. Si el tema
@@ -140,7 +141,7 @@ body.open .aurora{opacity:.42}
    Tres zonas flex (marca / redes / controles): las redes quedan centradas
    de verdad entre los bordes, no respecto al hueco que dejen los lados. */
 .marca{display:flex;align-items:center;flex:1 1 0;min-width:0}
-.marca img{height:48px;width:auto;display:block;
+.marca img{height:62px;width:auto;display:block;
   transition:transform .8s var(--e-back)}
 
 /* ── centro: redes, siempre a color, al tamaño de los iconos de la derecha ── */
@@ -1054,10 +1055,10 @@ $('#theme').addEventListener('click',()=>{
     disco.style.transform=`translate(-50%,-50%) scale(${R/12})`;
     anillo.style.transform=`translate(-50%,-50%) scale(${R/12})`;
     anillo.style.opacity='0';   // sin esto su desvanecido nunca arranca
+    disco.style.opacity='0';    // el disco revela el nuevo tema al apagarse
   });
-  setTimeout(aplicar, 640);                      // el tema cambia a mitad del viaje
-  setTimeout(()=>{disco.style.opacity='0'}, 1250);
-  setTimeout(()=>{disco.remove(); anillo.remove()}, 2400);
+  setTimeout(aplicar, 200);                      // el tema cambia a mitad del pulso
+  setTimeout(()=>{disco.remove(); anillo.remove()}, 900);
 });
 
 document.addEventListener('click',e=>{

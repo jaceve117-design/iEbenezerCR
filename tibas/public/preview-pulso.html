@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es" data-tema="claro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Preview · pulso del cambio de tema — Ebenezer CR</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#EAE9E6;--panel:#F6F5F2;--fg:#131210;--fg-2:#5E5B53;--gold:#9C7318;--line:rgba(19,18,16,.15)}
+[data-tema="oscuro"]{--bg:#08080A;--panel:#121218;--fg:#F0EEE9;--fg-2:#8E8B98;--gold:#D5B269;--line:rgba(240,238,233,.12)}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--fg);font-family:'EB Garamond',Georgia,serif;min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;padding:24px;
+  transition:background-color .25s ease,color .25s ease}
+h1{font-weight:500;letter-spacing:-.02em;font-size:clamp(26px,5vw,40px);text-align:center}
+p{color:var(--fg-2);font-style:italic;text-align:center;max-width:46ch}
+.elegido{font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
+.fila{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+button.vel{font:inherit;color:var(--fg);background:var(--panel);border:1px solid var(--line);
+  border-radius:100px;padding:12px 22px;font-size:15px;letter-spacing:.06em;cursor:pointer;
+  transition:border-color .3s,color .3s,background-color .3s}
+button.vel.on{border-color:var(--gold);color:var(--gold)}
+.modo{position:fixed;top:14px;right:14px;z-index:20;width:44px;height:44px;border-radius:12px;
+  border:1px solid var(--line);background:var(--panel);color:var(--fg);display:grid;place-items:center;
+  cursor:pointer;font-size:19px;transition:border-color .3s}
+.modo:hover{border-color:var(--gold)}
+.onda{position:fixed;width:24px;height:24px;border-radius:50%;z-index:9995;pointer-events:none;
+  transform:translate(-50%,-50%) scale(0)}
+.anillo{position:fixed;width:24px;height:24px;border-radius:50%;z-index:9994;pointer-events:none;
+  border:1px solid var(--gold);opacity:.8;transform:translate(-50%,-50%) scale(0)}
+.pista{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--fg-2);text-align:center;line-height:1.9}
+</style>
+</head>
+<body>
+<button class="modo" id="modo" aria-label="Pulsar a la velocidad elegida">◐</button>
+<h1>Pulso del cambio de tema</h1>
+<p>Tocá una velocidad: el pulso sale del botón que toques y la página alterna claro/oscuro,
+igual que la web real. El botón de arriba a la derecha dispara la velocidad elegida.</p>
+<div class="elegido" id="elegido">400 ms</div>
+<div class="fila">
+  <button class="vel" data-ms="300">300 ms</button>
+  <button class="vel on" data-ms="400">400 ms</button>
+  <button class="vel" data-ms="500">500 ms</button>
+  <button class="vel" data-ms="650">650 ms</button>
+</div>
+<p class="pista">el que quede elegido es el que va a la web<br>decime cuál y lo dejo fijo</p>
+<script>
+let dur=400, oscuro=false;
+const $=s=>document.querySelector(s);
+function alternar(){oscuro=!oscuro;document.documentElement.dataset.tema=oscuro?'oscuro':'claro'}
+function pulso(x,y,ms){
+  const destino=oscuro?'#EAE9E6':'#08080A';          // color del tema que viene
+  const disco=document.createElement('div');
+  disco.className='onda';
+  disco.style.cssText=`left:${x}px;top:${y}px;background:${destino};`+
+    `transition:transform ${ms}ms cubic-bezier(.6,.2,.35,1),opacity ${Math.round(ms*.45)}ms ease-out ${Math.round(ms*.8)}ms`;
+  const anillo=document.createElement('div');
+  anillo.className='anillo';
+  anillo.style.cssText=`left:${x}px;top:${y}px;`+
+    `transition:transform ${Math.round(ms*1.25)}ms cubic-bezier(.6,.2,.35,1) ${Math.round(ms*.12)}ms,opacity ${Math.round(ms*.55)}ms ease-out ${Math.round(ms*.65)}ms`;
+  document.body.append(disco,anillo);
+  requestAnimationFrame(()=>{
+    const R=Math.hypot(Math.max(x,innerWidth-x),Math.max(y,innerHeight-y));
+    disco.style.transform=`translate(-50%,-50%) scale(${R/12})`;
+    anillo.style.transform=`translate(-50%,-50%) scale(${R/12})`;
+    anillo.style.opacity='0';
+    disco.style.opacity='0';
+  });
+  setTimeout(alternar, ms*.5);
+  setTimeout(()=>{disco.remove();anillo.remove()}, ms*2.2);
+}
+document.querySelectorAll('.vel').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.vel').forEach(x=>x.classList.toggle('on',x===b));
+  dur=+b.dataset.ms; $('#elegido').textContent=dur+' ms';
+  const r=b.getBoundingClientRect();
+  pulso(r.left+r.width/2, r.top+r.height/2, dur);
+}));
+$('#modo').addEventListener('pointerdown',e=>{
+  const r=e.currentTarget.getBoundingClientRect();
+  pulso(r.left+r.width/2, r.top+r.height/2, dur);
+});
+/* para la grabación: window.pulsoIcono(ms) y window.__fijar('claro'|'oscuro') */
+window.pulsoIcono=(ms)=>{const r=$('#modo').getBoundingClientRect();pulso(r.left+r.width/2,r.top+r.height/2,ms||dur)};
+window.__fijar=t=>{oscuro=t==='oscuro';document.documentElement.dataset.tema=t};
+const auto=new URLSearchParams(location.search).get('auto');
+if(auto){dur=+auto;$('#elegido').textContent=dur+' ms (auto)';
+  document.querySelectorAll('.vel').forEach(x=>x.classList.toggle('on',x.dataset.ms===auto));
+  setInterval(()=>window.pulsoIcono(dur),1800);}
+</script>
+</body>
+</html>
