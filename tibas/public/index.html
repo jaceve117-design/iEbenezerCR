@@ -21,6 +21,7 @@
   --amber:#8C6D14; --amber-2:#6E5410; --violet:#4B3EE0; --rose:#D6365A; --mint:#1F9E76;
   --accent:var(--amber);
   --line:rgba(20,19,17,.17); --line-2:rgba(20,19,17,.08);
+  --barra:rgba(20,19,17,.22); --barra-viva:rgba(20,19,17,.40);
   --glow:rgba(140,109,20,.22);
   /* Translúcidos escritos a mano en vez de color-mix(): esa función pide
      iOS 16.2 y estos colores sostienen la estructura, no un adorno. */
@@ -65,6 +66,7 @@
   --gold:#D5B269;
   --amber:#F0A93B; --amber-2:#FFD79A; --violet:#6B5BFF; --rose:#FF6B8A; --mint:#4FD1A5;
   --line:rgba(240,238,233,.10); --line-2:rgba(240,238,233,.055);
+  --barra:rgba(240,238,233,.20); --barra-viva:rgba(240,238,233,.38);
   --glow:rgba(240,169,59,.32);
   --bg-55:rgba(8,8,10,.55);
   --bg-60:rgba(8,8,10,.60);
@@ -80,6 +82,22 @@
    <button>, y el resaltado del sistema se colaba en Android */
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{-webkit-text-size-adjust:100%}
+
+/* ── Las barras de scroll ─────────────────────────────────────────────
+   `scrollbar-width` y `::-webkit-scrollbar` no conviven: el navegador que
+   entiende la primera descarta la segunda. Por eso van las dos, cada una
+   para su bando — la moderna manda en Chrome y Firefox de hoy, y la
+   `-webkit-` recoge a Safari y a los WebKit viejos. En ambos casos lo
+   mismo: un hilo redondeado del color del texto, sin canal y sin flechas,
+   metido dos píxeles hacia dentro para que no roce el borde. Lo justo
+   para saber por dónde vas. */
+*{scrollbar-width:thin;scrollbar-color:var(--barra) transparent}
+::-webkit-scrollbar{width:9px;height:9px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--barra);border-radius:99px;
+  border:2px solid transparent;background-clip:padding-box}
+::-webkit-scrollbar-thumb:hover{background:var(--barra-viva);background-clip:padding-box}
+::-webkit-scrollbar-corner{background:transparent}
 body{
   background:var(--bg);color:var(--fg);
   font-family:var(--serif);font-weight:var(--w-book);
@@ -313,6 +331,10 @@ body.open .vscrim{pointer-events:auto;cursor:pointer}
   transform:translate3d(0,100%,0);visibility:hidden;pointer-events:none;
   will-change:transform;display:flex;flex-direction:column}
 .view.on{pointer-events:auto;visibility:visible}
+/* Vive dentro de la portada, no del panel. Así se retira con ella al bajar,
+   que es lo honesto: anuncia «tirá de aquí para cerrar» y cerrar sólo se
+   puede estando arriba del todo. De paso no queda flotando sobre el cuerpo,
+   donde perdería el contraste — es blanco, y el fondo claro es casi blanco. */
 .grip{position:absolute;top:11px;left:50%;translate:-50% 0;z-index:6;
   width:52px;height:4px;border-radius:4px;background:rgba(255,255,255,.55)}
 @media(max-width:760px){
@@ -331,7 +353,15 @@ body.open .vscrim{pointer-events:auto;cursor:pointer}
    (que GSAP escala) y el recorte del hero se rasterizan por separado mientras
    sube el panel, y en el borde inferior aparece un filete oscuro de un píxel:
    la «línea que titila» al abrir cualquier sección. */
-.view-hero{position:relative;flex:none;height:min(32vh,300px);overflow:hidden;
+/* El scroll vive aquí, no en el cuerpo. Antes la portada tenía alto fijo y
+   sólo scrolleaba el cuerpo: eran dos capas, y al arrastrar el contenido
+   pasaba por detrás de una portada clavada. La tarjeta se sentía partida en
+   dos. Ahora portada y cuerpo van dentro del mismo scroller y suben juntos,
+   como una página. */
+.view-scroll{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;touch-action:pan-y}
+
+.view-hero{position:relative;height:min(32vh,300px);overflow:hidden;
   transform:translateZ(0)}
 .view-hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
   filter:grayscale(.55) brightness(.5);transform:scale(1.06)}
@@ -340,12 +370,7 @@ body.open .vscrim{pointer-events:auto;cursor:pointer}
 .view-hero .cap{position:absolute;left:0;right:0;bottom:clamp(16px,3vh,36px);padding-inline:var(--pad);z-index:2}
 .view-hero h1{font-size:clamp(46px,9vw,130px);letter-spacing:-.025em;font-weight:var(--w-med)}
 .view-hero .lead{margin-top:10px;max-width:52ch;color:var(--fg-2);font-size:1.05em;font-style:italic}
-.view-body{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;
-  -webkit-overflow-scrolling:touch;touch-action:pan-y;
-  padding:clamp(22px,3.5vh,44px) var(--pad) clamp(56px,9vh,100px);
-  scrollbar-width:thin}
-.view-body::-webkit-scrollbar{width:4px}
-.view-body::-webkit-scrollbar-thumb{background:var(--line);border-radius:4px}
+.view-body{padding:clamp(22px,3.5vh,44px) var(--pad) clamp(56px,9vh,100px)}
 .vclose{position:absolute;top:16px;right:16px;z-index:8;
   width:42px;height:42px;border-radius:14px;display:grid;place-items:center;color:#F4F1EA;
   border:1px solid rgba(244,241,234,.3);background:rgba(10,10,12,.4);
@@ -533,7 +558,6 @@ body.open .vscrim{pointer-events:auto;cursor:pointer}
 .archivo{margin-top:14px;cursor:pointer}
 
 .feed{padding-right:0}
-.feed::-webkit-scrollbar{width:3px}.feed::-webkit-scrollbar-thumb{background:var(--line);border-radius:3px}
 .vi{display:grid;grid-template-columns:110px 1fr;gap:13px;padding:10px 0;border-bottom:1px solid var(--line-2);
   transition:transform .5s var(--e-expo)}
 .vi img{aspect-ratio:16/9;object-fit:cover;border-radius:8px;filter:grayscale(.5);
@@ -707,14 +731,15 @@ body.open .vscrim{pointer-events:auto;cursor:pointer}
 <!-- ══ VISTA ══ -->
 <div class="vscrim" id="vscrim"></div>
 <section class="view" id="view" aria-hidden="true">
-  <span class="grip"></span>
   <button class="vclose" id="vclose" aria-label="Cerrar">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
   </button>
-  <div class="view-hero"><img id="vimg" decoding="async" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" alt=""><div class="cap">
-    <p class="mono" id="vkicker"></p><h1 id="vtitle"></h1><p class="lead" id="vlead"></p>
-  </div></div>
-  <div class="view-body" id="vbody"></div>
+  <div class="view-scroll" id="vscroll">
+    <div class="view-hero"><span class="grip"></span><img id="vimg" decoding="async" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" alt=""><div class="cap">
+      <p class="mono" id="vkicker"></p><h1 id="vtitle"></h1><p class="lead" id="vlead"></p>
+    </div></div>
+    <div class="view-body" id="vbody"></div>
+  </div>
 </section>
 
 <!-- ══ DRAWER ══ -->
@@ -1688,7 +1713,8 @@ const BUILD={
 /* ═══════════════════════════════════════════════════════════════
    ABRIR / CERRAR VISTA  (expansión tipo FLIP desde la tarjeta)
    ═══════════════════════════════════════════════════════════════ */
-const view=$('#view'), vbody=$('#vbody');
+const view=$('#view'), vbody=$('#vbody'), vscroll=$('#vscroll');
+
 let currentId=null, viewTl=null, guard=null, revealT=null, abiertoEn=0;
 
 /* Estado final de cada transición, aislado e idempotente.
@@ -1708,7 +1734,7 @@ let currentId=null, viewTl=null, guard=null, revealT=null, abiertoEn=0;
    y el dedo baja; si no, manda el scroll. Al engancharse se re-ancla el
    origen para que la hoja no dé un salto.
    ═══════════════════════════════════════════════════════════════ */
-function hojaArrastrable({hoja, oyente, scroller, libre, puede, alProgreso, cerrar, volver}){
+function hojaArrastrable({hoja, oyente, scroller, puede, alProgreso, cerrar, volver}){
   oyente = oyente || scroller;
   const UMBRAL = 9;          // px antes de decidir si es arrastre o scroll
   const RESIST = 0.22;       // cuánto cede hacia arriba
@@ -1716,15 +1742,12 @@ function hojaArrastrable({hoja, oyente, scroller, libre, puede, alProgreso, cerr
   const mover = gsap.quickSetter(hoja, 'y', 'px');
   const alto  = () => hoja.getBoundingClientRect().height || innerHeight;
 
-  /* La portada del panel no hace scroll: tocarla siempre debe poder
-     arrastrar. Sólo dentro del cuerpo se exige estar arriba del todo.
-     Antes el gesto vivía sólo en el cuerpo y la hoja parecía partida en
-     dos: arrastrabas desde el titular y no respondía nada. */
-  let enZonaLibre = false;
+  /* Se escucha en la hoja entera, no sólo en la zona que scrollea: si no,
+     tirar del titular no respondía y la tarjeta se sentía partida en dos.
+     Y se arrastra estando arriba del todo, punto — desde donde sea. */
   oyente.addEventListener('touchstart', e=>{
     if(e.touches.length !== 1){ listo=false; return; }
-    enZonaLibre = !!(libre && e.target.closest && e.target.closest(libre));
-    listo = puede(enZonaLibre); activo = false; y = 0;
+    listo = puede(); activo = false; y = 0;
     y0 = e.touches[0].clientY;
     muestras = [[performance.now(), 0]];
   }, {passive:true});
@@ -1734,7 +1757,7 @@ function hojaArrastrable({hoja, oyente, scroller, libre, puede, alProgreso, cerr
     const d = e.touches[0].clientY - y0;
     if(!activo){
       if(d < UMBRAL) return;                 // todavía puede ser scroll
-      if(!enZonaLibre && scroller.scrollTop > 0){ listo=false; return; }
+      if(scroller.scrollTop > 0){ listo=false; return; }
       activo = true;
       y0 = e.touches[0].clientY;             // re-anclar: sin salto
       gsap.killTweensOf(hoja);
@@ -1765,6 +1788,12 @@ function hojaArrastrable({hoja, oyente, scroller, libre, puede, alProgreso, cerr
 }
 
 function settleOpen(){
+  /* Lo primero es matar la línea de tiempo. Si sigue viva —rAF ralentizado
+     en segundo plano, o un teléfono que no da para la animación en 2,6 s—
+     GSAP vuelve a escribir la transformada en el tick siguiente y deshace
+     todo lo que fijamos aquí: el panel se queda a media subida. La red de
+     seguridad tiene que ser la última en escribir. */
+  if(viewTl){ viewTl.kill(); viewTl=null; }
   /* El cuerpo se monta un frame después de abrir. Si el navegador congela
      requestAnimationFrame — pestaña de fondo, ahorro de energía— ese frame
      no llega nunca y el panel se queda vacío. Aquí se monta igual. */
@@ -1778,6 +1807,7 @@ function settleOpen(){
   revealBody();
 }
 function settleClose(){
+  if(viewTl){ viewTl.kill(); viewTl=null; }   // mismo motivo que en settleOpen
   clearTimeout(revealT);
   gsap.set('#vscrim',{opacity:0});
   view.classList.remove('on');
@@ -1786,6 +1816,7 @@ function settleClose(){
   gsap.set(stage,{scale:1,opacity:1,clearProps:'transform,opacity'});
   document.body.classList.remove('open');
   vbody.innerHTML='';
+  vscroll.scrollTop=0;   // la próxima apertura arranca desde arriba
   $('#nav').classList.remove('solid');
   if(active>=0) ponAcento(SECCIONES[active%NS].accent);
   despertar();   // el carrusel retoma su loop al volver el home
@@ -1868,7 +1899,7 @@ function openSection(id, fromCard){
 
 function montarCuerpo(id, primera){
   vbody.innerHTML = BUILD[id]() + sectionFooter(id);
-  vbody.scrollTop=0;
+  vscroll.scrollTop=0;
   wireSection(id);
   // El revelado arranca cuando el panel ya subió lo suficiente: antes
   // coincidía con el pico de la animación y se notaba el empujón.
@@ -1896,7 +1927,7 @@ function observeRest(){
     entries.forEach(en=>{
       if(en.isIntersecting){ mostrar(en.target,0); io.unobserve(en.target); }
     });
-  },{root:vbody,threshold:.1,rootMargin:'0px 0px -5% 0px'});
+  },{root:vscroll,threshold:.1,rootMargin:'0px 0px -5% 0px'});
   $$('.rv',vbody).forEach(el=>{ if(!el.classList.contains('in')) io.observe(el) });
 }
 
@@ -1965,10 +1996,9 @@ gsap.set('#vscrim',{opacity:0});
 hojaArrastrable({
   hoja: view,
   oyente: view,                 // el panel entero, no sólo el cuerpo
-  scroller: vbody,
-  libre: '.view-hero, .grip',   // la portada arrastra siempre
-  puede: (enZonaLibre)=> document.body.classList.contains('open')
-              && (enZonaLibre || vbody.scrollTop <= 0)
+  scroller: vscroll,
+  puede: ()=> document.body.classList.contains('open')
+              && vscroll.scrollTop <= 0
               && performance.now() - abiertoEn > 420,
   alProgreso: p=>{
     gsap.set('#vscrim',{opacity: 1 - p*0.92});
@@ -2005,7 +2035,7 @@ function wireSection(id){
       const p=(r.top+r.height/2-innerHeight/2)/innerHeight;
       im.style.transform=`translate3d(0,${clamp(p*-26,-30,30)}px,0) scale(1.12)`;
     });
-    vbody.addEventListener('scroll',onScroll,{passive:true}); onScroll();
+    vscroll.addEventListener('scroll',onScroll,{passive:true}); onScroll();
   }
 
   if(id==='departamentos'){
