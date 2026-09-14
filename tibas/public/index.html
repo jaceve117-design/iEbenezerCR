@@ -21,6 +21,13 @@
   --accent:var(--amber);
   --line:rgba(16,15,13,.15); --line-2:rgba(16,15,13,.075);
   --glow:rgba(168,105,10,.2);
+  /* Translúcidos escritos a mano en vez de color-mix(): esa función pide
+     iOS 16.2 y estos colores sostienen la estructura, no un adorno. */
+  --bg-55:rgba(232,229,223,.55);
+  --bg-72:rgba(232,229,223,.72);
+  --bg-78:rgba(232,229,223,.78);
+  --panel-55:rgba(243,241,236,.55);
+  --panel-65:rgba(243,241,236,.65);
 
   --e-expo:cubic-bezier(.16,1,.3,1);
   --e-snap:cubic-bezier(.7,0,.2,1);
@@ -52,6 +59,11 @@
   --amber:#F0A93B; --amber-2:#FFD79A; --violet:#6B5BFF; --rose:#FF6B8A; --mint:#4FD1A5;
   --line:rgba(240,238,233,.10); --line-2:rgba(240,238,233,.055);
   --glow:rgba(240,169,59,.32);
+  --bg-55:rgba(8,8,10,.55);
+  --bg-72:rgba(8,8,10,.72);
+  --bg-78:rgba(8,8,10,.78);
+  --panel-55:rgba(18,18,24,.55);
+  --panel-65:rgba(18,18,24,.65);
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
@@ -277,7 +289,7 @@ body.open .hud{opacity:0;pointer-events:none;transition:opacity .35s}
 /* ══════════════════════════════ VISTA DE SECCIÓN ══════════════════════════════ */
 /* Velo entre el home y el panel. Un clic aquí = fuera de la tarjeta = se cierra. */
 .vscrim{position:fixed;inset:0;z-index:590;opacity:0;pointer-events:none;
-  background:color-mix(in oklab,var(--bg) 55%,transparent);
+  background:var(--bg-55);
   -webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px)}
 body.open .vscrim{pointer-events:auto;cursor:pointer}
 
@@ -307,7 +319,7 @@ body.open .vscrim{pointer-events:auto;cursor:pointer}
 .view-hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
   filter:grayscale(.55) brightness(.5);transform:scale(1.06);will-change:transform}
 .view-hero::after{content:"";position:absolute;inset:0;
-  background:linear-gradient(180deg,color-mix(in oklab,var(--bg) 55%,transparent) 0%,transparent 30%,var(--bg) 97%)}
+  background:linear-gradient(180deg,var(--bg-55) 0%,transparent 30%,var(--bg) 97%)}
 .view-hero .cap{position:absolute;left:0;right:0;bottom:clamp(16px,3vh,36px);padding-inline:var(--pad);z-index:2}
 .view-hero h1{font-size:clamp(46px,9vw,130px);letter-spacing:-.025em;font-weight:var(--w-med)}
 .view-hero .lead{margin-top:16px;max-width:52ch;color:var(--fg-2);font-size:1.05em;font-style:italic}
@@ -346,7 +358,7 @@ body.open .vscrim{pointer-events:auto;cursor:pointer}
 .g3{grid-template-columns:repeat(auto-fit,minmax(min(100%,270px),1fr))}
 .g4{grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr))}
 .box{position:relative;border:1px solid var(--line);border-radius:16px;padding:clamp(20px,2.3vw,30px);
-  background:color-mix(in oklab,var(--panel) 55%,transparent);overflow:hidden;
+  background:var(--panel-55);overflow:hidden;
   transition:transform .6s var(--e-expo),border-color .45s}
 .box::before{content:"";position:absolute;left:var(--gx,50%);top:var(--gy,50%);width:300px;height:300px;
   translate:-50% -50%;border-radius:50%;pointer-events:none;filter:blur(6px);opacity:0;
@@ -388,7 +400,7 @@ body.open .vscrim{pointer-events:auto;cursor:pointer}
 /* ── VISÍTANOS: la dirección como pieza tipográfica ── */
 .addr{position:relative;padding:clamp(28px,5vw,64px) clamp(24px,4vw,54px);
   border:1px solid var(--line);border-radius:18px;overflow:hidden;
-  background:color-mix(in oklab,var(--panel) 55%,transparent)}
+  background:var(--panel-55)}
 .addr::before{content:"";position:absolute;inset:auto -10% -60% 40%;height:120%;
   background:radial-gradient(circle at 50% 100%,var(--glow),transparent 62%);
   filter:blur(30px);pointer-events:none}
@@ -494,7 +506,7 @@ body.open .vscrim{pointer-events:auto;cursor:pointer}
 .langs button{padding:7px 15px;border:1px solid var(--line);border-radius:100px;font-size:13px;
   font-family:var(--serif);letter-spacing:.14em;text-transform:uppercase;color:var(--fg-2);
   transition:border-color .35s,color .35s,background-color .4s}
-.langs button.on{border-color:var(--accent);color:var(--accent);background:color-mix(in oklab,var(--accent) 10%,transparent)}
+.langs button.on{border-color:var(--accent);color:var(--accent);background:var(--accent-10,transparent)}
 
 /* videoteca */
 .vt{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,250px),1fr));gap:14px}
@@ -517,7 +529,7 @@ body.open .vscrim{pointer-events:auto;cursor:pointer}
 
 /* drawer (fichas internas) */
 .drawer{position:fixed;inset:0;z-index:800;pointer-events:none}
-.drawer .scrim{position:absolute;inset:0;background:color-mix(in oklab,var(--bg) 72%,transparent);
+.drawer .scrim{position:absolute;inset:0;background:var(--bg-72);
   backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);opacity:0}
 .drawer .sheet{position:absolute;right:0;top:0;bottom:0;width:min(560px,100%);background:var(--panel);
   border-left:1px solid var(--line);overflow-y:auto;transform:translateX(100%);
@@ -790,6 +802,17 @@ const $=(s,c=document)=>c.querySelector(s), $$=(s,c=document)=>[...c.querySelect
 const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* El acento cambia por sección desde aquí. Junto a él se publican sus
+   versiones translúcidas en rgba(): color-mix() pide iOS 16.2 y el idioma
+   activo de Rhema es un estado visible al tacto, no un :hover. */
+function ponAcento(hex){
+  const n=parseInt(hex.slice(1),16);
+  const r=(n>>16)&255, g=(n>>8)&255, b=n&255;
+  root.style.setProperty('--accent',hex);
+  root.style.setProperty('--accent-10',`rgba(${r},${g},${b},.10)`);
+  root.style.setProperty('--glow',`rgba(${r},${g},${b},.33)`);
+}
 function toast(msg){const t=$('#toast');t.textContent=msg;
   gsap.killTweensOf(t);gsap.fromTo(t,{opacity:0,y:14},{opacity:1,y:0,duration:.45,ease:'power3.out'});
   gsap.to(t,{opacity:0,y:10,duration:.4,delay:2.6,ease:'power2.in'})}
@@ -1091,8 +1114,7 @@ function setActive(i){
   const si=i%NS, s=SECCIONES[si];
   cards.forEach((c,k)=>c.classList.toggle('act',k===i));
   $$('#dots button').forEach((b,k)=>b.classList.toggle('on',k===si));
-  root.style.setProperty('--accent',s.accent);
-  root.style.setProperty('--glow',s.accent+'55');
+  ponAcento(s.accent);
   const au=$$('#aurora i');
   if(au.length===3){
     au[0].style.background=`radial-gradient(circle,${s.accent}88,transparent 68%)`;
@@ -1533,7 +1555,7 @@ function settleClose(){
   document.body.classList.remove('open');
   vbody.innerHTML='';
   $('#nav').classList.remove('solid');
-  if(active>=0) root.style.setProperty('--accent',SECCIONES[active%NS].accent);
+  if(active>=0) ponAcento(SECCIONES[active%NS].accent);
 }
 
 function sectionFooter(id){
@@ -1570,9 +1592,7 @@ function openSection(id, fromCard){
   view.classList.add('on');
   document.body.classList.add('open');
   $('#nav').classList.add('solid');
-  // acento de la sección
-  root.style.setProperty('--accent',s.accent);
-  root.style.setProperty('--glow',s.accent+'55');
+  ponAcento(s.accent);            // acento de la sección
 
   wireSection(id);
 
