@@ -465,6 +465,29 @@ body.open .vscrim{pointer-events:auto;cursor:pointer}
 .dep .n{position:absolute;top:18px;left:22px;font-family:var(--serif);font-size:12.5px;
   letter-spacing:.2em;color:rgba(244,241,234,.6);font-variant-numeric:lining-nums}
 
+/* ministerios: sin foto, sólo nombre y descripción sobre el hilo dorado */
+.min{position:relative;border:1px solid var(--line-oro);border-radius:16px;
+  padding:clamp(22px,2.4vw,30px);min-height:190px;cursor:pointer;
+  display:flex;flex-direction:column;background:var(--panel-55);overflow:hidden;
+  transition:transform .6s var(--e-expo),border-color .45s,background-color .45s}
+.min::before{content:"";position:absolute;left:var(--gx,50%);top:var(--gy,50%);
+  width:280px;height:280px;translate:-50% -50%;border-radius:50%;pointer-events:none;
+  filter:blur(6px);opacity:0;background:radial-gradient(circle,var(--glow),transparent 66%);
+  transition:opacity .45s}
+.min>*{position:relative}
+.min .n{font-size:12px;letter-spacing:.2em;color:var(--fg-3);margin-bottom:14px}
+.min h3{font-size:clamp(21px,2.1vw,29px);font-weight:var(--w-semi);letter-spacing:-.012em;
+  margin-bottom:9px}
+.min p{font-size:.93em;color:var(--fg-2);flex:1}
+.min .go{margin-top:18px;display:flex;align-items:center;gap:9px;font-size:11.5px;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--accent)}
+.min .go svg{width:13px;transition:transform .5s var(--e-back)}
+@media(hover:hover){
+  .min:hover{transform:translateY(-6px);border-color:var(--accent);background:var(--panel-65)}
+  .min:hover::before{opacity:1}
+  .min:hover .go svg{transform:translateX(6px)}
+}
+
 /* en vivo */
 .lgrid{display:grid;grid-template-columns:1.55fr .95fr;gap:clamp(18px,2.6vw,36px);align-items:start}
 @media(max-width:980px){.lgrid{grid-template-columns:1fr}}
@@ -481,7 +504,35 @@ body.open .vscrim{pointer-events:auto;cursor:pointer}
 .tabs button::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--accent);
   transform:scaleX(0);transform-origin:left;transition:transform .5s var(--e-expo)}
 .tabs button.on{color:var(--fg)}.tabs button.on::after{transform:scaleX(1)}
-.feed{max-height:min(56vh,520px);overflow-y:auto;overscroll-behavior:contain;padding-right:8px}
+/* ── En Vivo ── */
+.proximo{position:relative;overflow:hidden}
+.proximo .cuando{font-size:clamp(19px,2vw,26px);font-weight:var(--w-med);
+  letter-spacing:-.012em;color:var(--fg);margin-top:4px}
+.proximo .falta{font-size:.88em;color:var(--fg-2);margin-top:8px}
+.proximo.ahora{border-color:#E8443F}
+.proximo.ahora .k{color:#E8443F}
+.proximo.ahora .k::after{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;
+  background:#E8443F;margin-left:9px;vertical-align:middle;animation:bl 1.5s infinite}
+
+.ultimo{display:block;border:1px solid var(--line-oro);border-radius:16px;overflow:hidden;
+  background:var(--panel-55);transition:transform .55s var(--e-expo),border-color .4s}
+.ultimo figure{position:relative;aspect-ratio:16/9;overflow:hidden;background:var(--bg-2)}
+.ultimo img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--e-expo)}
+.ultimo .play{position:absolute;inset:0;display:grid;place-items:center}
+.ultimo .play b{width:54px;height:54px;border-radius:50%;background:var(--accent);color:#fff;
+  display:grid;place-items:center;transition:transform .5s var(--e-back)}
+.ultimo .meta{padding:16px 18px 19px}
+.ultimo h4{font-family:var(--serif);font-weight:var(--w-semi);font-size:16px;line-height:1.32;
+  margin-top:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ultimo .fecha{display:block;margin-top:8px;font-size:12.5px;letter-spacing:.1em;color:var(--fg-2)}
+@media(hover:hover){
+  .ultimo:hover{transform:translateY(-5px);border-color:var(--accent)}
+  .ultimo:hover img{transform:scale(1.06)}
+  .ultimo:hover .play b{transform:scale(1.12)}
+}
+.archivo{margin-top:14px;cursor:pointer}
+
+.feed{padding-right:0}
 .feed::-webkit-scrollbar{width:3px}.feed::-webkit-scrollbar-thumb{background:var(--line);border-radius:3px}
 .vi{display:grid;grid-template-columns:110px 1fr;gap:13px;padding:10px 0;border-bottom:1px solid var(--line-2);
   transition:transform .5s var(--e-expo)}
@@ -750,6 +801,13 @@ const VIDEOS=[
 {id:"L3_JyI8wxV0",t:"Meditando · No estéis afanosos",d:"—"},
 {id:"ZDTcHbmxjuo",t:"Meditando en la Palabra",d:"—"}];
 
+/* Los que no caen cada semana: van aparte para que no se confundan con
+   el horario fijo. */
+const ESPECIALES=[
+ {t:'Discipulado',          c:'Una vez al mes', x:'Formación para quien quiere dar el siguiente paso y entender la Palabra a fondo.'},
+ {t:'Servicio de Varones',  c:'Una vez al mes', x:'Encuentro de hombres: enseñanza, conversación honesta y compromiso.'},
+ {t:'Servicio de Mujeres',  c:'Una vez al mes', x:'Encuentro de mujeres: formación, comunión y oración juntas.'}];
+
 const SERVICIOS=[
  {day:'Domingo', h:'10:00', ap:'a.m.', t:'Servicio General',
   x:'El servicio central de la semana. Adoración, palabra y toda la congregación reunida.'},
@@ -815,28 +873,73 @@ const SEDES=[
  {p:'Heredia',  c:'Heredia centro',   h:'Domingo · 10:00 a.m.'},
  {p:'Puntarenas', c:'Puntarenas centro', h:'Domingo · 9:00 a.m.'},
  {p:'Guanacaste', c:'Liberia',        h:'Domingo · 10:00 a.m.'}];
+/* Los servicios que se transmiten. El día va en el formato de getDay():
+   0 domingo … 6 sábado. Todo se calcula en hora de Costa Rica (GMT−6),
+   no en la del visitante: la iglesia transmite en su horario, y quien
+   mira desde España o Estados Unidos necesita saber cuándo es allá. */
+const TRANSMISIONES=[
+  {dia:3, h:19, m:0, t:'Servicio Doctrinal'},   // miércoles 7:00 p.m.
+  {dia:0, h:10, m:0, t:'Servicio General'}      // domingo 10:00 a.m.
+];
+const TZ_CR = -6;          // Costa Rica no cambia de hora en todo el año
+
+/* Devuelve el próximo servicio a transmitir, o el que está en curso.
+   Se trabaja sobre el reloj de Costa Rica reconstruido desde UTC, así
+   el resultado es el mismo se mire desde donde se mire. */
+function proximoDirecto(ahora = new Date()){
+  const utc = ahora.getTime() + ahora.getTimezoneOffset()*60000;
+  const cr  = new Date(utc + TZ_CR*3600000);
+  let mejor = null;
+  for(const t of TRANSMISIONES){
+    // el mismo día de esta semana y el de la que viene, para no fallar
+    // cuando el servicio de hoy ya pasó
+    for(const semana of [0, 7]){
+      const d = new Date(cr);
+      d.setDate(cr.getDate() + ((t.dia - cr.getDay() + 7) % 7) + semana);
+      d.setHours(t.h, t.m, 0, 0);
+      const faltan = d - cr;
+      // durante las dos horas siguientes al inicio se considera en curso
+      if(faltan > -2*3600000 && (!mejor || faltan < mejor.faltan)){
+        mejor = {...t, cuando:d, faltan, enCurso: faltan <= 0};
+      }
+    }
+  }
+  return mejor;
+}
+
+const DIAS=['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+function textoFalta(ms){
+  if(ms <= 0) return 'ahora';
+  const min = Math.round(ms/60000);
+  if(min < 60)   return `en ${min} min`;
+  const h = Math.floor(min/60), mm = min%60;
+  if(h < 24)     return mm ? `en ${h} h ${mm} min` : `en ${h} h`;
+  const d = Math.floor(h/24), hh = h%24;
+  return hh ? `en ${d} d ${hh} h` : `en ${d} días`;
+}
+
 const MESES=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 const IDIOMAS=['Español','Inglés','Francés','Portugués','Italiano','K’iche’'];
 
 /* ── Las 6 secciones del carrusel ── */
 const SECCIONES=[
  {id:'servicios', n:'Servicios', kicker:'01 / La semana', img:'img/serv.webp', accent:'#8C6D14',
-  lead:'Cuatro encuentros por semana, cada uno con su propio carácter. Vení como estés — aquí hay lugar para vos, tu familia y tus preguntas.',
+  lead:'«No dejando de congregarnos, como algunos tienen por costumbre, sino exhortándonos» — Hebreos 10:25',
   sub:'Los horarios de la semana'},
  {id:'historia', n:'Historia', kicker:'02 / Veintiún años', img:'img/hist.webp', accent:'#4B3EE0',
-  lead:'«Ebenezer» es el nombre que Samuel le puso a una piedra, para que ninguna generación olvidara de dónde vino el auxilio.',
+  lead:'«Hasta aquí nos ayudó Jehová» — 1 Samuel 7:12',
   sub:'De 2005 a hoy, en cinco capítulos'},
- {id:'departamentos', n:'Departamentos', kicker:'03 / Los ministerios', img:'img/dept.webp', accent:'#1F9E76',
-  lead:'Seis ministerios, un mismo cuerpo. Todos tienen la puerta abierta y todos necesitan manos.',
-  sub:'Seis ministerios de la casa'},
+ {id:'departamentos', n:'Ministerios', kicker:'03 / El cuerpo', img:'img/dept.webp', accent:'#1F9E76',
+  lead:'«Cada uno según el don que ha recibido, minístrelo a los otros» — 1 Pedro 4:10',
+  sub:'Los seis ministerios de la casa'},
  {id:'envivo', n:'En Vivo', kicker:'04 / Transmisión', img:'img/vivo.webp', accent:'#D6365A',
-  lead:'Si estamos transmitiendo, el servicio arranca solo. Si no, te dejamos el más reciente y todo el archivo del canal.',
+  lead:'«Así que la fe es por el oír, y el oír, por la palabra de Dios» — Romanos 10:17',
   sub:'El servicio, en directo por YouTube'},
  {id:'recursos', n:'Recursos', kicker:'05 / Para llevarte', img:'img/recu.webp', accent:'#7E6212',
-  lead:'La Revista Rhema mes a mes, las aplicaciones del ministerio y el archivo de enseñanzas.',
+  lead:'«Lámpara es a mis pies tu palabra, y lumbrera a mi camino» — Salmo 119:105',
   sub:'Revista Rhema y aplicaciones'},
  {id:'visitanos', n:'Visítanos', kicker:'06 / Dónde estamos', img:'img/visi.webp', accent:'#8C6D14',
-  lead:'No hace falta traer nada. Solo vos, como estás. Esta es la dirección y cómo encontrarnos.',
+  lead:'«Yo me alegré con los que me decían: A la casa de Jehová iremos» — Salmo 122:1',
   sub:'Tibás, San José'}];
 /* ═══════════════════════════════════════════════════════════════
    UTILS
@@ -1452,16 +1555,12 @@ const BUILD={
      <div><h3>${esc(s.t)}</h3><p>${esc(s.x)}</p></div>
      <span class="day">${esc(s.day)}</span>
    </article>`).join('')}
-  <div class="hd rv"><div><h2>Qué esperar</h2></div>
-    <p>Lo que suele preguntar quien viene por primera vez.</p></div>
+  <div class="hd rv"><div><h2>Servicios<br>especiales</h2></div>
+    <p>No caen cada semana. La fecha exacta se anuncia en el servicio y por Facebook.</p></div>
   <div class="grid g3">
-    ${[['Duración','Alrededor de dos horas, con música en vivo y predicación.'],
-       ['Vestimenta','Como te sientas cómodo. Nadie te va a mirar raro.'],
-       ['Niños','Tienen su propio espacio durante el servicio del domingo.'],
-       ['Ofrenda','Es voluntaria. Si venís de visita, no tenés que dar nada.'],
-       ['Después','Siempre hay café y gente con ganas de conocerte.'],
-       ['Volver','Sin compromiso. La puerta queda abierta.']]
-      .map(([t,x])=>`<div class="box rv"><h3>${t}</h3><p>${x}</p></div>`).join('')}
+    ${ESPECIALES.map(e=>`<div class="box rv">
+       <span class="k">${esc(e.c)}</span>
+       <h3>${esc(e.t)}</h3><p>${esc(e.x)}</p></div>`).join('')}
   </div>`;
  },
 
@@ -1485,10 +1584,10 @@ const BUILD={
 
  departamentos(){
   return `<div class="grid g3">${DEPTOS.map((d,i)=>`
-    <article class="dep rv" data-dep="${i}" tabindex="0" role="button" aria-label="Ver ${esc(d.n)}">
-      <img loading="lazy" src="${th(VIDEOS[d.i].id)}" alt="">
+    <article class="min rv" data-dep="${i}" tabindex="0" role="button" aria-label="Ver ${esc(d.n)}">
       <span class="n num">${String(i+1).padStart(2,'0')}</span>
       <h3>${esc(d.n)}</h3><p>${esc(d.x)}</p>
+      <span class="go">Ver ${ICON_ARROW}</span>
     </article>`).join('')}</div>
    <div class="hd rv"><div><h2>¿Querés servir?</h2></div>
      <p>Contanos qué te gusta hacer y en qué horario podés. Te conectamos con el equipo que mejor calce.</p></div>
@@ -1511,22 +1610,23 @@ const BUILD={
         <iframe id="player" title="Transmisión Ministerios Ebenezer C.R" src="about:blank" loading="lazy"
           allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture;web-share" allowfullscreen></iframe>
       </div>
-      <div class="grid g3" style="margin-top:18px">
+      <div class="grid g2" style="margin-top:18px">
+        <article class="box proximo rv" id="proximo"><span class="k">Próxima transmisión</span></article>
         <a class="box rv" href="${CFG.channelUrl}" target="_blank" rel="noopener">
           <span class="k">YouTube</span><h3>El canal</h3>
-          <p>Suscribite para recibir aviso apenas entramos en vivo.</p>
+          <p>Suscribite y el aviso te llega apenas entramos en vivo.</p>
           <span class="go">Abrir ${ICON_ARROW}</span></a>
-        <a class="box rv" href="https://www.facebook.com/${CFG.fbPage}/live" target="_blank" rel="noopener">
-          <span class="k">Facebook</span><h3>También en vivo</h3>
-          <p>Transmitimos en paralelo en la página de la iglesia.</p>
-          <span class="go">Abrir ${ICON_ARROW}</span></a>
-        <div class="box rv"><span class="k">En directo</span><h3 class="num">Domingo 10:00</h3>
-          <p>Hora de Costa Rica (GMT−6). También lunes, viernes y sábado.</p></div>
       </div>
     </div>
     <div class="rv">
-      <div class="tabs"><button class="on" data-tab="yt">Últimos servicios</button><button data-tab="fb">Facebook</button></div>
+      <div class="tabs"><button class="on" data-tab="yt">Lo último</button><button data-tab="fb">Facebook</button></div>
       <div class="feed" id="feed"></div>
+      <article class="box archivo rv" id="abrirArchivo" tabindex="0" role="button">
+        <span class="k">Archivo</span>
+        <h3>Servicios anteriores</h3>
+        <p>Todo lo que hemos transmitido, ordenado por fecha.</p>
+        <span class="go">Ver la lista ${ICON_ARROW}</span>
+      </article>
       <div class="fbpane" id="fbpane" hidden>
         <iframe title="Facebook Ministerios Ebenezer CR" loading="lazy"
           src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2F${CFG.fbPage}&tabs=timeline&width=520&height=520&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=false"
@@ -1557,8 +1657,7 @@ const BUILD={
     <span class="k">La dirección</span>
     <p class="place">${DIRECCION.ciudad},<br><em>${DIRECCION.provincia}</em><br>${DIRECCION.pais}</p>
     <p class="note">${DIRECCION.nota}</p>
-    <a class="pill" href="https://www.google.com/maps/search/?api=1&query=Ministerios+Ebenezer+Tib%C3%A1s+San+Jos%C3%A9+Costa+Rica"
-       target="_blank" rel="noopener" style="margin-top:26px">Abrir en Google Maps</a>
+    <button class="pill" id="abrirMapa" style="margin-top:26px">Cómo llegar</button>
   </div>
   <div class="grid g2" style="margin-top:clamp(26px,4vh,50px)">
     <a class="box rv" href="https://www.facebook.com/${CFG.fbPage}" target="_blank" rel="noopener">
@@ -1571,8 +1670,8 @@ const BUILD={
       <span class="go">Ver horarios ${ICON_ARROW}</span></a>
   </div>
 
-  <div class="hd rv"><div><h2>En el resto<br>del país</h2></div>
-    <p>Más de veinte congregaciones a lo largo del territorio nacional. Estas son algunas.</p></div>
+  <div class="hd rv"><div><h2>Iglesias bajo<br>cobertura apostólica</h2></div>
+    <p>Congregaciones hermanas a lo largo del territorio nacional.</p></div>
   <div class="sedes">
     ${SEDES.map((v,i)=>`<article class="sede rv">
       <span class="n num">${String(i+1).padStart(2,'0')}</span>
@@ -1609,26 +1708,33 @@ let currentId=null, viewTl=null, guard=null, revealT=null, abiertoEn=0;
    y el dedo baja; si no, manda el scroll. Al engancharse se re-ancla el
    origen para que la hoja no dé un salto.
    ═══════════════════════════════════════════════════════════════ */
-function hojaArrastrable({hoja, scroller, puede, alProgreso, cerrar, volver}){
+function hojaArrastrable({hoja, oyente, scroller, libre, puede, alProgreso, cerrar, volver}){
+  oyente = oyente || scroller;
   const UMBRAL = 9;          // px antes de decidir si es arrastre o scroll
   const RESIST = 0.22;       // cuánto cede hacia arriba
   let y0=0, y=0, activo=false, listo=false, muestras=[];
   const mover = gsap.quickSetter(hoja, 'y', 'px');
   const alto  = () => hoja.getBoundingClientRect().height || innerHeight;
 
-  scroller.addEventListener('touchstart', e=>{
+  /* La portada del panel no hace scroll: tocarla siempre debe poder
+     arrastrar. Sólo dentro del cuerpo se exige estar arriba del todo.
+     Antes el gesto vivía sólo en el cuerpo y la hoja parecía partida en
+     dos: arrastrabas desde el titular y no respondía nada. */
+  let enZonaLibre = false;
+  oyente.addEventListener('touchstart', e=>{
     if(e.touches.length !== 1){ listo=false; return; }
-    listo = puede(); activo = false; y = 0;
+    enZonaLibre = !!(libre && e.target.closest && e.target.closest(libre));
+    listo = puede(enZonaLibre); activo = false; y = 0;
     y0 = e.touches[0].clientY;
     muestras = [[performance.now(), 0]];
   }, {passive:true});
 
-  scroller.addEventListener('touchmove', e=>{
+  oyente.addEventListener('touchmove', e=>{
     if(!listo || e.touches.length !== 1) return;
     const d = e.touches[0].clientY - y0;
     if(!activo){
       if(d < UMBRAL) return;                 // todavía puede ser scroll
-      if(scroller.scrollTop > 0){ listo=false; return; }
+      if(!enZonaLibre && scroller.scrollTop > 0){ listo=false; return; }
       activo = true;
       y0 = e.touches[0].clientY;             // re-anclar: sin salto
       gsap.killTweensOf(hoja);
@@ -1654,11 +1760,15 @@ function hojaArrastrable({hoja, scroller, puede, alProgreso, cerrar, volver}){
     if((v > 0.9 && y > 45) || y > alto() * 0.26) cerrar(v, y, alto());
     else volver();
   };
-  scroller.addEventListener('touchend', soltar, {passive:true});
-  scroller.addEventListener('touchcancel', soltar, {passive:true});
+  oyente.addEventListener('touchend', soltar, {passive:true});
+  oyente.addEventListener('touchcancel', soltar, {passive:true});
 }
 
 function settleOpen(){
+  /* El cuerpo se monta un frame después de abrir. Si el navegador congela
+     requestAnimationFrame — pestaña de fondo, ahorro de energía— ese frame
+     no llega nunca y el panel se queda vacío. Aquí se monta igual. */
+  if(currentId && !vbody.innerHTML) montarCuerpo(currentId, false);
   gsap.set(view,{y:'0%'});
   gsap.set(stage,{scale:.955,opacity:.5});
   gsap.set('#vscrim',{opacity:1});
@@ -1854,9 +1964,11 @@ gsap.set('#vscrim',{opacity:0});
    la entrada del historial se consuma y el botón atrás siga en hora. */
 hojaArrastrable({
   hoja: view,
+  oyente: view,                 // el panel entero, no sólo el cuerpo
   scroller: vbody,
-  puede: ()=> document.body.classList.contains('open')
-              && vbody.scrollTop <= 0
+  libre: '.view-hero, .grip',   // la portada arrastra siempre
+  puede: (enZonaLibre)=> document.body.classList.contains('open')
+              && (enZonaLibre || vbody.scrollTop <= 0)
               && performance.now() - abiertoEn > 420,
   alProgreso: p=>{
     gsap.set('#vscrim',{opacity: 1 - p*0.92});
@@ -1897,7 +2009,7 @@ function wireSection(id){
   }
 
   if(id==='departamentos'){
-    $$('.dep',vbody).forEach(d=>{
+    $$('.min',vbody).forEach(d=>{
       const open=()=>openDrawerDep(+d.dataset.dep);
       d.addEventListener('click',open);
       d.addEventListener('keydown',e=>{if(e.key==='Enter')open()});
@@ -1905,8 +2017,18 @@ function wireSection(id){
   }
 
   if(id==='envivo'){
-    $('#feed').innerHTML = VIDEOS.map(v=>`<a class="vi" href="https://youtu.be/${v.id}" target="_blank" rel="noopener">
-      <img loading="lazy" src="${th(v.id)}" alt=""><div><h4>${esc(v.t)}</h4><span>${v.d}</span></div></a>`).join('');
+    // el más reciente, en grande: es lo que casi todo el mundo viene a ver
+    const u = VIDEOS[0];
+    $('#feed').innerHTML = `
+      <a class="ultimo" href="https://youtu.be/${u.id}" target="_blank" rel="noopener">
+        <figure><img loading="lazy" src="${th(u.id,'hqdefault')}" alt="">
+          <span class="play"><b>${ICON_PLAY}</b></span></figure>
+        <div class="meta"><span class="k">Lo último subido</span>
+          <h4>${esc(u.t)}</h4><span class="fecha num">${u.d}</span></div>
+      </a>`;
+    pintarProximo();
+    $('#abrirArchivo').addEventListener('click', abrirArchivo);
+    $('#abrirArchivo').addEventListener('keydown', e=>{ if(e.key==='Enter') abrirArchivo(); });
     $$('.tabs button',vbody).forEach(b=>b.addEventListener('click',()=>{
       $$('.tabs button',vbody).forEach(x=>x.classList.toggle('on',x===b));
       const yt=b.dataset.tab==='yt';
@@ -1914,6 +2036,11 @@ function wireSection(id){
       gsap.fromTo(yt?$('#feed'):$('#fbpane'),{opacity:0,y:12},{opacity:1,y:0,duration:.55,ease:'power3.out'});
     }));
     initLive();
+  }
+
+  if(id==='visitanos'){
+    const b = $('#abrirMapa', vbody);
+    if(b) b.addEventListener('click', abrirMapa);
   }
 
   if(id==='recursos'){
@@ -2011,6 +2138,7 @@ $$('.x',drawer).forEach(b=>b.addEventListener('click',closeDrawer));
    responde al dedo con la misma física. */
 hojaArrastrable({
   hoja: sheet,
+  oyente: sheet,
   scroller: sheet,
   puede: ()=> drawer.classList.contains('on') && fichaMovil()
               && sheet.scrollTop <= 0
@@ -2068,6 +2196,79 @@ function openDrawerRes(kind){
       <p style="margin-top:22px;color:var(--fg-2);font-size:.9em">
         Los enlaces a App Store y Google Play quedan pendientes de confirmar.</p>`);
   }
+}
+
+const ICON_PLAY='<svg width="15" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
+
+/* Pinta el cuadro del próximo directo y lo mantiene al día. La cuenta se
+   rehace cada 30 s mientras el panel está abierto: si el servicio empieza
+   mientras alguien mira la página, el cuadro lo refleja solo. */
+let latidoProximo = null;
+function pintarProximo(){
+  const caja = $('#proximo');
+  clearInterval(latidoProximo);
+  if(!caja) return;
+  const pinta = ()=>{
+    if(!caja.isConnected){ clearInterval(latidoProximo); return; }
+    const p = proximoDirecto();
+    if(!p) return;
+    const hora = ((p.h % 12) || 12) + (p.m ? ':' + String(p.m).padStart(2,'0') : ':00')
+               + ' ' + (p.h < 12 ? 'a.m.' : 'p.m.');
+    caja.classList.toggle('ahora', p.enCurso);
+    caja.innerHTML = `
+      <span class="k">${p.enCurso ? 'Transmitiendo ahora' : 'Próxima transmisión'}</span>
+      <h3>${esc(p.t)}</h3>
+      <p class="cuando num">${DIAS[p.dia]} · ${hora}</p>
+      <p class="falta">${p.enCurso ? 'En el aire' : textoFalta(p.faltan)} · hora de Costa Rica</p>`;
+  };
+  pinta();
+  latidoProximo = setInterval(pinta, 30000);
+}
+
+/* El archivo entra por el panel lateral: al elegir un servicio se abre
+   YouTube, siempre en pestaña aparte. */
+/* ── Cómo llegar ────────────────────────────────────────────────────
+   En el móvil conviene entregar la dirección al sistema y que sea él
+   quien ofrezca la app: con `geo:` en Android sale el selector con las
+   que tenga instaladas, y en iOS `maps://` abre Mapas de Apple. En
+   escritorio no hay app que elegir, así que va derecho a Google Maps.  */
+const CONSULTA_MAPA = 'Ministerios Ebenezer Tibás, San José, Costa Rica';
+function abrirMapa(){
+  const q = encodeURIComponent(CONSULTA_MAPA);
+  const ua = navigator.userAgent || '';
+  const esIOS = /iPad|iPhone|iPod/.test(ua)
+             || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const esAndroid = /Android/.test(ua);
+  const web = `https://www.google.com/maps/search/?api=1&query=${q}`;
+
+  if(esIOS){
+    // Mapas de Apple; si no responde, Google Maps en el navegador
+    const t = setTimeout(()=>location.href = web, 900);
+    addEventListener('pagehide', ()=>clearTimeout(t), {once:true});
+    location.href = `maps://?q=${q}`;
+    return;
+  }
+  if(esAndroid){
+    // `geo:` deja que Android muestre el selector de apps de mapas
+    const t = setTimeout(()=>window.open(web,'_blank','noopener'), 900);
+    addEventListener('pagehide', ()=>clearTimeout(t), {once:true});
+    location.href = `geo:0,0?q=${q}`;
+    return;
+  }
+  window.open(web, '_blank', 'noopener');
+}
+
+function abrirArchivo(){
+  openDrawer(`<p class="mono">En vivo</p><h3>Servicios anteriores</h3>
+    <p style="color:var(--fg-2)">${VIDEOS.length} transmisiones. Al elegir una se abre en YouTube.</p>
+    <div class="vt" style="margin-top:22px;grid-template-columns:1fr 1fr">
+      ${VIDEOS.map(v=>`<a href="https://youtu.be/${v.id}" target="_blank" rel="noopener">
+        <figure><img loading="lazy" src="${th(v.id)}" alt="">
+          <span class="play"><b>${ICON_PLAY}</b></span></figure>
+        <div class="meta"><h4>${esc(v.t)}</h4><span>${v.d}</span></div></a>`).join('')}
+    </div>
+    <a class="pill" style="margin-top:24px" href="${CFG.channelUrl}/videos"
+       target="_blank" rel="noopener">Ver el canal completo</a>`);
 }
 
 /* ═══════════════════════════════════════════════════════════════

@@ -23,7 +23,13 @@ DESCARTES = {'Pueblo 6.jpg'}
 
 # Foto que debe quedar en el centro de la sección, por peso propio.
 DESTACADAS = {
-    '2. Historia': '776640720_18366709126242516_2092305493713774485_n.jpg',
+    '2. Historia':  '776640720_18366709126242516_2092305493713774485_n.jpg',
+    '6. Visitanos': '639752410_18340174399242516_5657618422486155499_n.jpg',   # Pastor General
+}
+
+# Fotos que deben caer en la mitad inferior del lienzo.
+ABAJO = {
+    '6. Visitanos': {'7.jpg'},
 }
 
 
@@ -184,6 +190,19 @@ def collage(carpeta, salida, semilla=7):
             return (w * h) / (1 + d * 1.6)
         i_centro = max(range(len(piezas)), key=lambda i: mide(piezas[i]))
         piezas[0], piezas[i_centro] = piezas[i_centro], piezas[0]
+
+    # Las que van abajo: se intercambian con la pieza más baja disponible.
+    for nombre in ABAJO.get(nombre_carpeta, ()):
+        k = next((j for j, f in enumerate(fotos)
+                  if os.path.basename(f) == nombre and j != 0), None)
+        if k is None:
+            continue
+        libres = [j for j in range(len(piezas)) if j not in (0, k)]
+        if not libres:
+            continue
+        j_bajo = max(libres, key=lambda j: piezas[j][1] + piezas[j][3] / 2)
+        if piezas[j_bajo][1] > piezas[k][1]:
+            piezas[k], piezas[j_bajo] = piezas[j_bajo], piezas[k]
 
     lienzo = Image.new('RGBA', (W, H), (18, 18, 20, 255))
     orden = sorted(range(len(piezas)), key=lambda i: -piezas[i][2] * piezas[i][3])
