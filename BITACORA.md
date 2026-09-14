@@ -291,3 +291,48 @@ fotos, el archivo de vídeos movido a panel lateral, y el collage de
 Visítanos con el Pastor General al centro.
 
 Verificado a 412×915 antes de publicar y contra producción después.
+
+## 14/09 (2) — La tarjeta deja de estar partida en dos
+
+Lo de ayer unió el **gesto de cerrar**; esto es el **scroll interno**, que
+es otra cosa. `.view-hero` y `.view-body` eran cajas hermanas y el
+`overflow` vivía sólo en la segunda: la portada quedaba clavada con alto
+fijo mientras el contenido le pasaba por detrás. Dos capas, y la costura
+se veía al deslizar.
+
+Ahora las dos viven dentro de `.view-scroll` y suben juntas. Todo lo que
+medía o escuchaba el scroll se mudó al contenedor nuevo: el reinicio en
+`montarCuerpo`, la raíz del `IntersectionObserver` que revela los
+bloques, el parallax de Historia y el `puede()` del gesto.
+
+**Se fue la zona franca.** `libre: '.view-hero, .grip'` existía porque la
+portada no scrolleaba y había que dejarla arrastrar siempre. Ahora
+scrollea, y la regla vuelve a ser una sola: se cierra estando arriba del
+todo, se tire desde donde se tire. Con la tarjeta a medio bajar manda el
+scroll. Menos máquina y menos casos que recordar.
+
+**El tirador** se mudó dentro de la portada — es de ella. Se retira con
+ella sin JavaScript. Lo intenté primero con un listener de scroll que
+bajaba la opacidad; sobraba. Y así deja de prometer lo que no cumple:
+más abajo no cierra.
+
+**Un fallo de antes, tapado de paso.** `settleOpen()` fijaba la posición
+del panel pero no mataba la línea de tiempo. GSAP se la volvía a escribir
+en el tick siguiente, así que en una pestaña de fondo o un teléfono lento
+el panel se quedaba a media subida *justo* cuando el guardián debía
+salvarlo. Ahora mata el tween primero: quien rescata escribe el último.
+Lo mismo en `settleClose()`.
+
+**Las barras de scroll** salían con el aspecto nativo de Windows, canal y
+flechas. `scrollbar-width` y `::-webkit-scrollbar` no conviven: el
+navegador que entiende la primera descarta la segunda sin avisar, y yo
+tenía las dos peleando. Van igual las dos, pero cada una para su bando —
+la moderna manda en Chrome y Firefox de hoy, la `-webkit-` recoge a
+Safari y a los WebKit viejos — y ahora es **una regla para todo el
+sitio** en vez de parches por elemento.
+
+**Nota sobre el panel incrustado del navegador.** Cuando no está
+visible no compone frames, y entonces no dispara eventos de `scroll` ni
+avanza `requestAnimationFrame`. Las medidas de esos dos caminos no valen
+ahí: hay que llamar a las funciones a mano o mirar el DOM. Ya van tres
+veces que me cuesta un rato; queda escrito.
