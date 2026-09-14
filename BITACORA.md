@@ -241,3 +241,18 @@ Validación: Chrome headless + CDP, escritorio y móvil, consola limpia; deep-li
 - Conectar las descargas de Rhema con el repositorio oficial y los enlaces de App Store / Google Play.
 - Confirmar cantones y horarios de las sedes del resto del país.
 - Si algún día se pisan los guards del drawer (hoy comparten `guardFicha`), separarlos.
+
+## 14/09 — Restauración: se había perdido el trabajo del 12/09
+
+Los ocho commits del 12/09 (fondos de mármol, onda del tema desde el icono,
+tema claro Piedra con dorado #8C6D14, logo a 62px, header al hueso) fueron
+sobrescritos el 14/09 al copiar una `site/index.html` local anterior sobre
+`tibas/public/index.html` sin comprobar que la carpeta de deploy había
+avanzado por su cuenta.
+
+Recuperado desde `31fc58c`, y vueltos a aplicar encima los cambios del 14/09:
+collages fotográficos con encuadre analizado, nombres cortos de imagen,
+gesto de arrastre iOS y las correcciones de compatibilidad con iOS.
+
+**Regla para no repetirlo:** `tibas/public/` es la fuente de verdad. Antes de
+copiar nada encima, comparar con lo que hay publicado.
