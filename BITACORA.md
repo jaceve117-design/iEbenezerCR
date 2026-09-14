@@ -256,3 +256,38 @@ gesto de arrastre iOS y las correcciones de compatibilidad con iOS.
 
 **Regla para no repetirlo:** `tibas/public/` es la fuente de verdad. Antes de
 copiar nada encima, comparar con lo que hay publicado.
+
+## 14/09 — La hoja responde entera, versículos, Ministerios y próximo directo
+
+**El glitch del arrastre.** El gesto escuchaba sólo en `#vbody`, el cuerpo
+que hace scroll. La portada del panel quedaba fuera, así que tirar desde
+el titular no movía nada: la tarjeta se sentía partida en dos. Ahora
+`hojaArrastrable` acepta un `oyente` aparte del `scroller` y se le pasa el
+panel completo. Dentro del cuerpo se sigue exigiendo `scrollTop <= 0`
+—si no, el gesto pelearía con el scroll—, pero las zonas marcadas en
+`libre` (`.view-hero, .grip`) arrastran siempre, porque ahí no hay scroll
+que disputar.
+
+**Un agujero que venía de antes.** `settleOpen()` no montaba el cuerpo.
+El montaje ocurre un frame después de abrir, así que con
+`requestAnimationFrame` congelado el panel se abría vacío y se quedaba
+así. El guardián ahora lo monta igual. Salió al verificar en el
+navegador incrustado, que no compone frames.
+
+**Próximo directo.** Se calcula desde `TRANSMISIONES` (miércoles 19:00,
+domingo 10:00) sobre el reloj de Costa Rica reconstruido desde UTC, no
+sobre el del visitante: quien mire desde España tiene que ver la hora de
+aquí. Se repinta cada 30 s y marca «en el aire» las dos horas siguientes
+al inicio.
+
+**Cómo llegar.** El botón entrega la dirección al sistema en vez de
+imponer una app: `geo:` saca el selector en Android, `maps://` abre Mapas
+de Apple en iOS, y en escritorio va derecho a Google Maps. Los dos
+esquemas llevan respaldo por si nadie responde.
+
+Además: versículo en la entradilla de cada panel, «Servicios especiales»
+en lugar de «Qué esperar», Departamentos renombrado a Ministerios y sin
+fotos, el archivo de vídeos movido a panel lateral, y el collage de
+Visítanos con el Pastor General al centro.
+
+Verificado a 412×915 antes de publicar y contra producción después.
