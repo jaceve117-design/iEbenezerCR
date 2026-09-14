@@ -94,16 +94,20 @@ body.open .aurora{opacity:.42}
 .aurora i:nth-child(3){width:44vw;height:44vw;left:26vw;bottom:-18vw}
 [data-theme="light"] .aurora i{mix-blend-mode:multiply}
 /* ── Onda del cambio de tema ────────────────────────────────────────
-   Donde el navegador soporta View Transitions, el círculo recorta el
-   render nuevo: se ve la web entera del otro tema apareciendo, no un
-   color plano. Donde no, cae al círculo de color de abajo.          */
-::view-transition-old(root),::view-transition-new(root){
-  animation:none;mix-blend-mode:normal}
-::view-transition-old(root){z-index:1}
-::view-transition-new(root){z-index:2}
+   Un disco del color de destino que nace en el botón y se expande hasta
+   cubrir la pantalla; debajo se cambia el tema y luego el disco se va.
+
+   Antes esto iba por View Transitions recortando el render nuevo, pero
+   en móvil el círculo salía descolocado: los pseudo-elementos de la
+   transición se anclan al bloque contenedor de la instantánea, que no
+   coincide con el viewport visual cuando la barra del navegador está a
+   la vista. Con un elemento fijo propio las coordenadas son las mismas
+   que devuelve getBoundingClientRect(), y la onda nace exactamente en
+   el botón en cualquier navegador.                                   */
 .onda{position:fixed;width:24px;height:24px;border-radius:50%;z-index:9995;
   pointer-events:none;transform:translate(-50%,-50%) scale(0);
-  transition:transform .8s cubic-bezier(.16,1,.3,1),opacity .4s ease-out}
+  will-change:transform,opacity;
+  transition:transform .82s cubic-bezier(.16,1,.3,1),opacity .38s ease-out}
 
 /* ══════════════════════════════ INTRO ══════════════════════════════
    Nace SIEMPRE en gris perla, sea cual sea el tema guardado. Si el tema
@@ -301,10 +305,6 @@ body.open .vscrim{pointer-events:auto;cursor:pointer}
 }
 .view-hero{position:relative;flex:none;height:min(38vh,360px);overflow:hidden}
 .view-hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
-  /* El collage lleva el logo en el centro; la cabecera es una franja
-     horizontal que lo partiria por la mitad. Se encuadra arriba, sobre
-     la zona de fotos, y el disco no llega a asomar. */
-  object-position:50% 18%;
   filter:grayscale(.55) brightness(.5);transform:scale(1.06);will-change:transform}
 .view-hero::after{content:"";position:absolute;inset:0;
   background:linear-gradient(180deg,color-mix(in oklab,var(--bg) 55%,transparent) 0%,transparent 30%,var(--bg) 97%)}
@@ -978,32 +978,26 @@ $('#theme').addEventListener('click',e=>{
 
   if(reduce){ aplicar(); return; }
 
-  // origen de la onda: el propio botón
+  // La onda nace en el centro del propio botón.
   const b=$('#theme').getBoundingClientRect();
   const x=b.left+b.width/2, y=b.top+b.height/2;
-  // radio que alcanza la esquina más lejana
+  // radio necesario para alcanzar la esquina más lejana de la pantalla
   const R=Math.hypot(Math.max(x,innerWidth-x), Math.max(y,innerHeight-y));
 
-  if(document.startViewTransition){
-    const vt=document.startViewTransition(aplicar);
-    vt.ready.then(()=>{
-      root.animate(
-        {clipPath:[`circle(0px at ${x}px ${y}px)`, `circle(${R}px at ${x}px ${y}px)`]},
-        {duration:760, easing:'cubic-bezier(.16,1,.3,1)',
-         pseudoElement:'::view-transition-new(root)'});
-    }).catch(()=>{});
-  }else{
-    // sin View Transitions: un disco del color de destino que se expande
-    const o=document.createElement('div');
-    o.className='onda';
-    o.style.background=FONDO[n];
-    o.style.left=x+'px'; o.style.top=y+'px';
-    document.body.appendChild(o);
-    requestAnimationFrame(()=>{o.style.transform=`translate(-50%,-50%) scale(${R/12})`});
-    setTimeout(aplicar, 430);                 // el tema cambia bajo el disco
-    setTimeout(()=>{o.style.opacity='0'}, 780);
-    setTimeout(()=>o.remove(), 1250);
-  }
+  const o=document.createElement('div');
+  o.className='onda';
+  o.style.background=FONDO[n];
+  o.style.left=x+'px';
+  o.style.top=y+'px';
+  document.body.appendChild(o);
+
+  // un reflow antes de animar, para que la transición arranque de escala 0
+  void o.offsetWidth;
+  o.style.transform=`translate(-50%,-50%) scale(${(R+30)/12})`;
+
+  setTimeout(aplicar, 440);                  // el tema cambia bajo el disco
+  setTimeout(()=>{ o.style.opacity='0' }, 800);
+  setTimeout(()=>o.remove(), 1260);
 });
 
 document.addEventListener('click',e=>{

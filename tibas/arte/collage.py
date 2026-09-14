@@ -181,9 +181,7 @@ def collage(carpeta, color, salida, semilla=7):
     lienzo = Image.composite(base, Image.blend(base, Image.new('RGB', (W, H)), 0.42),
                              vin).convert('RGBA')
 
-    logo = logo_alfa(logo_ruta) if logo_ruta else None
-    if logo:
-        lienzo = centro_logo(lienzo, logo, color, rnd)
+    # sin disco central: la tarjeta queda sólo con las fotos fundidas
 
     im = lienzo.convert('RGB')
     im.save(salida, 'WEBP', quality=86, method=6)
