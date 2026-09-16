@@ -16,7 +16,7 @@
  *   wrangler secret put YT_API_KEY       # tu key de YouTube Data API v3
  *   wrangler deploy
  *
- *   Luego en site/index.html:
+ *   Luego en tibas/public/index.html:
  *     CFG.liveEndpoint = 'https://ebenezer-live.<tu-subdominio>.workers.dev'
  *
  * ── wrangler.toml ───────────────────────────────────────────────────────

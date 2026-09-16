@@ -36,8 +36,21 @@ Puntarenas y Guanacaste.
 No hay build ni dependencias: los sitios son HTML estático autocontenido. Cada `git push`
 a `main` publica automáticamente.
 
+## Dónde está cada cosa
+
+| Archivo | Qué cuenta |
+|---|---|
+| `BP.md` | **Bitácora de progreso**: el estado del proyecto, qué se ha hecho y qué falta. Empezá por aquí. |
+| `BITACORA.md` | Diario técnico: cada cambio con su porqué, en orden. |
+| `tibas/docs/DISENO.md` | Cómo está construido el sitio por dentro: físicas del inicio, tipografía, temas. |
+| `tibas/README.md` | La iglesia madre: qué publica y cómo se despliega. |
+
+Los insumos —fotos originales, logos y referencias de diseño— viven fuera del
+repositorio, en la carpeta `material/` de al lado. El `LEEME.md` de la carpeta
+padre es el índice de todo.
+
 ## Estado
 
 Despliegue de prueba. Cada sitio lleva `robots.txt` y la cabecera `X-Robots-Tag: noindex`
-para que los buscadores no lo recojan mientras haya contenido sin confirmar. Los pendientes
-de cada iglesia están en su propio README.
+para que los buscadores no lo recojan mientras haya contenido sin confirmar. El detalle
+de lo que falta está en `BP.md`.
