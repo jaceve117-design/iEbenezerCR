@@ -246,7 +246,10 @@ body.open .aurora{opacity:.42}
 
 /* ══════════════════════════════ HOME — SCROLL INFINITO ══════════════════════════════ */
 .stage{position:fixed;inset:0;z-index:1;overflow:hidden;touch-action:none;cursor:grab;
-  will-change:transform,opacity;transform-origin:50% 46%}
+  will-change:transform,opacity;transform-origin:50% 46%;
+  /* gesto de app: nada de selección de texto ni la hoja «Guardar imagen»
+     de Safari al mantener el dedo sobre una portada */
+  -webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 .stage:active{cursor:grabbing}
 
 .deck{position:absolute;top:50%;left:0;width:100%;height:0;
@@ -1479,12 +1482,22 @@ addEventListener('wheel',e=>{
   const TOL_RATON=6, TOL_DEDO=15;
   let id=null, x0=0, y0=0, t0=0, moved=0, tol=TOL_RATON;
   let arrastrando=false, capturado=false, lastX=0, lastT=0, pv=0;
+  /* Historial reciente de velocidad: iOS coalesce los pointermove y en un
+     flick rápido el último evento puede llegar más tarde que la ventana de
+     decisión — con un solo valor el golpe seco moría sin inercia. Guardar
+     las últimas muestras y usar la más fresca dentro de 120 ms lo hace
+     inmune al espaciado irregular de eventos. */
+  let muestras=[];
 
   stage.addEventListener('pointerdown',e=>{
     if(document.body.classList.contains('open')) return;
+    /* un solo dedo manda: un segundo contacto (o la palma) no re-ancla el
+       arrastre a mitad de vuelo — era la causa de saltos en iPad */
+    if(id!==null || (e.pointerType!=='mouse' && !e.isPrimary)) return;
+    if(e.pointerType==='mouse' && e.button!==0) return;   // sólo el botón primario
     despertar();
     id=e.pointerId; x0=lastX=e.clientX; y0=e.clientY; t0=target;
-    moved=0; arrastrando=false; capturado=false; pv=0;
+    moved=0; arrastrando=false; capturado=false; pv=0; muestras=[];
     tol = e.pointerType==='mouse' ? TOL_RATON : TOL_DEDO;
     lastT=performance.now();
     momentum=0;                       // agarrar detiene el deslizamiento
@@ -1507,6 +1520,7 @@ addEventListener('wheel',e=>{
     const ahora=performance.now(), dt=Math.max(8, ahora-lastT);
     pv=(lastX-e.clientX)/dt;          // px/ms en el sentido del contenido
     lastX=e.clientX; lastT=ahora;
+    muestras.push([ahora,pv]); if(muestras.length>6) muestras.shift();
     target = t0 - (e.clientX-x0)*ARRASTRE;
   });
 
@@ -1523,9 +1537,14 @@ addEventListener('wheel',e=>{
       if(card){ ultimoToque=performance.now(); openSection(card.dataset.id, card); }
       return;
     }
-    // soltó en movimiento: la velocidad del dedo se convierte en deslizamiento
-    if(performance.now()-lastT < 110 && !reduce){
-      momentum = clamp(pv*ARRASTRE*FRAME, -120, 120);
+    // soltó en movimiento: la velocidad del dedo se convierte en deslizamiento.
+    // La muestra más reciente dentro de 120 ms manda, aunque el último
+    // pointermove haya llegado con retraso (iOS coalesce eventos).
+    if(!reduce){
+      const ahora=performance.now();
+      let muestra=null;
+      for(const m of muestras){ if(ahora-m[0]<120) muestra=m; }
+      if(muestra) momentum = clamp(muestra[1]*ARRASTRE*FRAME, -120, 120);
     }
   };
   stage.addEventListener('pointerup',soltar);
@@ -1951,8 +1970,10 @@ function cerrarVisual(viaPop){
     .to('#vscrim',{opacity:0,duration:.6,ease:'power2.in'},0)
     .to(stage,{scale:1,opacity:1,duration:.95,ease:EZ.expo},.06)
     .to('.view-hero .cap > *',{yPercent:-26,opacity:0,duration:.36,ease:'power2.in'},0);
-  // las fotos del carrusel respiran al volver: la ola sale de la sección activa
-  gsap.fromTo(cards.map(c=>c.querySelector('img')),{scale:1.1},{scale:1.02,duration:1.2,ease:EZ.expo,stagger:{each:.035,from:Math.max(active,0)}});
+  // las fotos del carrusel respiran al volver: la ola sale de la sección
+  // activa. Se anima el figure, no la img — la img tiene transición CSS
+  // propia (el hover) y GSAP peleándosela llegaba embarrado y tarde.
+  gsap.fromTo(cards.map(c=>c.querySelector('figure')),{scale:1.1},{scale:1,duration:1.2,ease:EZ.expo,clearProps:'transform',stagger:{each:.035,from:Math.max(active,0)}});
 }
 function closeView(){
   if(!document.body.classList.contains('open')) return;

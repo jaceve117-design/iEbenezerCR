@@ -242,6 +242,46 @@ Validación: Chrome headless + CDP, escritorio y móvil, consola limpia; deep-li
 - Confirmar cantones y horarios de las sedes del resto del país.
 - Si algún día se pisan los guards del drawer (hoy comparten `guardFicha`), separarlos.
 
+## 15/09 · Pulido de gestos: flick a prueba de iOS, multitouch y cierre sin barro
+
+**Auditoría pedida:** los dos gestos centrales — mover las secciones izquierda/derecha y el
+cierre de las tarjetas — con lupa para iOS. El diagnóstico halló un conflicto real, dos huecos
+de iOS y un par de bordes; los cinco arreglos son quirúrgicos.
+
+**1. El flick que moría (iOS).** La inercia del carrusel sólo se activaba si el último
+`pointermove` llegaba dentro de 110 ms del soltar. iOS agrupa (coalesce) los eventos de
+movimiento: en un golpe seco el último evento puede llegar después de esa ventana y el impulso
+se descartaba — la banda frenaba en seco. Ahora el arrastre guarda las últimas seis muestras de
+velocidad y al soltar manda **la más reciente dentro de 120 ms**, el mismo patrón que ya usaba
+`hojaArrastrable` para las hojas. Verificado con el peor caso (hueco de 130 ms entre el último
+move y el soltar): la inercia vive — la banda recorrió ~103 px extra tras soltar.
+
+**2. Segundo dedo fuera.** El `pointerdown` del escenario no rechazaba contactos adicionales:
+un segundo dedo (o la palma en iPad) re-anclaba el arrastre a mitad de vuelo y la banda saltaba.
+Ahora un dedo manda — se ignoran los contactos que no son primarios mientras hay uno activo.
+
+**3. Click derecho ya no arrastra.** Con ratón, sólo el botón primario inicia el gesto.
+
+**4. La «respiración» al cerrar, sin barro.** Al cerrar una sección, la ola que recorre las
+fotos del carrusel animaba con GSAP el `scale` de las `img` — que tienen su propia transición
+CSS de hover (1,1 s). Cada tick de GSAP disparaba además esa transición: el efecto llegaba
+embarrado y tarde, perceptible en iOS donde los eventos llegan agrupados. Ahora la ola anima el
+`figure` contenedor y al terminar limpia su transformada; la transición CSS queda dueña
+exclusiva de la `img`.
+
+**5. Nada de callouts al mantener el dedo.** El escenario llevará `-webkit-touch-callout:none`
+y `user-select:none`: mantener el dedo sobre una portada ya no abre la hoja «Guardar imagen»
+de Safari ni selecciona texto — sensación de app.
+
+**Validación:** sintaxis verificada; flick con hueco final de 130 ms con inercia; swipe-down
+cierra el panel con remate por velocidad; consola limpia en móvil emulado. Quedaron anotados y
+a propósito sin tocar: el fallback `72vh` del alto de tarjeta (svh pide iOS 15.4 y el valor lo
+escribe JS en el primer frame, así que no aporta), y el edge-swipe del sistema en el borde
+izquierdo de Safari, que no se puede prevenir desde la web — el botón atrás ya lo recibe con
+gracia vía `popstate`.
+
+---
+
 ## 14/09 — Restauración: se había perdido el trabajo del 12/09
 
 Los ocho commits del 12/09 (fondos de mármol, onda del tema desde el icono,
