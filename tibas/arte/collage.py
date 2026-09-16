@@ -23,13 +23,13 @@ DESCARTES = {'Pueblo 6.jpg'}
 
 # Foto que debe quedar en el centro de la sección, por peso propio.
 DESTACADAS = {
-    '2. Historia':  '776640720_18366709126242516_2092305493713774485_n.jpg',
-    '6. Visitanos': '639752410_18340174399242516_5657618422486155499_n.jpg',   # Pastor General
+    '02. HISTORIA':  '776640720_18366709126242516_2092305493713774485_n.jpg',
+    '06. VISÍTANOS': '639752410_18340174399242516_5657618422486155499_n.jpg',   # Pastor General
 }
 
 # Fotos que deben caer en la mitad inferior del lienzo.
 ABAJO = {
-    '6. Visitanos': {'7.jpg'},
+    '06. VISÍTANOS': {'7.jpg'},
 }
 
 

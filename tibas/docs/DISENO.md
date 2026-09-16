@@ -2,21 +2,21 @@
 
 Notas técnicas del sitio: de dónde sale el movimiento del inicio, cómo están
 medidas las físicas y por qué cada decisión es la que es. Para el qué y el
-cuándo del proyecto está `../../BP.md`; para el diario de cambios,
-`../../BITACORA.md`.
+cuándo del proyecto está `BP.md`, en la raíz de la carpeta del proyecto; para el
+diario de cambios, `../../BITACORA.md`.
 
 El sitio entero es `../public/index.html` — autocontenido, sin build.
 
 Para servirlo en local:
 
 ```bash
-python -m http.server 5199 --directory web/tibas/public
+python -m http.server 5199 --directory "1. WEB/tibas/public"
 ```
 
 También está en `.claude/launch.json` con el nombre `ebenezer`.
 
 Los dos prototipos de los que salió la estética actual están fuera del
-repositorio, en `material/referencias/propuestas-iniciales/`.
+repositorio, en `2. MATERIAL/referencias/propuestas-iniciales/`.
 
 ---
 
